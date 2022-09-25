@@ -25,5 +25,3 @@ public class encoder_Test extends LinearOpMode {
         }
     }
 }
-
-
