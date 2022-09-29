@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Autonmous;
+package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -15,15 +15,15 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvCameraFactory;
-import org.openftc.easyopencv.OpenCvCameraRotation;
-import org.openftc.easyopencv.OpenCvWebcam;
+//import org.openftc.easyopencv.OpenCvCamera;
+//import org.openftc.easyopencv.OpenCvCameraFactory;
+//import org.openftc.easyopencv.OpenCvCameraRotation;
+//import org.openftc.easyopencv.OpenCvWebcam;
 import static java.lang.Thread.sleep;
 
 
 @Autonomous
-public class Red_Left extends LinearOpMode {
+public class Red_Right extends LinearOpMode {
 
 
     private DcMotor crane;
@@ -71,7 +71,7 @@ public class Red_Left extends LinearOpMode {
             move(1,1440);
 
             //turn to face cones
-            gyroTurning(90);
+            gyroTurning(-90);
 
             //arm stuff
 
@@ -119,7 +119,7 @@ public class Red_Left extends LinearOpMode {
 
             ////////////////////////////////////////////////////////////////////////
 
-            StrafeRight(1,2000);
+            StrafeLeft(1,2000);
 
 
             if (side ==1){
@@ -219,34 +219,34 @@ public class Red_Left extends LinearOpMode {
         backLeft.setPower(0);
     }
 
-   public void StrafeRight(double power, int position){
-       frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-       backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-       frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-       backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    public void StrafeRight(double power, int position){
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-       frontRight.setTargetPosition(-position);
-       frontLeft.setTargetPosition(position);
-       backRight.setTargetPosition(position);
-       backLeft.setTargetPosition(-position);
+        frontRight.setTargetPosition(-position);
+        frontLeft.setTargetPosition(position);
+        backRight.setTargetPosition(position);
+        backLeft.setTargetPosition(-position);
 
-       frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-       frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-       backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-       backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-       frontRight.setPower(power);
-       frontLeft.setPower(power);
-       backRight.setPower(power);
-       backLeft.setPower(power);
+        frontRight.setPower(power);
+        frontLeft.setPower(power);
+        backRight.setPower(power);
+        backLeft.setPower(power);
 
-       while (frontLeft.isBusy()) {
+        while (frontLeft.isBusy()) {
 
-       }
-       frontRight.setPower(0);
-       frontLeft.setPower(0);
-       backRight.setPower(0);
-       backLeft.setPower(0);
+        }
+        frontRight.setPower(0);
+        frontLeft.setPower(0);
+        backRight.setPower(0);
+        backLeft.setPower(0);
 
     }
 

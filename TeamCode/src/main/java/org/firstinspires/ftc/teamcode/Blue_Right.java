@@ -1,10 +1,11 @@
-package org.firstinspires.ftc.teamcode.Autonmous;
+package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.sun.source.tree.WhileLoopTree;
+import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -15,15 +16,17 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvCameraFactory;
-import org.openftc.easyopencv.OpenCvCameraRotation;
-import org.openftc.easyopencv.OpenCvWebcam;
+
+//import org.openftc.easyopencv.OpenCvCamera;
+//import org.openftc.easyopencv.OpenCvCameraFactory;
+//import org.openftc.easyopencv.OpenCvCameraRotation;
+//import org.openftc.easyopencv.OpenCvWebcam;
 import static java.lang.Thread.sleep;
 
 
 @Autonomous
 public class Blue_Right extends LinearOpMode {
+
 
 
     private DcMotor crane;
@@ -36,7 +39,9 @@ public class Blue_Right extends LinearOpMode {
     public Orientation angles;
     public BNO055IMU imu;
 
-    public void runOpMode() {
+    public void runOpMode() throws InterruptedException {
+        initGyro();
+
         crane = hardwareMap.get(DcMotor.class, "crane");
         frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
@@ -139,6 +144,20 @@ public class Blue_Right extends LinearOpMode {
 
 
         }
+    }
+
+
+
+    public void initGyro() {
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.calibrationDataFile = "BNO055IMUCalibration.json";
+        parameters.loggingEnabled = true;
+        parameters.loggingTag = "IMU";
+        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        imu.initialize(parameters);
+        sleep(250);
     }
 
     public boolean gyroTurning(double targetAngle) {

@@ -1,4 +1,5 @@
-package org.firstinspires.ftc.teamcode.Autonmous;
+package org.firstinspires.ftc.teamcode;
+import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -15,11 +16,11 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvCameraFactory;
-import org.openftc.easyopencv.OpenCvCameraRotation;
-import org.openftc.easyopencv.OpenCvWebcam;
-import static java.lang.Thread.sleep;
+//import org.openftc.easyopencv.OpenCvCamera;
+//import org.openftc.easyopencv.OpenCvCameraFactory;
+//import org.openftc.easyopencv.OpenCvCameraRotation;
+//import org.openftc.easyopencv.OpenCvWebcam;
+//import static java.lang.Thread.sleep;
 
 
 @Autonomous
@@ -37,6 +38,9 @@ public class Blue_Left extends LinearOpMode {
     public BNO055IMU imu;
 
     public void runOpMode() {
+
+        initGyro();
+
         crane = hardwareMap.get(DcMotor.class, "crane");
         frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
@@ -141,14 +145,29 @@ public class Blue_Left extends LinearOpMode {
         }
     }
 
+
+
+    public void initGyro() {
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.calibrationDataFile = "BNO055IMUCalibration.json";
+        parameters.loggingEnabled = true;
+        parameters.loggingTag = "IMU";
+        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        imu.initialize(parameters);
+        sleep(250);
+    }
+
+
     public boolean gyroTurning(double targetAngle) {
         boolean foundAngle = false;
-        //while (foundAngle == false || did I reach time limit) {
+        //while (opModeIsActive()) {
         while (foundAngle == false) {
             angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
             double currentAngle = angles.firstAngle;
 
-            if (angles.firstAngle >= targetAngle - 0.25 && angles.firstAngle <= targetAngle + 0.25) {
+            if (angles.firstAngle >= targetAngle - 0.1 && angles.firstAngle <= targetAngle + 0.1) {
                 frontLeft.setPower(0);
                 frontRight.setPower(0);
                 backLeft.setPower(0);
@@ -158,10 +177,10 @@ public class Blue_Left extends LinearOpMode {
                 break;
             } else if (angles.firstAngle >= targetAngle + 0.5) {
                 if (angles.firstAngle <= targetAngle + 10) {
-                    frontLeft.setPower(0.15);
-                    frontRight.setPower(-0.15);
-                    backLeft.setPower(0.15);
-                    backRight.setPower(-0.15);
+                    frontLeft.setPower(0.3);
+                    frontRight.setPower(-0.3);
+                    backLeft.setPower(0.3);
+                    backRight.setPower(-0.3);
                     foundAngle = false;
                 } else {
                     frontLeft.setPower(0.5);
@@ -172,10 +191,10 @@ public class Blue_Left extends LinearOpMode {
                 }
             } else if (angles.firstAngle <= targetAngle - 0.5) {
                 if (angles.firstAngle >= targetAngle - 10) {
-                    frontLeft.setPower(-0.15);
-                    frontRight.setPower(0.15);
-                    backLeft.setPower(-0.15);
-                    backRight.setPower(0.15);
+                    frontLeft.setPower(-0.3);
+                    frontRight.setPower(0.3);
+                    backLeft.setPower(-0.3);
+                    backRight.setPower(0.3);
                     foundAngle = false;
                 } else {
                     frontLeft.setPower(-0.5);
