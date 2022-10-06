@@ -16,10 +16,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-//import org.openftc.easyopencv.OpenCvCamera;
-//import org.openftc.easyopencv.OpenCvCameraFactory;
-//import org.openftc.easyopencv.OpenCvCameraRotation;
-//import org.openftc.easyopencv.OpenCvWebcam;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.openftc.easyopencv.OpenCvWebcam;
 //import static java.lang.Thread.sleep;
 
 
@@ -34,7 +34,7 @@ public class Blue_Left extends LinearOpMode {
     private DcMotor backRight;
 
     public int side = 2;
-    public Orientation angles;
+    Orientation angles;
     public BNO055IMU imu;
 
     public void runOpMode() {
@@ -72,23 +72,35 @@ public class Blue_Left extends LinearOpMode {
 
 
             //move to cones
-            move(1,1440);
+            //move(1,1440);
 
             //turn to face cones
+
+            telemetry.addData( "sdf", imu.getAngularOrientation());
+            telemetry.update();
             gyroTurning(90);
 
             //arm stuff
 
             //turn to face stick
-            gyroTurning(180);
+            //gyroTurning(180);
 
             //arm stuff
 
             //turn to face cones
-            gyroTurning(180);
+            //gyroTurning(180);
 
             //arm stuff
 
+            //turn to face stick
+            //gyroTurning(180);
+
+            //arm stuff
+
+            //turn to face cones
+            /*gyroTurning(180);
+
+            //arm stuff
             //turn to face stick
             gyroTurning(180);
 
@@ -112,16 +124,7 @@ public class Blue_Left extends LinearOpMode {
 
             //arm stuff
 
-            //turn to face cones
-            gyroTurning(180);
-
-            //arm stuff
-            //turn to face stick
-            gyroTurning(180);
-
-            //arm stuff
-
-            ////////////////////////////////////////////////////////////////////////
+            /*///////////////////////////////////////////////////////////////////////
 
             StrafeRight(1,2000);
 
@@ -162,12 +165,12 @@ public class Blue_Left extends LinearOpMode {
 
     public boolean gyroTurning(double targetAngle) {
         boolean foundAngle = false;
-        //while (opModeIsActive()) {
+        //while (foundAngle == false || did I reach time limit) {
         while (foundAngle == false) {
             angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
             double currentAngle = angles.firstAngle;
 
-            if (angles.firstAngle >= targetAngle - 0.1 && angles.firstAngle <= targetAngle + 0.1) {
+            if (angles.firstAngle >= targetAngle - 0.25 && angles.firstAngle <= targetAngle + 0.25) {
                 frontLeft.setPower(0);
                 frontRight.setPower(0);
                 backLeft.setPower(0);
@@ -177,10 +180,10 @@ public class Blue_Left extends LinearOpMode {
                 break;
             } else if (angles.firstAngle >= targetAngle + 0.5) {
                 if (angles.firstAngle <= targetAngle + 10) {
-                    frontLeft.setPower(0.3);
-                    frontRight.setPower(-0.3);
-                    backLeft.setPower(0.3);
-                    backRight.setPower(-0.3);
+                    frontLeft.setPower(0.15);
+                    frontRight.setPower(-0.15);
+                    backLeft.setPower(0.15);
+                    backRight.setPower(-0.15);
                     foundAngle = false;
                 } else {
                     frontLeft.setPower(0.5);
@@ -191,10 +194,10 @@ public class Blue_Left extends LinearOpMode {
                 }
             } else if (angles.firstAngle <= targetAngle - 0.5) {
                 if (angles.firstAngle >= targetAngle - 10) {
-                    frontLeft.setPower(-0.3);
-                    frontRight.setPower(0.3);
-                    backLeft.setPower(-0.3);
-                    backRight.setPower(0.3);
+                    frontLeft.setPower(-0.15);
+                    frontRight.setPower(0.15);
+                    backLeft.setPower(-0.15);
+                    backRight.setPower(0.15);
                     foundAngle = false;
                 } else {
                     frontLeft.setPower(-0.5);
@@ -274,7 +277,6 @@ public class Blue_Left extends LinearOpMode {
         backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
         frontRight.setTargetPosition(position);
         frontLeft.setTargetPosition(-position);
         backRight.setTargetPosition(-position);

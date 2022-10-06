@@ -36,14 +36,15 @@ public class Encoder_Wheels extends LinearOpMode {
 
         if (opModeIsActive()) {
 
+
+
+
+            move(.5,720);
             telemetry.addData("fR", frontRight.getCurrentPosition());
             telemetry.addData("fL", frontLeft.getCurrentPosition());
             telemetry.addData("BL", backLeft.getCurrentPosition());
             telemetry.addData("BR", backRight.getCurrentPosition());
             telemetry.update();
-
-
-            move(1,720);
 
             frontLeft.setPower(0);
             frontRight.setPower(0);

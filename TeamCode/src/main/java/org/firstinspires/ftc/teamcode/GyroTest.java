@@ -55,7 +55,7 @@ public class GyroTest extends LinearOpMode {
         //starting opMode code.
         waitForStart();
         while (opModeIsActive()){
-            angles                       = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+            angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
             double targetAngle = -90;
             double currentAngle = angles.firstAngle;
             if (angles.firstAngle >= targetAngle-0.5 && angles.firstAngle <= targetAngle+0.5){
