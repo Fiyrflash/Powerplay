@@ -70,15 +70,15 @@ public class Chases_Test extends LinearOpMode {
             //making motors run.
             //strafing
             if (strafeLeft) {
-                frontLeft.setPower(-0.75);
-                frontRight.setPower(0.75);
-                backLeft.setPower(0.75);
-                backRight.setPower(-0.75);
+                frontLeft.setPower(1.00);
+                frontRight.setPower(-1.00);
+                backLeft.setPower(-1.00);
+                backRight.setPower(1.00);
             } else if (strafeRight) {
-                frontLeft.setPower(-0.75);
-                frontRight.setPower(0.75);
-                backLeft.setPower(0.75);
-                backRight.setPower(-0.75);
+                frontLeft.setPower(-1.00);
+                frontRight.setPower(1.00);
+                backLeft.setPower(1.00);
+                backRight.setPower(-1.00);
             }
             //forward and backward movement
             frontLeft.setPower(throttle);
