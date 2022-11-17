@@ -118,6 +118,103 @@ public class blueLeft extends LinearOpMode{
                 intake(1,2000);
                 moveandspin(1,470,-800);
 
+                //second cone
+                move(.5,470);
+                crane(300);
+                intake(-1,2000);
+                moveandspin(1,-720,800);
+                crane(-300);
+                intake(1,2000);
+                moveandspin(1,470,-800);
+
+                //third cone
+                move(.5,470);
+                crane(300);
+                intake(-1,2000);
+                moveandspin(1,-720,800);
+                crane(-300);
+                intake(1,2000);
+                moveandspin(1,470,-800);
+
+                //forth cone
+                move(.5,470);
+                crane(300);
+                intake(-1,2000);
+                moveandspin(1,-720,800);
+                crane(-300);
+                intake(1,2000);
+                moveandspin(1,470,-800);
+
+                //fith cone
+                move(.5,470);
+                crane(300);
+                intake(-1,2000);
+                moveandspin(1,-720,800);
+                crane(-300);
+                intake(1,2000);
+                moveandspin(1,470,-800);
+
+                move(.5,470);
+                strafeRight(1,1000);
+            }
+            if(position=="side2"){
+                crane(-200);
+                move(1,2160);
+                gyroTurning(90);
+
+                //first cone
+                move(.5,470);
+                crane(300);
+                intake(-1,2000);
+                moveandspin(1,-720,800);
+                crane(-300);
+                intake(1,2000);
+                moveandspin(1,470,-800);
+
+                //second cone
+                move(.5,470);
+                crane(300);
+                intake(-1,2000);
+                moveandspin(1,-720,800);
+                crane(-300);
+                intake(1,2000);
+                moveandspin(1,470,-800);
+
+                //third cone
+                move(.5,470);
+                crane(300);
+                intake(-1,2000);
+                moveandspin(1,-720,800);
+                crane(-300);
+                intake(1,2000);
+                moveandspin(1,470,-800);
+
+                //forth cone
+                move(.5,470);
+                crane(300);
+                intake(-1,2000);
+                moveandspin(1,-720,800);
+                crane(-300);
+                intake(1,2000);
+                moveandspin(1,470,-800);
+
+                //fith cone
+                move(.5,470);
+                crane(300);
+                intake(-1,2000);
+                moveandspin(1,-720,800);
+                crane(-300);
+                intake(1,2000);
+                moveandspin(1,470,-800);
+
+                move(.5,200);
+                strafeRight(1,1000);
+            }
+            if(position=="side3"){
+                crane(-200);
+                move(1,2160);
+                gyroTurning(90);
+
                 //first cone
                 move(.5,470);
                 crane(300);
@@ -164,10 +261,8 @@ public class blueLeft extends LinearOpMode{
                 moveandspin(1,470,-800);
 
 
-
-
-
-
+                strafeRight(1,1000);
+                move(.5,200);
             }
 
 
@@ -257,6 +352,17 @@ public class blueLeft extends LinearOpMode{
         while (Spin.isBusy()){
 
         }
+    }
+    public void strafeRight(double power, int time){
+        frontLeft.setPower(power);
+        frontRight.setPower(-power);
+        backLeft.setPower(-power);
+        backRight.setPower(power);
+        sleep(time);
+        frontLeft.setPower(0);
+        frontRight.setPower(0);
+        backLeft.setPower(0);
+        backRight.setPower(0);
     }
 
     public void spin(int position){
