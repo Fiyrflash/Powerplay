@@ -40,6 +40,7 @@ public class blueLeft extends LinearOpMode{
     BNO055IMU imu;
     Orientation angles;
     String position;
+    double i;
 
 
 
@@ -107,9 +108,63 @@ public class blueLeft extends LinearOpMode{
                 crane(-200);
                 move(1,2160);
                 gyroTurning(90);
+
+                //first cone
                 move(.5,470);
                 crane(300);
                 intake(-1,2000);
+                moveandspin(1,-720,800);
+                crane(-300);
+                intake(1,2000);
+                moveandspin(1,470,-800);
+
+                //first cone
+                move(.5,470);
+                crane(300);
+                intake(-1,2000);
+                moveandspin(1,-720,800);
+                crane(-300);
+                intake(1,2000);
+                moveandspin(1,470,-800);
+
+                //second cone
+                move(.5,470);
+                crane(300);
+                intake(-1,2000);
+                moveandspin(1,-720,800);
+                crane(-300);
+                intake(1,2000);
+                moveandspin(1,470,-800);
+
+                //third cone
+                move(.5,470);
+                crane(300);
+                intake(-1,2000);
+                moveandspin(1,-720,800);
+                crane(-300);
+                intake(1,2000);
+                moveandspin(1,470,-800);
+
+                //forth cone
+                move(.5,470);
+                crane(300);
+                intake(-1,2000);
+                moveandspin(1,-720,800);
+                crane(-300);
+                intake(1,2000);
+                moveandspin(1,470,-800);
+
+                //fith cone
+                move(.5,470);
+                crane(300);
+                intake(-1,2000);
+                moveandspin(1,-720,800);
+                crane(-300);
+                intake(1,2000);
+                moveandspin(1,470,-800);
+
+
+
 
 
 
@@ -194,6 +249,28 @@ public class blueLeft extends LinearOpMode{
         Right.setPower(0);
         Left.setPower(0);
 
+    }
+
+    public void moveandspin(double power,int moveposition,int spinposition){
+        move(power,moveposition);
+        spin(spinposition);
+        while (Spin.isBusy()){
+
+        }
+    }
+
+    public void spin(int position){
+        Spin.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Crane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Spin.setTargetPosition(position);
+        Crane.setTargetPosition(-500);
+        Spin.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        Crane.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        Spin.setPower(1);
+        Crane.setPower(1);
+        while(Spin.isBusy()){
+
+        }
     }
 
     public void move(double power, int position){
