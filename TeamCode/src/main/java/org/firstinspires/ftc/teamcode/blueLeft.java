@@ -37,9 +37,14 @@ public class blueLeft extends LinearOpMode{
     private DcMotor Crane;
     private DcMotor Spin;
 
+    BNO055IMU imu;
+    Orientation angles;
+    String position;
+
+
 
     public void runOpMode() throws InterruptedException {
-
+        initGyro();
 
         frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
@@ -83,20 +88,139 @@ public class blueLeft extends LinearOpMode{
         if (opModeIsActive()){
             switch (detector.getLocation()) {
                 case SIDE1:
+                    position="side1";
                     break;
             }
 
             switch (d.getLocation()) {
                 case SIDE3:
+                    position="side3";
                     break;
             }
             switch (j.getLocation()) {
                 case SIDE2:
+                    position="side2";
                     break;
+            }
+
+            if (position=="side1"){
+                crane(-200);
+                move(1,2160);
+                gyroTurning(90);
+                move(.5,470);
+                crane(300);
+                intake(-1,2000);
+
+
+
             }
 
 
 
         }
+    }
+    public void initGyro() {
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.calibrationDataFile = "BNO055IMUCalibration.json";
+        parameters.loggingEnabled = true;
+        parameters.loggingTag = "IMU";
+        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        imu.initialize(parameters);
+        sleep(250);
+    }
+    public boolean gyroTurning(double targetAngle) {
+        boolean foundAngle = false;
+        //while (opModeIsActive()) {
+        while (foundAngle == false) {
+            angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+            double currentAngle = angles.firstAngle;
+
+            if (angles.firstAngle >= targetAngle - 0.1 && angles.firstAngle <= targetAngle + 0.1) {
+                frontLeft.setPower(0);
+                frontRight.setPower(0);
+                backLeft.setPower(0);
+                backRight.setPower(0);
+                foundAngle = true;
+                sleep(1000);
+                break;
+            } else if (angles.firstAngle >= targetAngle + 0.5) {
+                if (angles.firstAngle <= targetAngle + 10) {
+                    frontLeft.setPower(0.15);
+                    frontRight.setPower(-0.15);
+                    backLeft.setPower(0.15);
+                    backRight.setPower(-0.15);
+                    foundAngle = false;
+                } else {
+                    frontLeft.setPower(0.5);
+                    frontRight.setPower(-0.5);
+                    backLeft.setPower(0.5);
+                    backRight.setPower(-0.5);
+                    foundAngle = false;
+                }
+            } else if (angles.firstAngle <= targetAngle - 0.5) {
+                if (angles.firstAngle >= targetAngle - 10) {
+                    frontLeft.setPower(-0.15);
+                    frontRight.setPower(0.15);
+                    backLeft.setPower(-0.15);
+                    backRight.setPower(0.15);
+                    foundAngle = false;
+                } else {
+                    frontLeft.setPower(-0.5);
+                    frontRight.setPower(0.5);
+                    backLeft.setPower(-0.5);
+                    backRight.setPower(0.5);
+                    foundAngle = false;
+                }
+            }
+        }
+        return foundAngle;
+    }
+
+    public void crane(int position){
+        Crane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Crane.setTargetPosition(position);
+        Crane.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        while (Crane.isBusy()){
+
+        }
+
+    }
+    public void intake(int direction,long Time){
+        Right.setPower(direction*1);
+        Left.setPower(direction*1);
+        sleep(Time);
+        Right.setPower(0);
+        Left.setPower(0);
+
+    }
+
+    public void move(double power, int position){
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        frontRight.setTargetPosition(-position);
+        frontLeft.setTargetPosition(-position);
+        backRight.setTargetPosition(-position);
+        backLeft.setTargetPosition(-position);
+
+        frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        frontRight.setPower(power);
+        frontLeft.setPower(power);
+        backRight.setPower(power);
+        backLeft.setPower(power);
+
+        while (frontLeft.isBusy()){
+
+        }
+
+
     }
 }
