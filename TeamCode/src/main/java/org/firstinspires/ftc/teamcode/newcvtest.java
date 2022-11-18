@@ -88,12 +88,18 @@ public class newcvtest extends LinearOpMode {
             switch (detector.getLocation()) {
                 case LEFT:
                     locationOfTSE = "left";
+                    telemetry.addLine("left");
+                    telemetry.update();
                     break;
                 case MIDDLE:
                     locationOfTSE = "middle";
+                    telemetry.addLine("middle");
+                    telemetry.update();
                     break;
                 case RIGHT:
                     locationOfTSE = "right";
+                    telemetry.addLine("right");
+                    telemetry.update();
                     break;
                 case NOT_FOUND:
                     locationOfTSE = "not Found";
