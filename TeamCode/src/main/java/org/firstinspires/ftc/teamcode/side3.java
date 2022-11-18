@@ -9,7 +9,7 @@ import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
 import org.opencv.core.Rect;
 
-public class Detector extends OpenCvPipeline {
+public class side3 extends OpenCvPipeline {
     Telemetry telemetry;
     Mat mat = new Mat();
 
@@ -29,7 +29,7 @@ public class Detector extends OpenCvPipeline {
 
     static double percentThreshold = 0.05;
 
-    public Detector(Telemetry t){
+    public side3(Telemetry t){
         telemetry = t;
     }
 
