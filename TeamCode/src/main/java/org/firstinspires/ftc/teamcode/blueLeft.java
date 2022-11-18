@@ -32,28 +32,28 @@ public class blueLeft extends LinearOpMode {
     private DcMotor backRight;
     OpenCvWebcam webcam;
 
-    //   private CRServo Right;
-    //   private CRServo Left;
+    private CRServo Right;
+    private CRServo Left;
     private DcMotor Crane;
-    //   private DcMotor Spin;
+    private DcMotor Spin;
 
-    //BNO055IMU imu;
-    //Orientation angles;
+    BNO055IMU imu;
+    Orientation angles;
     String position;
 
 
     public void runOpMode() throws InterruptedException {
-       // initGyro();
+        initGyro();
 
         frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
         backLeft = hardwareMap.get(DcMotor.class, "backLeft");
         backRight = hardwareMap.get(DcMotor.class, "backRight");
 
-        //     Right = hardwareMap.get(CRServo.class, "Rights");
-        //     Left = hardwareMap.get(CRServo.class, "Lefts");
-        Crane = hardwareMap.get(DcMotor.class, "crane"); // Uppercase C for other code
-        //     Spin = hardwareMap.get(DcMotor.class, "Spin");
+        Right = hardwareMap.get(CRServo.class, "Rights");
+        Left = hardwareMap.get(CRServo.class, "Lefts");
+        Crane = hardwareMap.get(DcMotor.class, "Crane");
+        Spin = hardwareMap.get(DcMotor.class, "Spin");
 
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         frontRight.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -67,8 +67,8 @@ public class blueLeft extends LinearOpMode {
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
         side1 detector = new side1(telemetry);
-        //side2 j = new side2(telemetry);
-        //Detector d = new Detector(telemetry);
+        side2 j = new side2(telemetry);
+        Detector d = new Detector(telemetry);
 
         webcam.setPipeline(detector);
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
@@ -86,13 +86,13 @@ public class blueLeft extends LinearOpMode {
         waitForStart();
 
         if (opModeIsActive()) {
-           switch (detector.getLocation()) {
-               case SIDE1:
-                   position = "side1";
-                   break;
-           }
+            switch (detector.getLocation()) {
+                case SIDE1:
+                    position = "side1";
+                    break;
+            }
 
-            /* switch (d.getLocation()) {
+            switch (d.getLocation()) {
                 case SIDE3:
                     position = "side3";
                     break;
@@ -103,171 +103,171 @@ public class blueLeft extends LinearOpMode {
                     break;
             }
 
-            if (position=="side1"){
+            if (position == "side1") {
                 crane(-200);
-                move(1,2160);
+                move(1, 2160);
                 gyroTurning(90);
 
                 //first cone
-                move(.5,470);
+                move(.5, 470);
                 crane(300);
-                intake(-1,2000);
-                moveandspin(1,-720,800);
+                intake(-1, 2000);
+                moveandspin(1, -720, 800);
                 crane(-300);
-                intake(1,2000);
-                moveandspin(1,470,-800);
+                intake(1, 2000);
+                moveandspin(1, 470, -800);
 
                 //second cone
-                move(.5,470);
+                move(.5, 470);
                 crane(300);
-                intake(-1,2000);
-                moveandspin(1,-720,800);
+                intake(-1, 2000);
+                moveandspin(1, -720, 800);
                 crane(-300);
-                intake(1,2000);
-                moveandspin(1,470,-800);
+                intake(1, 2000);
+                moveandspin(1, 470, -800);
 
                 //third cone
-                move(.5,470);
+                move(.5, 470);
                 crane(300);
-                intake(-1,2000);
-                moveandspin(1,-720,800);
+                intake(-1, 2000);
+                moveandspin(1, -720, 800);
                 crane(-300);
-                intake(1,2000);
-                moveandspin(1,470,-800);
+                intake(1, 2000);
+                moveandspin(1, 470, -800);
 
                 //forth cone
-                move(.5,470);
+                move(.5, 470);
                 crane(300);
-                intake(-1,2000);
-                moveandspin(1,-720,800);
+                intake(-1, 2000);
+                moveandspin(1, -720, 800);
                 crane(-300);
-                intake(1,2000);
-                moveandspin(1,470,-800);
+                intake(1, 2000);
+                moveandspin(1, 470, -800);
 
                 //fith cone
-                move(.5,470);
+                move(.5, 470);
                 crane(300);
-                intake(-1,2000);
-                moveandspin(1,-720,800);
+                intake(-1, 2000);
+                moveandspin(1, -720, 800);
                 crane(-300);
-                intake(1,2000);
-                moveandspin(1,470,-800);
+                intake(1, 2000);
+                moveandspin(1, 470, -800);
 
-                move(.5,470);
-                strafeRight(1,1000);
+                move(.5, 470);
+                strafeRight(1, 1000);
             }
-  /*          if(position=="side2"){
+            if (position == "side2") {
                 crane(-200);
-                move(1,2160);
+                move(1, 2160);
                 gyroTurning(90);
 
                 //first cone
-                move(.5,470);
+                move(.5, 470);
                 crane(300);
-                intake(-1,2000);
-                moveandspin(1,-720,800);
+                intake(-1, 2000);
+                moveandspin(1, -720, 800);
                 crane(-300);
-                intake(1,2000);
-                moveandspin(1,470,-800);
+                intake(1, 2000);
+                moveandspin(1, 470, -800);
 
                 //second cone
-                move(.5,470);
+                move(.5, 470);
                 crane(300);
-                intake(-1,2000);
-                moveandspin(1,-720,800);
+                intake(-1, 2000);
+                moveandspin(1, -720, 800);
                 crane(-300);
-                intake(1,2000);
-                moveandspin(1,470,-800);
+                intake(1, 2000);
+                moveandspin(1, 470, -800);
 
                 //third cone
-                move(.5,470);
+                move(.5, 470);
                 crane(300);
-                intake(-1,2000);
-                moveandspin(1,-720,800);
+                intake(-1, 2000);
+                moveandspin(1, -720, 800);
                 crane(-300);
-                intake(1,2000);
-                moveandspin(1,470,-800);
+                intake(1, 2000);
+                moveandspin(1, 470, -800);
 
                 //forth cone
-                move(.5,470);
+                move(.5, 470);
                 crane(300);
-                intake(-1,2000);
-                moveandspin(1,-720,800);
+                intake(-1, 2000);
+                moveandspin(1, -720, 800);
                 crane(-300);
-                intake(1,2000);
-                moveandspin(1,470,-800);
+                intake(1, 2000);
+                moveandspin(1, 470, -800);
 
                 //fith cone
-                move(.5,470);
+                move(.5, 470);
                 crane(300);
-                intake(-1,2000);
-                moveandspin(1,-720,800);
+                intake(-1, 2000);
+                moveandspin(1, -720, 800);
                 crane(-300);
-                intake(1,2000);
-                moveandspin(1,470,-800);
+                intake(1, 2000);
+                moveandspin(1, 470, -800);
 
-                move(.5,200);
-                strafeRight(1,1000);
+                move(.5, 200);
+                strafeRight(1, 1000);
             }
-            if(position=="side3"){
+            if (position == "side3") {
                 crane(-200);
-                move(1,2160);
+                move(1, 2160);
                 gyroTurning(90);
 
                 //first cone
-                move(.5,470);
+                move(.5, 470);
                 crane(300);
-                intake(-1,2000);
-                moveandspin(1,-720,800);
+                intake(-1, 2000);
+                moveandspin(1, -720, 800);
                 crane(-300);
-                intake(1,2000);
-                moveandspin(1,470,-800);
+                intake(1, 2000);
+                moveandspin(1, 470, -800);
 
                 //second cone
-                move(.5,470);
+                move(.5, 470);
                 crane(300);
-                intake(-1,2000);
-                moveandspin(1,-720,800);
+                intake(-1, 2000);
+                moveandspin(1, -720, 800);
                 crane(-300);
-                intake(1,2000);
-                moveandspin(1,470,-800);
+                intake(1, 2000);
+                moveandspin(1, 470, -800);
 
                 //third cone
-                move(.5,470);
+                move(.5, 470);
                 crane(300);
-                intake(-1,2000);
-                moveandspin(1,-720,800);
+                intake(-1, 2000);
+                moveandspin(1, -720, 800);
                 crane(-300);
-                intake(1,2000);
-                moveandspin(1,470,-800);
+                intake(1, 2000);
+                moveandspin(1, 470, -800);
 
                 //forth cone
-                move(.5,470);
+                move(.5, 470);
                 crane(300);
-                intake(-1,2000);
-                moveandspin(1,-720,800);
+                intake(-1, 2000);
+                moveandspin(1, -720, 800);
                 crane(-300);
-                intake(1,2000);
-                moveandspin(1,470,-800);
+                intake(1, 2000);
+                moveandspin(1, 470, -800);
 
                 //fith cone
-                move(.5,470);
+                move(.5, 470);
                 crane(300);
-                intake(-1,2000);
-                moveandspin(1,-720,800);
+                intake(-1, 2000);
+                moveandspin(1, -720, 800);
                 crane(-300);
-                intake(1,2000);
-                moveandspin(1,470,-800);
+                intake(1, 2000);
+                moveandspin(1, 470, -800);
 
 
-                strafeRight(1,1000);
-                move(.5,200);
+                strafeRight(1, 1000);
+                move(.5, 200);
             }
-
 
 
         }
     }
+
     public void initGyro() {
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
@@ -279,9 +279,9 @@ public class blueLeft extends LinearOpMode {
         imu.initialize(parameters);
         sleep(250);
     }
+
     public boolean gyroTurning(double targetAngle) {
         boolean foundAngle = false;
-        //while (opModeIsActive()) {
         while (foundAngle == false) {
             angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
             double currentAngle = angles.firstAngle;
@@ -327,32 +327,35 @@ public class blueLeft extends LinearOpMode {
         return foundAngle;
     }
 
-    public void crane(int position){
+
+    public void crane(int position) {
         Crane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Crane.setTargetPosition(position);
         Crane.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        while (Crane.isBusy()){
+        while (Crane.isBusy()) {
 
         }
 
     }
-    public void intake(int direction,long Time){
-        Right.setPower(direction*1);
-        Left.setPower(direction*1);
+
+    public void intake(int direction, long Time) {
+        Right.setPower(direction * 1);
+        Left.setPower(direction * 1);
         sleep(Time);
         Right.setPower(0);
         Left.setPower(0);
 
     }
 
-    public void moveandspin(double power,int moveposition,int spinposition){
-        //move(power,moveposition);
-      //  spin(spinposition);
-     //   while (Spin.isBusy()){
+    public void moveandspin(double power, int moveposition, int spinposition) {
+        move(power, moveposition);
+        spin(spinposition);
+        while (Spin.isBusy()) {
 
-    //}
+        }
     }
-    public void strafeRight(double power, int time){
+
+    public void strafeRight(double power, int time) {
         frontLeft.setPower(power);
         frontRight.setPower(-power);
         backLeft.setPower(-power);
@@ -364,21 +367,21 @@ public class blueLeft extends LinearOpMode {
         backRight.setPower(0);
     }
 
-    public void spin(int position){
-      //  Spin.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    public void spin(int position) {
+        Spin.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Crane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-      //  Spin.setTargetPosition(position);
+        Spin.setTargetPosition(position);
         Crane.setTargetPosition(-500);
-      //  Spin.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        Spin.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Crane.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-      //  Spin.setPower(1);
+        Spin.setPower(1);
         Crane.setPower(1);
-      //  while(Spin.isBusy()){
+        while (Spin.isBusy()) {
 
-      //  }
+        }
     }
 
-    public void move(double power, int position){
+    public void move(double power, int position) {
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -399,12 +402,15 @@ public class blueLeft extends LinearOpMode {
         backRight.setPower(power);
         backLeft.setPower(power);
 
-        while (frontLeft.isBusy()){
+        while (frontLeft.isBusy()) {
 
         }
 
-            */
-            webcam.stopStreaming();
-        }
+
+        webcam.stopStreaming();
     }
-}//delete later
+}
+
+
+
+
