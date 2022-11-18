@@ -55,7 +55,7 @@ public class copyofoldcv extends OpenCvPipeline {
         Scalar greenLowHSV = new Scalar(40,40,40);
         Scalar greenHighHSV = new Scalar(70,255,255);
 
-        Core.inRange(mat, greenLowHSV, greenHighHSV, mat);
+        Core.inRange(mat, yellowLowHSV, yellowHighHSV, mat);
 
         Mat left = mat.submat(LEFT_ROI);
         Mat mid = mat.submat(MID_ROI);
