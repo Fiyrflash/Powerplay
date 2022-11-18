@@ -23,8 +23,8 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
-
-public class blueLeft extends LinearOpMode{
+@Autonomous
+public class blueLeft extends LinearOpMode {
 
     private DcMotor frontLeft;
     private DcMotor frontRight;
@@ -32,30 +32,28 @@ public class blueLeft extends LinearOpMode{
     private DcMotor backRight;
     OpenCvWebcam webcam;
 
-    private CRServo Right;
-    private CRServo Left;
+    //   private CRServo Right;
+    //   private CRServo Left;
     private DcMotor Crane;
-    private DcMotor Spin;
+    //   private DcMotor Spin;
 
-    BNO055IMU imu;
-    Orientation angles;
+    //BNO055IMU imu;
+    //Orientation angles;
     String position;
-    double i;
-
 
 
     public void runOpMode() throws InterruptedException {
-        initGyro();
+       // initGyro();
 
         frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
         backLeft = hardwareMap.get(DcMotor.class, "backLeft");
         backRight = hardwareMap.get(DcMotor.class, "backRight");
 
-        Right = hardwareMap.get(CRServo.class, "Rights");
-        Left = hardwareMap.get(CRServo.class, "Lefts");
-        Crane = hardwareMap.get(DcMotor.class, "Crane");
-        Spin = hardwareMap.get(DcMotor.class, "Spin");
+        //     Right = hardwareMap.get(CRServo.class, "Rights");
+        //     Left = hardwareMap.get(CRServo.class, "Lefts");
+        Crane = hardwareMap.get(DcMotor.class, "crane"); // Uppercase C for other code
+        //     Spin = hardwareMap.get(DcMotor.class, "Spin");
 
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         frontRight.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -63,14 +61,14 @@ public class blueLeft extends LinearOpMode{
         backRight.setDirection(DcMotorSimple.Direction.FORWARD);
 
 
-
         int cameraMonitorViewId = hardwareMap.appContext
                 .getResources().getIdentifier("cameraMonitorViewId",
                         "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+
         side1 detector = new side1(telemetry);
-        side2 j = new side2(telemetry);
-        Detector d =new Detector(telemetry);
+        //side2 j = new side2(telemetry);
+        //Detector d = new Detector(telemetry);
 
         webcam.setPipeline(detector);
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
@@ -86,21 +84,22 @@ public class blueLeft extends LinearOpMode{
         });
 
         waitForStart();
-        if (opModeIsActive()){
-            switch (detector.getLocation()) {
-                case SIDE1:
-                    position="side1";
-                    break;
-            }
 
-            switch (d.getLocation()) {
+        if (opModeIsActive()) {
+           switch (detector.getLocation()) {
+               case SIDE1:
+                   position = "side1";
+                   break;
+           }
+
+            /* switch (d.getLocation()) {
                 case SIDE3:
-                    position="side3";
+                    position = "side3";
                     break;
             }
             switch (j.getLocation()) {
                 case SIDE2:
-                    position="side2";
+                    position = "side2";
                     break;
             }
 
@@ -157,7 +156,7 @@ public class blueLeft extends LinearOpMode{
                 move(.5,470);
                 strafeRight(1,1000);
             }
-            if(position=="side2"){
+  /*          if(position=="side2"){
                 crane(-200);
                 move(1,2160);
                 gyroTurning(90);
@@ -347,11 +346,11 @@ public class blueLeft extends LinearOpMode{
     }
 
     public void moveandspin(double power,int moveposition,int spinposition){
-        move(power,moveposition);
-        spin(spinposition);
-        while (Spin.isBusy()){
+        //move(power,moveposition);
+      //  spin(spinposition);
+     //   while (Spin.isBusy()){
 
-        }
+    //}
     }
     public void strafeRight(double power, int time){
         frontLeft.setPower(power);
@@ -366,17 +365,17 @@ public class blueLeft extends LinearOpMode{
     }
 
     public void spin(int position){
-        Spin.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+      //  Spin.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Crane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        Spin.setTargetPosition(position);
+      //  Spin.setTargetPosition(position);
         Crane.setTargetPosition(-500);
-        Spin.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+      //  Spin.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Crane.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        Spin.setPower(1);
+      //  Spin.setPower(1);
         Crane.setPower(1);
-        while(Spin.isBusy()){
+      //  while(Spin.isBusy()){
 
-        }
+      //  }
     }
 
     public void move(double power, int position){
@@ -404,6 +403,8 @@ public class blueLeft extends LinearOpMode{
 
         }
 
-
+            */
+            webcam.stopStreaming();
+        }
     }
-}
+}//delete later
