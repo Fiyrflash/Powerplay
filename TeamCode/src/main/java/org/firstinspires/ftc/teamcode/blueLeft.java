@@ -50,11 +50,11 @@ public class blueLeft extends LinearOpMode {
         backLeft = hardwareMap.get(DcMotor.class, "backLeft");
         backRight = hardwareMap.get(DcMotor.class, "backRight");
 
-        Right = hardwareMap.get(CRServo.class, "Rights");
+        /*Right = hardwareMap.get(CRServo.class, "Rights");
         Left = hardwareMap.get(CRServo.class, "Lefts");
         Crane = hardwareMap.get(DcMotor.class, "Crane");
         Spin = hardwareMap.get(DcMotor.class, "Spin");
-
+*/
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         frontRight.setDirection(DcMotorSimple.Direction.FORWARD);
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -67,8 +67,8 @@ public class blueLeft extends LinearOpMode {
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
         side1 a = new side1(telemetry);
-        side2 b = new side2(telemetry);
-        side3 c = new side3(telemetry);
+        //side2 b = new side2(telemetry);
+        //side3 c = new side3(telemetry);
 
         webcam.setPipeline(a);
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
@@ -89,9 +89,10 @@ public class blueLeft extends LinearOpMode {
             switch (a.getLocation()) {
                 case SIDE1:
                     position = "side1";
+                    sleep(3000);
                     break;
             }
-            webcam.setPipeline(c);
+            /*webcam.setPipeline(c);
 
             switch (c.getLocation()) {
                 case SIDE3:
@@ -105,7 +106,7 @@ public class blueLeft extends LinearOpMode {
                     break;
             }
 
-            if (position == "side1") {
+            /*if (position == "side1") {
                 crane(-200);
                 move(1, 2160);
                 gyroTurning(90);
@@ -264,7 +265,7 @@ public class blueLeft extends LinearOpMode {
 
                 strafeRight(1, 1000);
                 move(.5, 200);
-            }
+           }*/
 
 
         }

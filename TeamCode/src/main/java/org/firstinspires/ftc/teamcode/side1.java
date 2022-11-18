@@ -51,7 +51,7 @@ public class side1 extends OpenCvPipeline {
         Scalar greenHighHSV = new Scalar(70,255,255);
 
 
-        Core.inRange(mat, orangeLowHSV, orangeHighHSV,mat);
+        Core.inRange(mat, yellowLowHSV, yellowHighHSV,mat);
 
 
 
