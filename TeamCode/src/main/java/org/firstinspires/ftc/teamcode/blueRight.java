@@ -58,15 +58,16 @@ public class blueRight extends LinearOpMode {
         frontLeft.setDirection(DcMotorSimple.Direction.FORWARD);
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.FORWARD);
-        backRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        backRight.setDirection(DcMotorSimple.Direction.FORWARD);
         waitForStart();
 
         if (opModeIsActive()) {
 
 
                 move(1, 2200);
-                //gyroTurning(90);
-                Turn(1,1000);
+                gyroTurning(90);
+                move(.2,700);
+
                 crane(300);
                 move(.5, 470);
                 crane(-250);
@@ -241,11 +242,14 @@ public class blueRight extends LinearOpMode {
     }
 
     public boolean gyroTurning(double targetAngle) {
-        boolean foundAngle = false;
-        while (foundAngle == false) {
+        boolean foundAngle;
+        foundAngle = false;
+        while (!foundAngle) {
             angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
             double currentAngle = angles.firstAngle;
-
+            telemetry.addData("Angle",currentAngle);
+            telemetry.addData("targetangle",targetAngle);
+            telemetry.update();
             if (angles.firstAngle >= targetAngle - 0.1 && angles.firstAngle <= targetAngle + 0.1) {
                 frontLeft.setPower(0);
                 frontRight.setPower(0);
@@ -254,32 +258,39 @@ public class blueRight extends LinearOpMode {
                 foundAngle = true;
                 sleep(1000);
                 break;
-            } else if (angles.firstAngle >= targetAngle + 0.5) {
+
+            }
+            else if (angles.firstAngle >= targetAngle + 0.5) {
                 if (angles.firstAngle <= targetAngle + 10) {
-                    frontLeft.setPower(0.15);
-                    frontRight.setPower(-0.15);
-                    backLeft.setPower(0.15);
-                    backRight.setPower(-0.15);
-                    foundAngle = false;
-                } else {
                     frontLeft.setPower(0.5);
                     frontRight.setPower(-0.5);
                     backLeft.setPower(0.5);
                     backRight.setPower(-0.5);
                     foundAngle = false;
                 }
-            } else if (angles.firstAngle <= targetAngle - 0.5) {
-                if (angles.firstAngle >= targetAngle - 10) {
-                    frontLeft.setPower(-0.15);
-                    frontRight.setPower(0.15);
-                    backLeft.setPower(-0.15);
-                    backRight.setPower(0.15);
+                else {
+                    frontLeft.setPower(0.5);
+                    frontRight.setPower(-0.5);
+                    backLeft.setPower(0.5);
+                    backRight.setPower(-0.5);
                     foundAngle = false;
-                } else {
+                }
+            }
+            else if (angles.firstAngle <= targetAngle - 0.5) {
+                if (angles.firstAngle >= targetAngle - 10) {
                     frontLeft.setPower(-0.5);
                     frontRight.setPower(0.5);
                     backLeft.setPower(-0.5);
                     backRight.setPower(0.5);
+                    foundAngle = false;
+                }
+                else {
+                    telemetry.addLine("hellow");
+                    telemetry.update();
+                    frontLeft.setPower(-1);
+                    frontRight.setPower(1);
+                    backLeft.setPower(-1);
+                    backRight.setPower(1);
                     foundAngle = false;
                 }
             }
