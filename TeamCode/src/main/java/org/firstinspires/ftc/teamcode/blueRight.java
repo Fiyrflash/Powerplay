@@ -59,7 +59,7 @@ public class blueRight extends LinearOpMode {
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.FORWARD);
         backRight.setDirection(DcMotorSimple.Direction.FORWARD);
-        waitForStart();
+        waitForStart();//posiblyy the problem
 
         if (opModeIsActive()) {
 
@@ -259,24 +259,21 @@ public class blueRight extends LinearOpMode {
                 sleep(1000);
                 break;
 
-            }
-            else if (angles.firstAngle >= targetAngle + 0.5) {
+            } else if (angles.firstAngle >= targetAngle + 0.5) {
                 if (angles.firstAngle <= targetAngle + 10) {
                     frontLeft.setPower(0.5);
                     frontRight.setPower(-0.5);
                     backLeft.setPower(0.5);
                     backRight.setPower(-0.5);
                     foundAngle = false;
-                }
-                else {
+                } else {
                     frontLeft.setPower(0.5);
                     frontRight.setPower(-0.5);
                     backLeft.setPower(0.5);
                     backRight.setPower(-0.5);
                     foundAngle = false;
                 }
-            }
-            else if (angles.firstAngle <= targetAngle - 0.5) {
+            } else if (angles.firstAngle <= targetAngle - 0.5) {
                 if (angles.firstAngle >= targetAngle - 10) {
                     frontLeft.setPower(-0.5);
                     frontRight.setPower(0.5);
@@ -287,10 +284,10 @@ public class blueRight extends LinearOpMode {
                 else {
                     telemetry.addLine("hellow");
                     telemetry.update();
-                    frontLeft.setPower(-1);
-                    frontRight.setPower(1);
-                    backLeft.setPower(-1);
-                    backRight.setPower(1);
+                    frontLeft.setPower(-.5);
+                    frontRight.setPower(.5);
+                    backLeft.setPower(-.5);
+                    backRight.setPower(.5);
                     foundAngle = false;
                 }
             }
@@ -303,6 +300,7 @@ public class blueRight extends LinearOpMode {
         Crane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Crane.setTargetPosition(position);
         Crane.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        Crane.setPower(1);
         while (Crane.isBusy()) {
 
         }

@@ -339,6 +339,7 @@ public class blueLeft extends LinearOpMode {
         Crane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Crane.setTargetPosition(position);
         Crane.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        Crane.setPower(1);
         while (Crane.isBusy()) {
 
         }

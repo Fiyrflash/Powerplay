@@ -49,6 +49,7 @@ public class oldtest extends LinearOpMode {
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backRight.setDirection(DcMotorSimple.Direction.FORWARD);
 
+        waitForStart();//possubky the problem
         if (opModeIsActive()) {
 
 
