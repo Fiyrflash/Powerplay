@@ -42,6 +42,7 @@ public class blueLeft extends LinearOpMode {
     String position;
 
 
+
     public void runOpMode() throws InterruptedException {
         initGyro();
 
@@ -86,6 +87,7 @@ public class blueLeft extends LinearOpMode {
         waitForStart();
 
         if (opModeIsActive()) {
+
             if (a.getLocation()== side1.Location.SIDE1) {
                     position = "side1";
                     telemetry.addLine("side1");

@@ -73,7 +73,7 @@ public class side1 extends OpenCvPipeline {
 
         if (tseMid){
             location = Location.SIDE1;
-            telemetry.addData("Location", "Middle");
+            telemetry.addData("Location", "s1");
         }
         telemetry.update();
 
