@@ -67,11 +67,11 @@ public class blueLeft extends LinearOpMode {
                         "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
-        side1 a = new side1(telemetry);
-        side2 b = new side2(telemetry);
-        side3 c = new side3(telemetry);
+        side1 Location = new side1(telemetry);
+        //side2 b = new side2(telemetry);
+        //side3 c = new side3(telemetry);
 
-        webcam.setPipeline(a);
+        webcam.setPipeline(Location);
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
@@ -83,18 +83,19 @@ public class blueLeft extends LinearOpMode {
 
             }
         });
-
+        telemetry.addData("location",Location.getLocation());
+        telemetry.update();
         waitForStart();
 
         if (opModeIsActive()) {
 
-            if (a.getLocation()== side1.Location.SIDE1) {
+            if (Location.getLocation() == side1.Location.SIDE1) {
                     position = "side1";
                     telemetry.addLine("side1");
                     telemetry.update();
                     sleep(3000);
             }
-            webcam.setPipeline(c);
+            /*webcam.setPipeline(c);
 
             if (c.getLocation()== side3.Location.SIDE3) {
                     position = "side3";

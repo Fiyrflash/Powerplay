@@ -22,6 +22,7 @@ public class side1 extends OpenCvPipeline {
     public Location location;
 
 
+
     static final Rect MID_ROI = new Rect(
             new Point(140, 10),
             new Point(170, 150));
@@ -73,7 +74,7 @@ public class side1 extends OpenCvPipeline {
 
         if (tseMid){
             location = Location.SIDE1;
-            telemetry.addData("Location", "s1");
+            telemetry.addData("Location", location);
         }
         telemetry.update();
 
