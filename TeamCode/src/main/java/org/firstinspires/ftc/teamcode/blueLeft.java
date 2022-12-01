@@ -89,12 +89,18 @@ public class blueLeft extends LinearOpMode {
 
         if (opModeIsActive()) {
 
-            if (Location.getLocation() == side1.Location.SIDE1) {
+            switch (Location.getLocation()) {
+                case SIDE1:
                     position = "side1";
                     telemetry.addLine("side1");
                     telemetry.update();
-                    sleep(3000);
+                    //sleep(3000);
+                    break;
+                case NOT_FOUND:
+                    telemetry.addLine("not");
+                    telemetry.update();
             }
+
             /*webcam.setPipeline(c);
 
             if (c.getLocation()== side3.Location.SIDE3) {

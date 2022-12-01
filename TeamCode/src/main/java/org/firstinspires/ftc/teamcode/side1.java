@@ -76,6 +76,10 @@ public class side1 extends OpenCvPipeline {
             location = Location.SIDE1;
             telemetry.addData("Location", location);
         }
+        else{
+            location=Location.NOT_FOUND;
+            telemetry.addData("Location",location);
+        }
         telemetry.update();
 
         Imgproc.cvtColor(mat, mat, Imgproc.COLOR_GRAY2RGB);
