@@ -77,7 +77,11 @@ public class side2 extends OpenCvPipeline {
 
         if (tseMid) {
             location = Location.SIDE2;
-            telemetry.addData("Location", "Middle");
+            telemetry.addData("Location", "s2");
+        }
+        else {
+            location=Location.NOT_FOUND;
+            telemetry.addLine("not found");
         }
 
         telemetry.update();

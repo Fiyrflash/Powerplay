@@ -71,7 +71,7 @@ public class side3 extends OpenCvPipeline {
 
         if (tseMid){
             location = Location.SIDE3;
-            telemetry.addData("Location", "Middle");
+            telemetry.addData("Location", "s3");
 
         }
         telemetry.update();
