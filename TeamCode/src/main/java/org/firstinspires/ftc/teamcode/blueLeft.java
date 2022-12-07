@@ -67,7 +67,7 @@ public class blueLeft extends LinearOpMode {
                         "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
-        cvtest Location = new cvtest(telemetry);
+        side1 Location = new side1(telemetry);
 
         webcam.setPipeline(Location);
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
