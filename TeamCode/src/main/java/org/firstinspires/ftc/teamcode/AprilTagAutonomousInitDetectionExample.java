@@ -180,10 +180,13 @@ public class AprilTagAutonomousInitDetectionExample extends LinearOpMode
 
 
         /* You wouldn't have this in your autonomous, this is just to prevent the sample from ending */
-        while (opModeIsActive()) {sleep(20);}
-    }
+        if (opModeIsActive()) {
 
-    void tagToTelemetry(AprilTagDetection detection)
+
+        }
+
+
+    }  void tagToTelemetry(AprilTagDetection detection)
     {
         telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
         telemetry.addLine(String.format("Translation X: %.2f feet", detection.pose.x*FEET_PER_METER));
