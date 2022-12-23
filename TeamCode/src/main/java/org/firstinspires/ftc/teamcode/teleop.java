@@ -23,20 +23,19 @@ public class teleop extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
 
-
         frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
         backLeft = hardwareMap.get(DcMotor.class, "backLeft");
         backRight = hardwareMap.get(DcMotor.class, "backRight");
 
-        Right = hardwareMap.get(CRServo.class,"Rights");
-        Left = hardwareMap.get(CRServo.class, "Lefts");
-        Crain = hardwareMap.get(DcMotor.class, "Crane");
-        Spin = hardwareMap.get(DcMotor.class, "Spin");
+        //Right = hardwareMap.get(CRServo.class,"Rights");
+        //Left = hardwareMap.get(CRServo.class, "Lefts");
+        //Crain = hardwareMap.get(DcMotor.class, "Crane");
+        //Spin = hardwareMap.get(DcMotor.class, "Spin");
 
-        frontLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
-        backLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backRight.setDirection(DcMotorSimple.Direction.FORWARD);
 
         waitForStart();
@@ -60,21 +59,21 @@ public class teleop extends LinearOpMode {
 
             crainpower = gamepad2.right_stick_y;
             spinpowerup = gamepad2.dpad_right;
-            spinpowerdown =gamepad2.dpad_left;
+            spinpowerdown = gamepad2.dpad_left;
             pickup = gamepad2.left_bumper;
             dropoff = gamepad2.right_bumper;
             turning = gamepad2.b;
 
             if (strafeLeft) {
                 frontLeft.setPower(0.75);
-                frontRight.setPower(-0.75);
-                backLeft.setPower(-00.75);
-                backRight.setPower(0.75);
+                frontRight.setPower(0.75);
+                backLeft.setPower(-0.75);
+                backRight.setPower(-0.75);
             }
             if (strafeRight) {
-                frontLeft.setPower(-0.75);
+                frontLeft.setPower(0.75);
                 frontRight.setPower(0.75);
-                backLeft.setPower(0.75);
+                backLeft.setPower(-0.75);
                 backRight.setPower(-0.75);
             }
 
@@ -89,9 +88,9 @@ public class teleop extends LinearOpMode {
             backLeft.setPower(-turn);
             backRight.setPower(turn);
 
-            Crain.setPower(crainpower);
+            //Crain.setPower(crainpower);
 
-            if (spinpowerup){
+            /*if (spinpowerup){
                 Spin.setPower(.5);
             }
             if (spinpowerdown){
@@ -140,7 +139,8 @@ public class teleop extends LinearOpMode {
             }
 
         }
+*/
 
-
+        }
     }
 }
