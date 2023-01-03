@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp
 public class teleop extends LinearOpMode {
@@ -29,7 +30,7 @@ public class teleop extends LinearOpMode {
         backRight = hardwareMap.get(DcMotor.class, "backRight");
 
         //Right = hardwareMap.get(CRServo.class,"Rights");
-        //Left = hardwareMap.get(CRServo.class, "Lefts");
+        Left = hardwareMap.get(CRServo.class, "Lefts");
         Crain = hardwareMap.get(DcMotor.class, "Crane");
         //Spin = hardwareMap.get(DcMotor.class, "Spin");
 
@@ -100,14 +101,12 @@ public class teleop extends LinearOpMode {
             if (!spinpowerdown && !spinpowerup){
                 Spin.setPower(0);
             }
-
+*/
             if (pickup) {
-                Right.setPower(1);
                 Left.setPower(-1);
             }
 
             if (dropoff){
-                Right.setPower(-1);
                 Left.setPower(1);
 
             }
@@ -118,7 +117,7 @@ public class teleop extends LinearOpMode {
 
             }
 
-
+/*
             if (turning){
                 Spin.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 Crain.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
