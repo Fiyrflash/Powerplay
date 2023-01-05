@@ -15,7 +15,7 @@ public class teleop extends LinearOpMode {
     private DcMotor backRight;
 
 
-    private CRServo Right;
+    //private CRServo Right;
     private CRServo Left;
     private DcMotor Crain;
     private DcMotor Spin;
@@ -46,8 +46,8 @@ public class teleop extends LinearOpMode {
             boolean strafeLeft;
             boolean strafeRight;
 
-            boolean pickup;
-            boolean dropoff;
+            float pickup;
+            float dropoff;
             boolean spinpowerup;
             boolean spinpowerdown;
             double crainpower;
@@ -61,15 +61,15 @@ public class teleop extends LinearOpMode {
             crainpower = gamepad2.right_stick_y;
             spinpowerup = gamepad2.dpad_right;
             spinpowerdown = gamepad2.dpad_left;
-            pickup = gamepad2.left_bumper;
-            dropoff = gamepad2.right_bumper;
+            pickup = gamepad2.left_trigger;
+            dropoff = gamepad2.right_trigger;
             turning = gamepad2.b;
 
             if (strafeLeft) {
-                frontLeft.setPower(0.75);
-                frontRight.setPower(0.75);
-                backLeft.setPower(-0.75);
-                backRight.setPower(-0.75);
+                frontLeft.setPower(-0.75);
+                frontRight.setPower(-0.75);
+                backLeft.setPower(0.75);
+                backRight.setPower(0.75);
             }
             if (strafeRight) {
                 frontLeft.setPower(0.75);
@@ -102,17 +102,16 @@ public class teleop extends LinearOpMode {
                 Spin.setPower(0);
             }
 */
-            if (pickup) {
+            if (pickup > 0){
                 Left.setPower(-1);
             }
 
-            if (dropoff){
+            if (dropoff > 0){
                 Left.setPower(1);
 
             }
 
-            if (dropoff==false && pickup==false){
-                Right.setPower(0);
+            if (dropoff == 0 && pickup == 0){
                 Left.setPower(0);
 
             }
@@ -139,7 +138,6 @@ public class teleop extends LinearOpMode {
 
         }
 */
-
         }
     }
 }
