@@ -48,8 +48,12 @@ public class blueLeft extends LinearOpMode {
 
         if (opModeIsActive()) {
 
-        move(1,500);
-        stopMotors();
+            move(1,-2000);
+            stopMotors();
+
+
+
+
         }
 
 
@@ -64,6 +68,8 @@ public class blueLeft extends LinearOpMode {
     }
 
     public void move(double power, int position) {
+        telemetry.addData("backright",backRight.getCurrentPosition());
+        telemetry.update();
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
