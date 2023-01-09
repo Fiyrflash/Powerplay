@@ -89,7 +89,7 @@ public class blueLeft extends LinearOpMode {
         }
 
     }
-    public void moveandspin(double power, int position,double powers, int positions) {
+    public void moveandspin(double power, int position,double powers, int times) {
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -109,7 +109,7 @@ public class blueLeft extends LinearOpMode {
         frontLeft.setPower(power);
         backRight.setPower(power);
         backLeft.setPower(power);
-        spin2(powers,positions);
+        spin2(powers,times);
         while (frontLeft.isBusy() && opModeIsActive()) {
 
         }
