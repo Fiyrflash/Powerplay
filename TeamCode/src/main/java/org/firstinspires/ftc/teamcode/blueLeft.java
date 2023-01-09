@@ -49,8 +49,9 @@ public class blueLeft extends LinearOpMode {
         if (opModeIsActive()) {
 
         move(1,500);
-
+        stopMotors();
         }
+
 
 
     }

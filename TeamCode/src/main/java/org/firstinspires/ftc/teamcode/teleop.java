@@ -43,8 +43,8 @@ public class teleop extends LinearOpMode {
         while (opModeIsActive()) {
             double turn;
             double throttle;
-            boolean strafeLeft;
-            boolean strafeRight;
+            float strafeLeft;
+            float strafeRight;
 
             float pickup;
             float dropoff;
@@ -55,8 +55,8 @@ public class teleop extends LinearOpMode {
 
             throttle = gamepad1.left_stick_y;
             turn = gamepad1.right_stick_x;
-            strafeLeft = gamepad1.left_bumper;
-            strafeRight = gamepad1.right_bumper;
+            strafeLeft = gamepad1.left_trigger;
+            strafeRight = gamepad1.right_trigger;
 
             crainpower = gamepad2.right_stick_y;
             spinpowerup = gamepad2.dpad_right;
@@ -65,13 +65,13 @@ public class teleop extends LinearOpMode {
             dropoff = gamepad2.right_trigger;
             turning = gamepad2.b;
 
-            if (strafeLeft) {
+            if (strafeLeft>0) {
                 frontLeft.setPower(-0.75);
                 frontRight.setPower(-0.75);
                 backLeft.setPower(0.75);
                 backRight.setPower(0.75);
             }
-            if (strafeRight) {
+            if (strafeRight>0) {
                 frontLeft.setPower(0.75);
                 frontRight.setPower(0.75);
                 backLeft.setPower(-0.75);
