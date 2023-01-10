@@ -29,10 +29,8 @@ public class teleop extends LinearOpMode {
         backLeft = hardwareMap.get(DcMotor.class, "backLeft");
         backRight = hardwareMap.get(DcMotor.class, "backRight");
 
-        //Right = hardwareMap.get(CRServo.class,"Rights");
         Left = hardwareMap.get(CRServo.class, "Lefts");
         Crain = hardwareMap.get(DcMotor.class, "Crane");
-        //Spin = hardwareMap.get(DcMotor.class, "Spin");
 
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);

@@ -31,20 +31,12 @@ public class encoder_for1foot extends LinearOpMode {
 
         if (opModeIsActive()) {
 
-            telemetry.addData("fR", frontRight.getCurrentPosition());
-            telemetry.addData("fL", frontLeft.getCurrentPosition());
-            telemetry.addData("BL", backLeft.getCurrentPosition());
-            telemetry.addData("BR", backRight.getCurrentPosition());
-            telemetry.update();
-
             frontLeft.setPower(.5);
             frontRight.setPower(.5);
             backRight.setPower(.5);
             backLeft.setPower(.5);
 
             sleep(2000);
-
-            //move(1,720);
 
             frontLeft.setPower(0);
             frontRight.setPower(0);

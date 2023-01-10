@@ -34,10 +34,8 @@ public class blueLeft extends LinearOpMode {
         backLeft = hardwareMap.get(DcMotor.class, "backLeft");
         backRight = hardwareMap.get(DcMotor.class, "backRight");
 
-        //Right = hardwareMap.get(CRServo.class,"Rights");
         Left = hardwareMap.get(CRServo.class, "Lefts");
         Crane = hardwareMap.get(DcMotor.class, "Crane");
-        //Spin = hardwareMap.get(DcMotor.class, "Spin");
 
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -95,89 +93,9 @@ public class blueLeft extends LinearOpMode {
         }
 
     }
-    public void moveandspin(double power, int position,double powers, int times) {
-        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        frontRight.setTargetPosition(-position);
-        frontLeft.setTargetPosition(-position);
-        backRight.setTargetPosition(-position);
-        backLeft.setTargetPosition(-position);
 
-        frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        frontRight.setPower(power);
-        frontLeft.setPower(power);
-        backRight.setPower(power);
-        backLeft.setPower(power);
-        spin2(powers,times);
-        while (frontLeft.isBusy() && opModeIsActive()) {
-
-        }
-    }
-    public void craneinput(int time) {
-        crane(1,time);
-        intake(1,1000);
-        sleep(1500);
-
-    }
-
-    public void strafeLeftwithcrane(double power, int position,double powerc, int timec)  {
-
-        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        frontRight.setTargetPosition(-position);
-        frontLeft.setTargetPosition(position);
-        backRight.setTargetPosition(position);
-        backLeft.setTargetPosition(-position);
-
-        frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        frontRight.setPower(power);
-        frontLeft.setPower(power);
-        backRight.setPower(power);
-        backLeft.setPower(power);
-        crane(powerc,timec);
-        while (frontLeft.isBusy() && opModeIsActive()) {
-        }
-
-    }
-    public void strafeRightwithcrane(double power, int position,double powerc, int timec)  {
-        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        frontRight.setTargetPosition(position);
-        frontLeft.setTargetPosition(-position);
-        backRight.setTargetPosition(-position);
-        backLeft.setTargetPosition(position);
-
-        frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        frontRight.setPower(power);
-        frontLeft.setPower(power);
-        backRight.setPower(power);
-        backLeft.setPower(power);
-        crane(powerc,timec);
-        while (frontLeft.isBusy() && opModeIsActive()) {
-
-        }
-    }
     public void strafeLeft(double power, int position)  {
 
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -230,25 +148,6 @@ public class blueLeft extends LinearOpMode {
         }
     }
 
-    public void intake(int direction, long time)  {
-        Left.setPower(direction );
-        sleep(time);
-        Left.setPower(0);
-
-    }
-
-
-    public void spin(double power, int position) {
-        telemetry.addData("spin", Spin.getCurrentPosition());
-        telemetry.update();
-        Spin.setTargetPosition(position);
-        Spin.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        Spin.setPower(power);
-        while (Spin.isBusy()&&opModeIsActive()) {
-
-        }
-    }
-
     public void crane(double power, int time) {
         Crane.setPower(power);
         sleep(time);
@@ -256,10 +155,10 @@ public class blueLeft extends LinearOpMode {
 
     }
     public void crane2(double power, int position) {
-        Crane.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        Crane.setTargetPosition(position);
-        Crane.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        Crane.setPower(power);
+        Left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        Left.setTargetPosition(position);
+        Left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        Left.setPower(power);
         while (Crane.isBusy()&&opModeIsActive()) {
 
         }
