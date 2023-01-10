@@ -63,18 +63,16 @@ public class teleop extends LinearOpMode {
             dropoff = gamepad2.right_trigger;
             turning = gamepad2.b;
 
-            if (strafeLeft>0) {
-                frontLeft.setPower(-0.75);
-                frontRight.setPower(-0.75);
-                backLeft.setPower(0.75);
-                backRight.setPower(0.75);
-            }
-            if (strafeRight>0) {
-                frontLeft.setPower(0.75);
-                frontRight.setPower(0.75);
-                backLeft.setPower(-0.75);
-                backRight.setPower(-0.75);
-            }
+            frontLeft.setPower(-strafeLeft);
+            frontRight.setPower(-strafeLeft);
+            backLeft.setPower(strafeLeft);
+            backRight.setPower(strafeLeft);
+
+            frontLeft.setPower(strafeRight);
+            frontRight.setPower(strafeRight);
+            backLeft.setPower(-strafeRight);
+            backRight.setPower(-strafeRight);
+
 
             frontLeft.setPower(throttle);
             frontRight.setPower(throttle);
