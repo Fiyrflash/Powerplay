@@ -48,7 +48,7 @@ public class blueLeft extends LinearOpMode {
 
         if (opModeIsActive()) {
 
-            move(1,-2000);
+            move(.2,-2000);
             stopMotors();
 
 
@@ -124,6 +124,7 @@ public class blueLeft extends LinearOpMode {
         crane(1,time);
         intake(1,1000);
         sleep(1500);
+
     }
 
     public void strafeLeftwithcrane(double power, int position,double powerc, int timec)  {

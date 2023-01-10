@@ -15,7 +15,7 @@ public class encoder_for1foot extends LinearOpMode {
     private DcMotor backRight;
 
     public void runOpMode() {
-        crane = hardwareMap.get(DcMotor.class, "crane");
+        //crane = hardwareMap.get(DcMotor.class, "crane");
         frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
         backLeft = hardwareMap.get(DcMotor.class, "backLeft");
@@ -37,8 +37,14 @@ public class encoder_for1foot extends LinearOpMode {
             telemetry.addData("BR", backRight.getCurrentPosition());
             telemetry.update();
 
+            frontLeft.setPower(.5);
+            frontRight.setPower(.5);
+            backRight.setPower(.5);
+            backLeft.setPower(.5);
 
-            move(1,720);
+            sleep(2000);
+
+            //move(1,720);
 
             frontLeft.setPower(0);
             frontRight.setPower(0);
