@@ -76,7 +76,6 @@ public class teleop extends LinearOpMode {
                 backRight.setPower(-0.75);
             }
 
-
             frontLeft.setPower(throttle);
             frontRight.setPower(throttle);
             backLeft.setPower(throttle);
@@ -89,17 +88,6 @@ public class teleop extends LinearOpMode {
 
             Crain.setPower(crainpower);
 
-            /*if (spinpowerup){
-                Spin.setPower(.5);
-            }
-            if (spinpowerdown){
-                Spin.setPower(-.5);
-            }
-
-            if (!spinpowerdown && !spinpowerup){
-                Spin.setPower(0);
-            }
-*/
             if (pickup > 0){
                 Left.setPower(-1);
             }
@@ -113,29 +101,6 @@ public class teleop extends LinearOpMode {
                 Left.setPower(0);
 
             }
-
-/*
-            if (turning){
-                Spin.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                Crain.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                Spin.setTargetPosition(0);
-                Crain.setTargetPosition(0);
-                Spin.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                Crain.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                Spin.setPower(1);
-                Crain.setPower(1);
-                while(Spin.isBusy()){
-
-                }
-                Crain.setTargetPosition(1);
-                Crain.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                Crain.setPower(1);
-                while (Crain.isBusy()){
-                }
-            }
-
-        }
-*/
         }
     }
 }
