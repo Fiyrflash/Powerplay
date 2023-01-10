@@ -142,8 +142,6 @@ public class blueLeft extends LinearOpMode {
         Crane.setPower(0);
     }
 
-
-
         public void intake(double power, int time){
             intake.setPower(power);
             sleep(time);
