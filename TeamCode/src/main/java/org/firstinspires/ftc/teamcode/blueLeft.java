@@ -152,7 +152,6 @@ public class blueLeft extends LinearOpMode {
     }
 
     public void intake(double power, int time){
-
         intake.setPower(power);
         sleep(time);
         intake.setPower(0);
