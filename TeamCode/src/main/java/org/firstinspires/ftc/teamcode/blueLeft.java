@@ -41,12 +41,12 @@ public class blueLeft extends LinearOpMode {
 
         if (opModeIsActive()) {
 
-            frontLeft.setPower(.5);
-            frontRight.setPower(.5);
-            backRight.setPower(.5);
-            backLeft.setPower(.5);
+            frontLeft.setPower(-.5);
+            frontRight.setPower(-.5);
+            backRight.setPower(-.5);
+            backLeft.setPower(-.5);
 
-            sleep(2000);
+            sleep(500);
 
             frontLeft.setPower(0);
             frontRight.setPower(0);
