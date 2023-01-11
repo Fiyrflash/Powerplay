@@ -41,9 +41,17 @@ public class blueLeft extends LinearOpMode {
 
         if (opModeIsActive()) {
 
-            move(.2, -2000);
-            stopMotors();
-            intake(-1,600);
+            frontLeft.setPower(.5);
+            frontRight.setPower(.5);
+            backRight.setPower(.5);
+            backLeft.setPower(.5);
+
+            sleep(2000);
+
+            frontLeft.setPower(0);
+            frontRight.setPower(0);
+            backRight.setPower(0);
+            backLeft.setPower(0);
 
         }
     }
@@ -84,7 +92,6 @@ public class blueLeft extends LinearOpMode {
     }
 
     public void strafeLeft(double power, int position) {
-
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -137,14 +144,17 @@ public class blueLeft extends LinearOpMode {
     }
 
     public void crane(double power, int time) {
+        telemetry.addData("Crane",Crane.getCurrentPosition());
+        telemetry.update();
         Crane.setPower(power);
         sleep(time);
         Crane.setPower(0);
     }
 
-        public void intake(double power, int time){
-            intake.setPower(power);
-            sleep(time);
-            intake.setPower(0);
+    public void intake(double power, int time){
+
+        intake.setPower(power);
+        sleep(time);
+        intake.setPower(0);
     }
 }

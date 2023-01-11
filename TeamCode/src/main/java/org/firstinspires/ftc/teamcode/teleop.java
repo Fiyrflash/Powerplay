@@ -14,15 +14,10 @@ public class teleop extends LinearOpMode {
     private DcMotor backLeft;
     private DcMotor backRight;
 
-
-    //private CRServo Right;
     private CRServo Left;
     private DcMotor Crain;
-    private DcMotor Spin;
-
 
     public void runOpMode() throws InterruptedException {
-
 
         frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
@@ -42,6 +37,7 @@ public class teleop extends LinearOpMode {
             double turn;
             double throttle;
             float strafeLeft;
+
             float strafeRight;
 
             float pickup;
@@ -85,6 +81,10 @@ public class teleop extends LinearOpMode {
             backRight.setPower(turn);
 
             Crain.setPower(crainpower);
+
+
+            telemetry.addData("crane",Crain.getCurrentPosition());
+            telemetry.update();
 
             if (pickup > 0){
                 Left.setPower(-1);
