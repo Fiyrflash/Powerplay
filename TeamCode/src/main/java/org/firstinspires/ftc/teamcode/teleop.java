@@ -52,6 +52,12 @@ public class teleop extends LinearOpMode {
             pickup = gamepad2.left_trigger;
             dropoff = gamepad2.right_trigger;
 
+            telemetry.addData("backright", backRight.getCurrentPosition());
+            telemetry.addData("backLeft", backLeft.getCurrentPosition());
+            telemetry.addData("frontRight", frontRight.getCurrentPosition());
+            telemetry.addData("frontLeft", frontLeft.getCurrentPosition());
+            telemetry.update();
+
             frontLeft.setPower(-strafeLeft);
             frontRight.setPower(-strafeLeft);
             backLeft.setPower(strafeLeft);
