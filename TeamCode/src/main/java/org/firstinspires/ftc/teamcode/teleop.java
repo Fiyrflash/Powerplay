@@ -15,7 +15,7 @@ public class teleop extends LinearOpMode {
     private DcMotor backRight;
 
     private CRServo Left;
-    private DcMotor Crain;
+    private DcMotor Crane;
 
     public void runOpMode() throws InterruptedException {
 
@@ -25,7 +25,7 @@ public class teleop extends LinearOpMode {
         backRight = hardwareMap.get(DcMotor.class, "backRight");
 
         Left = hardwareMap.get(CRServo.class, "Lefts");
-        Crain = hardwareMap.get(DcMotor.class, "Crane");
+        Crane = hardwareMap.get(DcMotor.class, "Crane");
 
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -41,22 +41,21 @@ public class teleop extends LinearOpMode {
 
             float pickup;
             float dropoff;
-            double crainpower;
+            double cranepower;
 
             throttle = gamepad1.left_stick_y;
             turn = gamepad1.right_stick_x;
             strafeLeft = gamepad1.left_trigger;
             strafeRight = gamepad1.right_trigger;
 
-            crainpower = gamepad2.right_stick_y;
+            cranepower = gamepad2.right_stick_y;
             pickup = gamepad2.left_trigger;
             dropoff = gamepad2.right_trigger;
 
-            telemetry.addData("backright", backRight.getCurrentPosition());
+            telemetry.addData("backRight", backRight.getCurrentPosition());
             telemetry.addData("backLeft", backLeft.getCurrentPosition());
             telemetry.addData("frontRight", frontRight.getCurrentPosition());
             telemetry.addData("frontLeft", frontLeft.getCurrentPosition());
-            telemetry.update();
 
             frontLeft.setPower(-strafeLeft);
             frontRight.setPower(-strafeLeft);
@@ -77,9 +76,9 @@ public class teleop extends LinearOpMode {
             frontRight.setPower(turn);
             backLeft.setPower(-turn);
             backRight.setPower(turn);
-            Crain.setPower(crainpower);
+            Crane.setPower(cranepower);
 
-            telemetry.addData("crane",Crain.getCurrentPosition());
+            telemetry.addData("crane",Crane.getCurrentPosition());
             telemetry.update();
 
             if (pickup > 0){
