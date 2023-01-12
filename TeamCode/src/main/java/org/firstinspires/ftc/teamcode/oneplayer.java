@@ -43,14 +43,14 @@ public class oneplayer extends LinearOpMode {
             boolean dropoff;
             double cranepower;
 
-            throttle = gamepad1.right_stick_y;
+            throttle = gamepad1.left_stick_y;
             turn = gamepad1.right_stick_x;
             strafeLeft = gamepad1.left_trigger;
             strafeRight = gamepad1.right_trigger;
 
             cranepower = gamepad1.right_stick_y;
             pickup = gamepad1.dpad_left;
-            dropoff = gamepad1.left_bumper;
+            dropoff = gamepad1.dpad_right;
 
             telemetry.addData("backRight", backRight.getCurrentPosition());
             telemetry.addData("backLeft", backLeft.getCurrentPosition());
