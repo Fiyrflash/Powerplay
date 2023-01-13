@@ -34,6 +34,7 @@ public class teleop extends LinearOpMode {
 
         waitForStart();
         while (opModeIsActive()) {
+
             double turn;
             double throttle;
             float strafeLeft;
@@ -76,6 +77,7 @@ public class teleop extends LinearOpMode {
             frontRight.setPower(turn);
             backLeft.setPower(-turn);
             backRight.setPower(turn);
+
             Crane.setPower(cranepower);
 
             telemetry.addData("crane",Crane.getCurrentPosition());
