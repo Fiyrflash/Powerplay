@@ -32,21 +32,21 @@ public class blueRight extends LinearOpMode {
         intake = hardwareMap.get(CRServo.class, "Lefts");
         Crane = hardwareMap.get(DcMotor.class, "Crane");
 
-        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
-        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        backRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+        frontRight.setDirection(DcMotorSimple.Direction.FORWARD);
+        backLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+        backRight.setDirection(DcMotorSimple.Direction.FORWARD);
 
         waitForStart();
 
         if (opModeIsActive()) {
 
-            frontLeft.setPower(-.5);
-            frontRight.setPower(-.5);
-            backRight.setPower(-.5);
-            backLeft.setPower(-.5);
+            frontLeft.setPower(-1);
+            frontRight.setPower(-1);
+            backRight.setPower(-1);
+            backLeft.setPower(-1);
 
-            sleep(500);
+            sleep(300);
 
             frontLeft.setPower(0);
             frontRight.setPower(0);
@@ -151,9 +151,9 @@ public class blueRight extends LinearOpMode {
         Crane.setPower(0);
     }
 
-    public void intake(double power, int time){
+    /*public void intake(double power, int milliseconds){
         intake.setPower(power);
-        sleep(time);
+        sleep(milliseconds);
         intake.setPower(0);
-    }
+    }*/
 }
