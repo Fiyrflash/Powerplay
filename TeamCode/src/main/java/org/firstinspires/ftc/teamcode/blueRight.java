@@ -41,7 +41,7 @@ public class blueRight extends LinearOpMode {
 
         if (opModeIsActive()) {
 
-            frontLeft.setPower(-1);
+            /*frontLeft.setPower(-1);
             frontRight.setPower(-1);
             backRight.setPower(-1);
             backLeft.setPower(-1);
@@ -52,7 +52,9 @@ public class blueRight extends LinearOpMode {
             frontRight.setPower(0);
             backRight.setPower(0);
             backLeft.setPower(0);
+*/
 
+            move(.25,2000);
         }
     }
 
@@ -64,17 +66,19 @@ public class blueRight extends LinearOpMode {
     }
 
     public void move(double power, int position) {
+
         telemetry.addData("backright", backRight.getCurrentPosition());
         telemetry.update();
+
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        frontRight.setTargetPosition(-position);
-        frontLeft.setTargetPosition(-position);
-        backRight.setTargetPosition(-position);
-        backLeft.setTargetPosition(-position);
+        frontRight.setTargetPosition(position);
+        frontLeft.setTargetPosition(position);
+        backRight.setTargetPosition(position);
+        backLeft.setTargetPosition(position);
 
         frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -111,7 +115,7 @@ public class blueRight extends LinearOpMode {
         frontLeft.setPower(power);
         backRight.setPower(power);
         backLeft.setPower(power);
-        crane(-1, 2100);
+
         while (frontLeft.isBusy() && opModeIsActive()) {
 
         }
