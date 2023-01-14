@@ -32,6 +32,8 @@ public class teleop extends LinearOpMode {
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
+        Crane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         waitForStart();
         while (opModeIsActive()) {
 
@@ -58,15 +60,15 @@ public class teleop extends LinearOpMode {
             telemetry.addData("frontRight", frontRight.getCurrentPosition());
             telemetry.addData("frontLeft", frontLeft.getCurrentPosition());
 
-            frontLeft.setPower(-strafeLeft);
-            frontRight.setPower(-strafeLeft);
-            backLeft.setPower(strafeLeft);
-            backRight.setPower(strafeLeft);
+            frontLeft.setPower(strafeLeft);
+            frontRight.setPower(strafeLeft);
+            backLeft.setPower(-strafeLeft);
+            backRight.setPower(-strafeLeft);
 
-            frontLeft.setPower(strafeRight);
-            frontRight.setPower(strafeRight);
-            backLeft.setPower(-strafeRight);
-            backRight.setPower(-strafeRight);
+            frontLeft.setPower(-strafeRight);
+            frontRight.setPower(-strafeRight);
+            backLeft.setPower(strafeRight);
+            backRight.setPower(strafeRight);
 
             frontLeft.setPower(throttle);
             frontRight.setPower(throttle);
@@ -78,12 +80,17 @@ public class teleop extends LinearOpMode {
             backLeft.setPower(-turn);
             backRight.setPower(turn);
 
-            if (cranepower >= 0) {
-                Crane.setPower(0);
 
-            }else
 
+            Crane.getCurrentPosition();
+            if (Crane.getCurrentPosition() <= 0) {
                 Crane.setPower(cranepower);
+
+            } else if (Crane.getCurrentPosition() >= -6750) {
+                Crane.setPower(.1);
+            }
+
+            //Crane.setPower(cranepower);
 
             telemetry.addData("crane",Crane.getCurrentPosition());
             telemetry.update();
