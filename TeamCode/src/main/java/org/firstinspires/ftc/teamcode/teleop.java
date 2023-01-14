@@ -32,8 +32,6 @@ public class teleop extends LinearOpMode {
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        Crane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
         waitForStart();
         while (opModeIsActive()) {
 
@@ -81,14 +79,6 @@ public class teleop extends LinearOpMode {
             backRight.setPower(turn);
 
             Crane.setPower(cranepower);
-
-            if (Crane.getCurrentPosition() <= 0) {
-                cranepower = 0;
-            }
-
-            if (Crane.getCurrentPosition() <= -6750) {
-                cranepower=0;
-            }
 
             telemetry.addData("crane",Crane.getCurrentPosition());
             telemetry.update();
