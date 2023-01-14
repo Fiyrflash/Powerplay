@@ -85,6 +85,7 @@ public class teleop extends LinearOpMode {
             if (Crane.getCurrentPosition() <= 0) {
                 cranepower = 0;
             }
+
             if (Crane.getCurrentPosition() <= -6750) {
                 cranepower=0;
             }
