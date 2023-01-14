@@ -80,17 +80,14 @@ public class teleop extends LinearOpMode {
             backLeft.setPower(-turn);
             backRight.setPower(turn);
 
+            Crane.setPower(cranepower);
 
-
-            Crane.getCurrentPosition();
             if (Crane.getCurrentPosition() <= 0) {
-                Crane.setPower(cranepower);
-
-            } else if (Crane.getCurrentPosition() >= -6750) {
-                Crane.setPower(.1);
+                cranepower = 0;
             }
-
-            //Crane.setPower(cranepower);
+            if (Crane.getCurrentPosition() <= -6750) {
+                cranepower=0;
+            }
 
             telemetry.addData("crane",Crane.getCurrentPosition());
             telemetry.update();
