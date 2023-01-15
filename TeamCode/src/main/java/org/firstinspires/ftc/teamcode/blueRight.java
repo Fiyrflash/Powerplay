@@ -46,7 +46,7 @@ public class blueRight extends LinearOpMode {
             backRight.setPower(-1);
             backLeft.setPower(-1);
 
-            sleep(300);
+            sleep(250);
 
             frontLeft.setPower(0);
             frontRight.setPower(0);
