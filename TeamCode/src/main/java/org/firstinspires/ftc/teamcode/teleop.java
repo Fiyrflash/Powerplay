@@ -15,7 +15,7 @@ public class teleop extends LinearOpMode {
     private DcMotor backRight;
 
     private CRServo Left;
-    private DcMotor Crane;
+    private DcMotor crane;
 
     public void runOpMode() throws InterruptedException {
 
@@ -25,7 +25,7 @@ public class teleop extends LinearOpMode {
         backRight = hardwareMap.get(DcMotor.class, "backRight");
 
         Left = hardwareMap.get(CRServo.class, "Lefts");
-        Crane = hardwareMap.get(DcMotor.class, "Crane");
+        crane = hardwareMap.get(DcMotor.class, "Crane");
 
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -53,6 +53,12 @@ public class teleop extends LinearOpMode {
             pickup = gamepad2.left_trigger;
             dropoff = gamepad2.right_trigger;
 
+            frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            crane.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
             telemetry.addData("backRight", backRight.getCurrentPosition());
             telemetry.addData("backLeft", backLeft.getCurrentPosition());
             telemetry.addData("frontRight", frontRight.getCurrentPosition());
@@ -78,9 +84,9 @@ public class teleop extends LinearOpMode {
             backLeft.setPower(-turn);
             backRight.setPower(turn);
 
-            Crane.setPower(cranepower);
+            crane.setPower(cranepower);
 
-            telemetry.addData("crane",Crane.getCurrentPosition());
+            telemetry.addData("crane",crane.getCurrentPosition());
             telemetry.update();
 
             if (pickup > 0){
