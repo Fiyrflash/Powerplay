@@ -1,17 +1,10 @@
 package org.firstinspires.ftc.teamcode;
-import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.Servo;
-
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.openftc.apriltag.AprilTagDetection;
 @Autonomous
 public class blueRight extends LinearOpMode {
     private DcMotor frontLeft;
@@ -41,17 +34,22 @@ public class blueRight extends LinearOpMode {
 
         if (opModeIsActive()) {
 
-            frontLeft.setPower(-1);
+            /*frontLeft.setPower(-1);
             frontRight.setPower(-1);
             backRight.setPower(-1);
             backLeft.setPower(-1);
 
-            sleep(250);
+            sleep(300);
 
             frontLeft.setPower(0);
             frontRight.setPower(0);
             backRight.setPower(0);
             backLeft.setPower(0);
+*/
+
+            move(.5,2000);
+            stopMotors();
+            sleep(100);
 
         }
     }
@@ -64,19 +62,15 @@ public class blueRight extends LinearOpMode {
     }
 
     public void move(double power, int position) {
-
-        telemetry.addData("backright", backRight.getCurrentPosition());
-        telemetry.update();
-
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        frontRight.setTargetPosition(position);
-        frontLeft.setTargetPosition(position);
-        backRight.setTargetPosition(position);
-        backLeft.setTargetPosition(position);
+        frontRight.setTargetPosition(-position);
+        frontLeft.setTargetPosition(-position);
+        backRight.setTargetPosition(-position);
+        backLeft.setTargetPosition(-position);
 
         frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -88,7 +82,7 @@ public class blueRight extends LinearOpMode {
         backRight.setPower(power);
         backLeft.setPower(power);
 
-        while (frontLeft.isBusy() && opModeIsActive()) {
+        while (backRight.isBusy() && opModeIsActive()) {
 
         }
     }
@@ -113,8 +107,7 @@ public class blueRight extends LinearOpMode {
         frontLeft.setPower(power);
         backRight.setPower(power);
         backLeft.setPower(power);
-
-        while (frontLeft.isBusy() && opModeIsActive()) {
+        while (backRight.isBusy() && opModeIsActive()) {
 
         }
     }
@@ -140,21 +133,22 @@ public class blueRight extends LinearOpMode {
         backRight.setPower(power);
         backLeft.setPower(power);
 
-        while (frontLeft.isBusy() && opModeIsActive()) {
+        while (backRight.isBusy() && opModeIsActive()) {
 
         }
     }
 
-    public void crane(double power, int time) {
+    /*public void crane(double power, int time) {
         telemetry.addData("Crane",Crane.getCurrentPosition());
         telemetry.update();
         Crane.setPower(power);
         sleep(time);
         Crane.setPower(0);
     }
+
     public void intake(double power, int milliseconds){
         intake.setPower(power);
         sleep(milliseconds);
         intake.setPower(0);
-    }
+    }*/
 }

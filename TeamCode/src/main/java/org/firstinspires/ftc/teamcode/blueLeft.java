@@ -34,17 +34,9 @@ public class blueLeft extends LinearOpMode {
 
         if (opModeIsActive()) {
 
-            frontLeft.setPower(-1);
-            frontRight.setPower(-1);
-            backRight.setPower(-1);
-            backLeft.setPower(-1);
-
-            sleep(300);
-
-            frontLeft.setPower(0);
-            frontRight.setPower(0);
-            backRight.setPower(0);
-            backLeft.setPower(0);
+            move(.5, 2000);
+            stopMotors();
+            sleep(100);
 
         }
     }
@@ -54,71 +46,15 @@ public class blueLeft extends LinearOpMode {
         frontRight.setPower(0);
         backLeft.setPower(0);
         backRight.setPower(0);
+        while (opModeIsActive()) {
+
+        }
     }
 
     public void move(double power, int position) {
-        telemetry.addData("backright", backRight.getCurrentPosition());
-        telemetry.update();
-        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        frontRight.setTargetPosition(-position);
-        frontLeft.setTargetPosition(-position);
-        backRight.setTargetPosition(-position);
-        backLeft.setTargetPosition(-position);
-
-        frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        frontRight.setPower(power);
-        frontLeft.setPower(power);
-        backRight.setPower(power);
-        backLeft.setPower(power);
-
-        while (frontLeft.isBusy() && opModeIsActive()) {
-
-        }
-    }
-
-    public void strafeLeft(double power, int position) {
-        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        frontRight.setTargetPosition(-position);
+        frontRight.setTargetPosition(position);
         frontLeft.setTargetPosition(position);
         backRight.setTargetPosition(position);
-        backLeft.setTargetPosition(-position);
-
-        frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        frontRight.setPower(power);
-        frontLeft.setPower(power);
-        backRight.setPower(power);
-        backLeft.setPower(power);
-        crane(-1, 2100);
-        while (frontLeft.isBusy() && opModeIsActive()) {
-
-        }
-    }
-
-    public void strafeRight(double power, int position) {
-        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        frontRight.setTargetPosition(position);
-        frontLeft.setTargetPosition(-position);
-        backRight.setTargetPosition(-position);
         backLeft.setTargetPosition(position);
 
         frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -130,23 +66,8 @@ public class blueLeft extends LinearOpMode {
         frontLeft.setPower(power);
         backRight.setPower(power);
         backLeft.setPower(power);
-
-        while (frontLeft.isBusy() && opModeIsActive()) {
+        while (opModeIsActive()) {
 
         }
     }
-
-    public void crane(double power, int time) {
-        telemetry.addData("Crane",Crane.getCurrentPosition());
-        telemetry.update();
-        Crane.setPower(power);
-        sleep(time);
-        Crane.setPower(0);
-    }
-
-    /*public void intake(double power, int milliseconds){
-        intake.setPower(power);
-        sleep(milliseconds);
-        intake.setPower(0);
-    }*/
 }
