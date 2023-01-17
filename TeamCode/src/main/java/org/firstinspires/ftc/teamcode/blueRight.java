@@ -34,7 +34,7 @@ public class blueRight extends LinearOpMode {
 
         if (opModeIsActive()) {
 
-            /*frontLeft.setPower(-1);
+            frontLeft.setPower(-1);
             frontRight.setPower(-1);
             backRight.setPower(-1);
             backLeft.setPower(-1);
@@ -45,11 +45,7 @@ public class blueRight extends LinearOpMode {
             frontRight.setPower(0);
             backRight.setPower(0);
             backLeft.setPower(0);
-*/
 
-            move(.5,2000);
-            stopMotors();
-            sleep(100);
 
         }
     }

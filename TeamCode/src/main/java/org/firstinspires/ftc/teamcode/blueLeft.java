@@ -12,8 +12,8 @@ public class blueLeft extends LinearOpMode {
     private DcMotor backLeft;
     private DcMotor backRight;
 
-    private CRServo intake;
-    private DcMotor Crane;
+    //private CRServo intake;
+    //rivate DcMotor Crane;
 
     public void runOpMode() throws InterruptedException {
 
@@ -22,8 +22,8 @@ public class blueLeft extends LinearOpMode {
         backLeft = hardwareMap.get(DcMotor.class, "backLeft");
         backRight = hardwareMap.get(DcMotor.class, "backRight");
 
-        intake = hardwareMap.get(CRServo.class, "Lefts");
-        Crane = hardwareMap.get(DcMotor.class, "Crane");
+        //intake = hardwareMap.get(CRServo.class, "Lefts");
+        //Crane = hardwareMap.get(DcMotor.class, "Crane");
 
         frontLeft.setDirection(DcMotorSimple.Direction.FORWARD);
         frontRight.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -35,27 +35,22 @@ public class blueLeft extends LinearOpMode {
         if (opModeIsActive()) {
 
             move(.5, 2000);
-            stopMotors();
+            //stopMotors();
             sleep(100);
 
         }
     }
 
-    public void stopMotors() {
-        frontLeft.setPower(0);
-        frontRight.setPower(0);
-        backLeft.setPower(0);
-        backRight.setPower(0);
-        while (opModeIsActive()) {
-
-        }
-    }
-
     public void move(double power, int position) {
-        frontRight.setTargetPosition(position);
-        frontLeft.setTargetPosition(position);
-        backRight.setTargetPosition(position);
-        backLeft.setTargetPosition(position);
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        frontRight.setTargetPosition(-position);
+        frontLeft.setTargetPosition(-position);
+        backRight.setTargetPosition(-position);
+        backLeft.setTargetPosition(-position);
 
         frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -66,7 +61,8 @@ public class blueLeft extends LinearOpMode {
         frontLeft.setPower(power);
         backRight.setPower(power);
         backLeft.setPower(power);
-        while (opModeIsActive()) {
+
+        while (frontLeft.isBusy() && opModeIsActive()) {
 
         }
     }
