@@ -27,10 +27,10 @@ public class teleop extends LinearOpMode {
         Left = hardwareMap.get(CRServo.class, "Lefts");
         crane = hardwareMap.get(DcMotor.class, "Crane");
 
-        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
-        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        backRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+        frontRight.setDirection(DcMotorSimple.Direction.FORWARD);
+        backLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+        backRight.setDirection(DcMotorSimple.Direction.FORWARD);
 
         waitForStart();
         while (opModeIsActive()) {
@@ -61,14 +61,14 @@ public class teleop extends LinearOpMode {
             telemetry.addData("frontLeft", frontLeft.getCurrentPosition());
 
             frontLeft.setPower(strafeLeft);
-            frontRight.setPower(strafeLeft);
+            frontRight.setPower(-strafeLeft);
             backLeft.setPower(-strafeLeft);
-            backRight.setPower(-strafeLeft);
+            backRight.setPower(strafeLeft);
 
             frontLeft.setPower(-strafeRight);
-            frontRight.setPower(-strafeRight);
+            frontRight.setPower(strafeRight);
             backLeft.setPower(strafeRight);
-            backRight.setPower(strafeRight);
+            backRight.setPower(-strafeRight);
 
             frontLeft.setPower(throttle);
             frontRight.setPower(throttle);
