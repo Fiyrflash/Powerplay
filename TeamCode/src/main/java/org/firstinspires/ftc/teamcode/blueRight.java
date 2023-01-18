@@ -43,6 +43,9 @@ public class blueRight extends LinearOpMode {
         frontRight.setPower(0);
         backLeft.setPower(0);
         backRight.setPower(0);
+        while (backRight.isBusy() && opModeIsActive()) {
+
+        }
     }
 
     public void move(double power, int position) {
@@ -128,11 +131,17 @@ public class blueRight extends LinearOpMode {
         Crane.setPower(power);
         sleep(milliseconds);
         Crane.setPower(0);
+        while (backRight.isBusy() && opModeIsActive()) {
+
+        }
     }
 
     public void intake(double power, int milliseconds){
         intake.setPower(power);
         sleep(milliseconds);
         intake.setPower(0);
+        while (backRight.isBusy() && opModeIsActive()) {
+
+        }
     }
 }
