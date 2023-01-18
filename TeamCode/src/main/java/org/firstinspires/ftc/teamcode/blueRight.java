@@ -33,19 +33,7 @@ public class blueRight extends LinearOpMode {
         waitForStart();
 
         if (opModeIsActive()) {
-
-            frontLeft.setPower(-1);
-            frontRight.setPower(-1);
-            backRight.setPower(-1);
-            backLeft.setPower(-1);
-
-            sleep(300);
-
-            frontLeft.setPower(0);
-            frontRight.setPower(0);
-            backRight.setPower(0);
-            backLeft.setPower(0);
-
+            
 
         }
     }
@@ -134,11 +122,11 @@ public class blueRight extends LinearOpMode {
         }
     }
 
-    /*public void crane(double power, int time) {
+    public void crane(double power, int milliseconds) {
         telemetry.addData("Crane",Crane.getCurrentPosition());
         telemetry.update();
         Crane.setPower(power);
-        sleep(time);
+        sleep(milliseconds);
         Crane.setPower(0);
     }
 
@@ -146,5 +134,5 @@ public class blueRight extends LinearOpMode {
         intake.setPower(power);
         sleep(milliseconds);
         intake.setPower(0);
-    }*/
+    }
 }
