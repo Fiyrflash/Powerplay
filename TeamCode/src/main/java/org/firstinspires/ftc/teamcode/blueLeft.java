@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 @Autonomous
-public class blueLeft extends LinearOpMode {
+public class blueRight extends LinearOpMode {
     private DcMotor frontLeft;
     private DcMotor frontRight;
     private DcMotor backLeft;
@@ -33,9 +33,7 @@ public class blueLeft extends LinearOpMode {
         waitForStart();
 
         if (opModeIsActive()) {
-
-            move(1, 1000);
-            stopMotors();
+            
 
         }
     }

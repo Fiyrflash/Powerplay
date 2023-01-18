@@ -33,9 +33,7 @@ public class blueRight extends LinearOpMode {
         waitForStart();
 
         if (opModeIsActive()) {
-
-            move(1, 1000);
-            stopMotors();
+            
 
         }
     }
