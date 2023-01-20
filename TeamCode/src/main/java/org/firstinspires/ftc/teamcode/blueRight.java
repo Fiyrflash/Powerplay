@@ -30,10 +30,24 @@ public class blueRight extends LinearOpMode {
         backLeft.setDirection(DcMotorSimple.Direction.FORWARD);
         backRight.setDirection(DcMotorSimple.Direction.FORWARD);
 
+        Crane.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         waitForStart();
 
         if (opModeIsActive()) {
-            
+
+            //move(1,1000);
+            craneup(1,2500);
+            strafeRight(1, 2700);
+            stopMotors();
+            move(.3, 100);
+            strafeRight(1,300);
+            stopMotors();
+            move(1,1500);
+            stopMotors();
+            cranedown(1,1750);
+
+
 
         }
     }
@@ -125,8 +139,18 @@ public class blueRight extends LinearOpMode {
         }
     }
 
-    public void crane(double power, int milliseconds) {
-        telemetry.addData("Crane",Crane.getCurrentPosition());
+    public void craneup(double power, int milliseconds) {
+        telemetry.addData("Crane", Crane.getCurrentPosition());
+        telemetry.update();
+        Crane.setPower(power);
+        sleep(milliseconds);
+        Crane.setPower(0);
+        while (backRight.isBusy() && opModeIsActive()) {
+
+        }
+    }
+    public void cranedown(double power, int milliseconds) {
+        telemetry.addData("Crane", Crane.getCurrentPosition());
         telemetry.update();
         Crane.setPower(power);
         sleep(milliseconds);
