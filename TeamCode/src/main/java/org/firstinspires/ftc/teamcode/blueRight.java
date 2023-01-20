@@ -37,7 +37,7 @@ public class blueRight extends LinearOpMode {
         if (opModeIsActive()) {
 
             //move(1,1000);
-            craneup(1,2500);
+            crane(1,2500);
             strafeRight(1, 2700);
             stopMotors();
             move(.3, 100);
@@ -45,7 +45,8 @@ public class blueRight extends LinearOpMode {
             stopMotors();
             move(1,1500);
             stopMotors();
-            cranedown(1,1750);
+            crane(-1,1750);
+            moveandcrane(1,1000, );
 
 
 
@@ -83,6 +84,37 @@ public class blueRight extends LinearOpMode {
         backRight.setPower(power);
         backLeft.setPower(power);
 
+        while (backRight.isBusy() && opModeIsActive()) {
+
+        }
+    }
+
+    public void moveandcrane(double power, int position, int milliseconds) {
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        frontRight.setTargetPosition(-position);
+        frontLeft.setTargetPosition(-position);
+        backRight.setTargetPosition(-position);
+        backLeft.setTargetPosition(-position);
+
+        frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        frontRight.setPower(power);
+        frontLeft.setPower(power);
+        backRight.setPower(power);
+        backLeft.setPower(power);
+
+        telemetry.addData("Crane", Crane.getCurrentPosition());
+        telemetry.update();
+        Crane.setPower(power);
+        sleep(milliseconds);
+        Crane.setPower(0);
         while (backRight.isBusy() && opModeIsActive()) {
 
         }
@@ -139,17 +171,7 @@ public class blueRight extends LinearOpMode {
         }
     }
 
-    public void craneup(double power, int milliseconds) {
-        telemetry.addData("Crane", Crane.getCurrentPosition());
-        telemetry.update();
-        Crane.setPower(power);
-        sleep(milliseconds);
-        Crane.setPower(0);
-        while (backRight.isBusy() && opModeIsActive()) {
-
-        }
-    }
-    public void cranedown(double power, int milliseconds) {
+    public void crane(double power, int milliseconds) {
         telemetry.addData("Crane", Crane.getCurrentPosition());
         telemetry.update();
         Crane.setPower(power);
