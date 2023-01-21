@@ -42,17 +42,20 @@ public class blueRight extends LinearOpMode {
 
             //move(1,1000);
 
+            move(.5, 300);
             strafeRightandCrane(1,900,.7,1600);
-            move(1,450);
+            move(1,260);
             intake(1);
             move(1,-450);
-            strafeLeftandCrane(1,900,-.7,1400);
-            move(1,2750);
-            turn(1,1000);
-
-
-
-
+            strafeLeftandCrane(1,900,-.7,600);
+            move(1,2635);
+            turn(1,1145);
+            moveandcrane(1,1250, 1,50);
+            crane(-1,200);;
+            intake(-1);
+            crane(1,1000);
+            move(1,2635);
+            strafeRightandCrane(1,2000,-1,1000);
 
         }
     }
