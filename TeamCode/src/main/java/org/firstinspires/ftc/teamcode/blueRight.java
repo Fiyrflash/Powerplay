@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -43,6 +45,8 @@ public class blueRight extends LinearOpMode {
 
         waitForStart();
 
+        initGyro();
+
         if (opModeIsActive()) {
 
             move(1,250);
@@ -50,7 +54,7 @@ public class blueRight extends LinearOpMode {
             crane(1,250);
             strafeLeft(1,500);
             move(1,2000);
-            turn();
+
 
 
 
@@ -124,6 +128,18 @@ public class blueRight extends LinearOpMode {
         while (backRight.isBusy() && opModeIsActive()) {
 
         }
+    }
+
+    public void initGyro () {
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.calibrationDataFile = "BNO055IMUCalibration.json";
+        parameters.loggingEnabled = true;
+        parameters.loggingTag = "IMU";
+        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        imu.initialize(parameters);
+        sleep(250);
     }
 
     public boolean gyroTurning(double targetAngle) {
