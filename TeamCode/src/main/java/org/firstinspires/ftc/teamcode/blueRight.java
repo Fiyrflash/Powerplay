@@ -5,6 +5,11 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+
 @Autonomous
 public class blueRight extends LinearOpMode {
     private DcMotor frontLeft;
@@ -121,30 +126,59 @@ public class blueRight extends LinearOpMode {
         }
     }
 
-    public void turn(double power, int position) {
-        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    public boolean gyroTurning(double targetAngle) {
+        frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        boolean foundAngle;
+        foundAngle = false;
+        while (!foundAngle) {
+            angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+            double currentAngle = angles.firstAngle;
+            telemetry.addData("Angle", currentAngle);
+            telemetry.addData("targetangle", targetAngle);
+            telemetry.update();
+            if (angles.firstAngle >= targetAngle - 0.1 && angles.firstAngle <= targetAngle + 0.1) {
+                frontLeft.setPower(0);
+                frontRight.setPower(0);
+                backLeft.setPower(0);
+                backRight.setPower(0);
+                foundAngle = true;
+                sleep(1000);
+                break;
 
-        frontRight.setTargetPosition(-position);
-        frontLeft.setTargetPosition(position);
-        backRight.setTargetPosition(-position);
-        backLeft.setTargetPosition(position);
-
-        frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        frontRight.setPower(power);
-        frontLeft.setPower(power);
-        backRight.setPower(power);
-        backLeft.setPower(power);
-
-        while (backRight.isBusy() && opModeIsActive()) {
-
+            } else if (angles.firstAngle >= targetAngle + 0.5) {
+                if (angles.firstAngle <= targetAngle - 5) {
+                    frontLeft.setPower(0.25);
+                    frontRight.setPower(-0.25);
+                    backLeft.setPower(0.25);
+                    backRight.setPower(-0.25);
+                    foundAngle = false;
+                } else {
+                    frontLeft.setPower(-0.25);
+                    frontRight.setPower(0.25);
+                    backLeft.setPower(-0.25);
+                    backRight.setPower(0.25);
+                    foundAngle = false;
+                }
+            } else if (angles.firstAngle <= targetAngle - 0.5) {
+                if (angles.firstAngle >= targetAngle + 5) {
+                    frontLeft.setPower(-0.25);
+                    frontRight.setPower(0.25);
+                    backLeft.setPower(-0.25);
+                    backRight.setPower(0.25);
+                    foundAngle = false;
+                } else {
+                    frontLeft.setPower(.25);
+                    frontRight.setPower(-.25);
+                    backLeft.setPower(.25);
+                    backRight.setPower(-.25);
+                    foundAngle = false;
+                }
+            }
         }
+        return foundAngle;
     }
 
     public void strafeLeft(double power, int position) {
