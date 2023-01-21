@@ -40,22 +40,15 @@ public class blueRight extends LinearOpMode {
 
         if (opModeIsActive()) {
 
-            //move(1,1000);
+            move(1,250);
+            strafeRightandCrane(1,500,1,500);
+            crane(1,250);
+            strafeLeft(1,500);
+            move(1,2000);
+            turn();
 
-            move(.5, 300);
-            strafeRightandCrane(1,900,.7,1600);
-            move(1,260);
-            intake(1);
-            move(1,-450);
-            strafeLeftandCrane(1,900,-.7,600);
-            move(1,2635);
-            turn(1,1145);
-            moveandcrane(1,1250, 1,50);
-            crane(-1,200);;
-            intake(-1);
-            crane(1,1000);
-            move(1,2635);
-            strafeRightandCrane(1,2000,-1,1000);
+
+
 
         }
     }
@@ -284,6 +277,58 @@ public class blueRight extends LinearOpMode {
         intake.setPower(0);
         while (backRight.isBusy() && opModeIsActive()) {
 
+        }
+    }
+    public void cranethenIntake(double power, int milliseconds, double power2){
+        telemetry.addData("Crane", Crane.getCurrentPosition());
+        telemetry.update();
+        Crane.setPower(power);
+        sleep(milliseconds);
+        Crane.setPower(0);
+        sleep(2000);
+        intake.setPower(power2);
+        sleep(2000);
+        intake.setPower(0);
+        while (backRight.isBusy() && opModeIsActive()) {
+
+        }
+    }
+
+    public void movethenCranethenIntake(double power, int position, int time, double power2, int milliseconds, double power3){
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        frontRight.setTargetPosition(-position);
+        frontLeft.setTargetPosition(-position);
+        backRight.setTargetPosition(-position);
+        backLeft.setTargetPosition(-position);
+
+        frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        frontRight.setPower(power);
+        frontLeft.setPower(power);
+        backRight.setPower(power);
+        backLeft.setPower(power);
+
+        sleep(time);
+
+        telemetry.addData("Crane", Crane.getCurrentPosition());
+        telemetry.update();
+        Crane.setPower(power2);
+        sleep(milliseconds);
+        Crane.setPower(0);
+
+        sleep(2000);
+
+        intake.setPower(power3);
+        sleep(2000);
+        intake.setPower(0);
+        while (backRight.isBusy() && opModeIsActive()) {
         }
     }
 }
