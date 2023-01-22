@@ -49,22 +49,20 @@ public class blueRight extends LinearOpMode {
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         waitForStart();
-
         initGyro();
-
         if (opModeIsActive()) {
 
-            strafeLeftandCrane(1,1050, 0,1,1425);
+            strafeLeftandCrane(1,1010, 0,1,1415);
             slowgyroTurning(0);
-            move(1,200);
+            move(1,55);
             cranethenIntake(-1,275,1000,1);
             crane(1,300);
             move(1,-200);
             slowgyroTurning(0);
-            strafeLeft(1,2150);
-            fastgyroTurning(90);
-            initGyro();
+            strafeLeft(1,2107);
             gyroTurning(90);
+            initGyro();
+            gyroTurning(95);
 
 
         }
