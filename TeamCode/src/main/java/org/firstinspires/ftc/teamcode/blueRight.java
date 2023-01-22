@@ -55,14 +55,18 @@ public class blueRight extends LinearOpMode {
             strafeLeftandCrane(1,1010, 0,1,1415);
             slowgyroTurning(0);
             move(1,55);
-            cranethenIntake(-1,275,1000,1);
+            cranethenIntake(1,-275,1000,1);
             crane(1,300);
             move(1,-200);
             slowgyroTurning(0);
-            strafeLeft(1,2107);
+            strafeLeft(1,2105);
             gyroTurning(90);
             initGyro();
             gyroTurning(95);
+            //move(1,1250);
+            //crane(1,);
+
+
 
 
         }
@@ -100,6 +104,7 @@ public class blueRight extends LinearOpMode {
         backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Crane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         frontRight.setTargetPosition(-position);
         frontLeft.setTargetPosition(-position);
@@ -120,8 +125,8 @@ public class blueRight extends LinearOpMode {
 
         telemetry.addData("Crane", Crane.getCurrentPosition());
         telemetry.update();
-        Crane.setPower(power2);
         Crane.setTargetPosition(position2);
+        Crane.setPower(power2);
         while (backRight.isBusy() && opModeIsActive()) {
 
         }
@@ -360,6 +365,7 @@ public class blueRight extends LinearOpMode {
         backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Crane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         frontRight.setTargetPosition(-position);
         frontLeft.setTargetPosition(position);
@@ -380,8 +386,8 @@ public class blueRight extends LinearOpMode {
 
         telemetry.addData("Crane", Crane.getCurrentPosition());
         telemetry.update();
+        Crane.setTargetPosition(position2);
         Crane.setPower(power2);
-        sleep(position2);
         while (backRight.isBusy() && opModeIsActive()) {
 
         }
@@ -392,6 +398,7 @@ public class blueRight extends LinearOpMode {
         backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Crane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         frontRight.setTargetPosition(position);
         frontLeft.setTargetPosition(-position);
@@ -412,19 +419,18 @@ public class blueRight extends LinearOpMode {
 
         telemetry.addData("Crane", Crane.getCurrentPosition());
         telemetry.update();
+        Crane.setTargetPosition(position2);
         Crane.setPower(power2);
-        sleep(position2);
         while (backRight.isBusy() && opModeIsActive()) {
 
         }
     }
 
-    public void crane(double power, int milliseconds) {
+    public void crane(double power, int position) {
         telemetry.addData("Crane", Crane.getCurrentPosition());
         telemetry.update();
+        Crane.setTargetPosition(position);
         Crane.setPower(power);
-        sleep(milliseconds);
-        Crane.setPower(0);
         while (backRight.isBusy() && opModeIsActive()) {
 
         }
@@ -439,10 +445,11 @@ public class blueRight extends LinearOpMode {
         }
     }
     public void cranethenIntake(double power, int position, int time, double power2){
+        Crane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         telemetry.addData("Crane", Crane.getCurrentPosition());
         telemetry.update();
+        Crane.setTargetPosition(position);
         Crane.setPower(power);
-        sleep(position);
 
         sleep(time);
 
@@ -459,6 +466,7 @@ public class blueRight extends LinearOpMode {
         backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Crane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         frontRight.setTargetPosition(-position);
         frontLeft.setTargetPosition(-position);
@@ -479,9 +487,8 @@ public class blueRight extends LinearOpMode {
 
         telemetry.addData("Crane", Crane.getCurrentPosition());
         telemetry.update();
+        Crane.setTargetPosition(position2);
         Crane.setPower(power2);
-        sleep(position2);
-        Crane.setPower(0);
 
         sleep(time2);
 
