@@ -25,26 +25,26 @@ public class craneTest extends LinearOpMode {
         Crane = hardwareMap.get(DcMotor.class, "Crane");
 
         Crane.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        waitForStart();
-        while (opModeIsActive()) {
-
-            double cranepower;
-
-            cranepower = gamepad2.right_stick_y;
-
-            Crane.setPower(cranepower);
-
-            telemetry.addData("crane",Crane.getCurrentPosition());
+        public void crane() {
+            telemetry.addData("Crane", Crane.getCurrentPosition());
             telemetry.update();
-
-            if (gamepad1.a) {
-
-
-
-
+            Crane.setTargetPosition(position);
+            Crane.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            Crane.setPower(power);
+            while (Crane.isBusy() && opModeIsActive()) {
 
             }
+        }
+
+        waitForStart();
+
+        while (opModeIsActive()) {
+
+            if (gamepad1.a = true) {
+                crane
+            }
+
+
         }
     }
 }
