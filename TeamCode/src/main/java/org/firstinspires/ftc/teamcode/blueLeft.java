@@ -52,17 +52,17 @@ public class blueLeft extends LinearOpMode {
         initGyro();
         if (opModeIsActive()) {
 
-            strafeRightandCrane(1,1010, 0,1,1415);
-            slowgyroTurning(0);
-            move(1,55);
+            strafeLeftandCrane(1,979, 0,.7,4075);
+            gyroTurning(0);
+            move(1,275);
             cranethenIntake(1,-275,1000,1);
             crane(1,300);
             move(1,-200);
             slowgyroTurning(0);
-            strafeLeft(1,2105);
+            strafeLeft(1,2250);
             gyroTurning(90);
             initGyro();
-            gyroTurning(95);
+            gyroTurning(92);
             //move(1,1250);
             //crane(1,);
 
