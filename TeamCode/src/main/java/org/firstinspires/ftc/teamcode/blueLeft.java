@@ -227,11 +227,12 @@ public class blueLeft extends LinearOpMode {
             gyroTurning(89);
             moveandcrane(1,1275, 0,1,-200);
             crane(.7,-1100);*/
-            strafeLeftandCrane(1, 4000, 0, 1, 2000);
+            strafeLeftandCrane(1, 3750, 0, .7, 12000);
             movethenCranethenIntake(1, 500, 0, 1, -100, 500, 1);
             move(1, -500);
-            strafeRight(1, 1000);
-            /*if (tagOfInterest.id == LEFT){
+            //strafeRight(1, 1000);
+            if (tagOfInterest.id == LEFT){
+                strafeRight(1,2000);
 
 
             }else if (tagOfInterest.id == MIDDLE){
@@ -240,7 +241,7 @@ public class blueLeft extends LinearOpMode {
             }else if (tagOfInterest.id == RIGHT){
 
 
-            }*/
+            }
 
 
         }
@@ -302,7 +303,7 @@ public class blueLeft extends LinearOpMode {
         Crane.setTargetPosition(position2);
         Crane.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Crane.setPower(power2);
-        while (backRight.isBusy() && opModeIsActive()) {
+        while (backRight.isBusy() || Crane.isBusy() && opModeIsActive()) {
 
         }
     }
@@ -316,7 +317,9 @@ public class blueLeft extends LinearOpMode {
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
-        sleep(250);
+        while (backRight.isBusy() && opModeIsActive()) {
+
+        }
     }
 
     public boolean gyroTurning(double targetAngle) {
@@ -564,7 +567,7 @@ public class blueLeft extends LinearOpMode {
         Crane.setTargetPosition(position2);
         Crane.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Crane.setPower(power2);
-        while (backRight.isBusy() && opModeIsActive()) {
+        while (backRight.isBusy() || Crane.isBusy() && opModeIsActive()) {
 
         }
     }
@@ -598,7 +601,7 @@ public class blueLeft extends LinearOpMode {
         Crane.setTargetPosition(position2);
         Crane.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Crane.setPower(power2);
-        while (backRight.isBusy() && opModeIsActive()) {
+        while (backRight.isBusy() || Crane.isBusy() && opModeIsActive()) {
 
         }
     }
@@ -609,7 +612,7 @@ public class blueLeft extends LinearOpMode {
         Crane.setTargetPosition(position);
         Crane.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Crane.setPower(power);
-        while (backRight.isBusy() && opModeIsActive()) {
+        while (Crane.isBusy() && opModeIsActive()) {
 
         }
     }
@@ -636,7 +639,7 @@ public class blueLeft extends LinearOpMode {
         intake.setPower(power2);
         sleep(2000);
         intake.setPower(0);
-        while (backRight.isBusy() && opModeIsActive()) {
+        while (Crane.isBusy() && opModeIsActive()) {
 
         }
     }
@@ -676,7 +679,8 @@ public class blueLeft extends LinearOpMode {
         intake.setPower(power3);
         sleep(2000);
         intake.setPower(0);
-        while (backRight.isBusy() && opModeIsActive()) {
+        while (backRight.isBusy() || Crane.isBusy() && opModeIsActive()) {
+
         }
     }
 }
