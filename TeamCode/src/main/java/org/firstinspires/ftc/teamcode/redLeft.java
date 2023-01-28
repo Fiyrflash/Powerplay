@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 @Autonomous
 
-public class blueLeft extends LinearOpMode {
+public class redLeft extends LinearOpMode {
     private DcMotor frontLeft;
     private DcMotor frontRight;
     private DcMotor backLeft;
@@ -206,26 +206,26 @@ public class blueLeft extends LinearOpMode {
             gyroTurning(89);
             moveandcrane(1,1275, 0,1,-200);
             crane(.7,-1100);*/
-            strafeLeftandCrane(1, 3650, 0, 1, 6800);
+            strafeRightandCrane(1, 3650, 0, 1, 6800);
             movethenCranethenIntake(1, 300, 500, 1, -100, 500, 1);
             move(1, -250);
             gyroTurning(0);
             if (tagOfInterest.id == LEFT){
-                strafeRight(1,2100);
+                strafeLeft(1,2100);
                 gyroTurning(0);
-                move(1,-1200);
+                move(1,1200);
 
             }
             else if (tagOfInterest.id == MIDDLE){
-                strafeRight(1,2100);
+                strafeLeft(1,2100);
 
 
 
             }
             else if (tagOfInterest.id == RIGHT){
-                strafeRight(1,2100);
+                strafeLeft(1,2100);
                 gyroTurning(0);
-                move(1,1200);
+                moveandcrane(1,-1200,0,1,-6700);
 
 
             }
