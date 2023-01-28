@@ -206,24 +206,24 @@ public class redLeft extends LinearOpMode {
             gyroTurning(89);
             moveandcrane(1,1275, 0,1,-200);
             crane(.7,-1100);*/
-            strafeRightandCrane(1, 3650, 0, 1, 6800);
+            strafeLeftandCrane(1, 3650, 0, 1, 6800);
             movethenCranethenIntake(1, 300, 500, 1, -100, 500, 1);
             move(1, -250);
             gyroTurning(0);
             if (tagOfInterest.id == LEFT){
-                strafeLeft(1,2100);
+                strafeRight(1,2100);
                 gyroTurning(0);
-                move(1,1200);
+                moveandcrane(1,1200,0,1,-6700);
 
             }
             else if (tagOfInterest.id == MIDDLE){
-                strafeLeft(1,2100);
+                strafeRightandCrane(1,2100,0,1,-6700);
 
 
 
             }
             else if (tagOfInterest.id == RIGHT){
-                strafeLeft(1,2100);
+                strafeRight(1,2100);
                 gyroTurning(0);
                 moveandcrane(1,-1200,0,1,-6700);
 

@@ -213,22 +213,22 @@ public class redRight extends LinearOpMode {
             strafeRightandCrane(1, 3650, 0, 1, 6500);
             movethenCranethenIntake(1, 300, 500, 1, -100, 500, 1);
             move(1, -250);
-            gyroTurning(0);
+            gyroTurning(90);
             if (tagOfInterest.id == LEFT){
                 strafeLeft(1,2100);
-                gyroTurning(0);
-                move(1,1200);
+                gyroTurning(90);
+                moveandcrane(1,1200,0,1,-6700);
 
             }
             else if (tagOfInterest.id == MIDDLE){
-                strafeLeft(1,2100);
+                strafeLeftandCrane(1,2100,0,1,-6700);
 
 
 
             }
             else if (tagOfInterest.id == RIGHT){
                 strafeLeft(1,2100);
-                gyroTurning(0);
+                gyroTurning(90);
                 moveandcrane(1,-1200,0,1,-6700);
 
 

@@ -213,11 +213,11 @@ public class blueLeft extends LinearOpMode {
             if (tagOfInterest.id == LEFT){
                 strafeRight(1,2100);
                 gyroTurning(0);
-                move(1,-1200);
+                moveandcrane(1,-1200,0,1,-6700);
 
             }
             else if (tagOfInterest.id == MIDDLE){
-                strafeRight(1,2100);
+                strafeRightandCrane(1,2100,0,1,-6700);
 
 
 
@@ -225,7 +225,7 @@ public class blueLeft extends LinearOpMode {
             else if (tagOfInterest.id == RIGHT){
                 strafeRight(1,2100);
                 gyroTurning(0);
-                move(1,1200);
+                moveandcrane(1,1200,0,1,-6700);
 
 
             }
