@@ -213,8 +213,9 @@ public class redLeft extends LinearOpMode {
             sleep(500);
             if (tagOfInterest.id == LEFT){
                 strafeRight(1,2100);
-                slowgyroTurning(0);
                 sleep(1000);
+                slowgyroTurning(0);
+                sleep(10000);
                 moveandcrane(1,-1300,0,1,-6700);
 
             }
@@ -226,8 +227,9 @@ public class redLeft extends LinearOpMode {
             }
             else if (tagOfInterest.id == RIGHT){
                 strafeRight(1,2100);
-                slowgyroTurning(0);
                 sleep(1000);
+                slowgyroTurning(0);
+                sleep(10000);
                 moveandcrane(1,1300,0,1,-6700);
 
 
