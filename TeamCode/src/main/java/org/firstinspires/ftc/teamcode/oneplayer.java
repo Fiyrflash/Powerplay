@@ -72,19 +72,19 @@ public class oneplayer extends LinearOpMode {
 
             if (cranepower<turn){
 
-                Crane.setPower(cranepower);
-                frontLeft.setPower(0);
-                frontRight.setPower(0);
-                backLeft.setPower(0);
-                backRight.setPower(0);
-
-            }else {
-
                 Crane.setPower(0);
                 frontLeft.setPower(-turn);
                 frontRight.setPower(turn);
                 backLeft.setPower(-turn);
                 backRight.setPower(turn);
+
+            }else {
+
+                Crane.setPower(cranepower);
+                frontLeft.setPower(0);
+                frontRight.setPower(0);
+                backLeft.setPower(0);
+                backRight.setPower(0);
 
                 if (cranepower==turn){
 
