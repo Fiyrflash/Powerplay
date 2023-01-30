@@ -34,6 +34,7 @@ public class oneplayer extends LinearOpMode {
 
         waitForStart();
         while (opModeIsActive()) {
+
             double turn;
             double throttle;
             float strafeLeft;
@@ -43,19 +44,16 @@ public class oneplayer extends LinearOpMode {
             boolean dropoff;
             double cranepower;
 
+            Crane.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
             throttle = gamepad1.left_stick_y;
             turn = gamepad1.right_stick_x;
             strafeLeft = gamepad1.left_trigger;
             strafeRight = gamepad1.right_trigger;
 
             cranepower = gamepad1.right_stick_y;
-            pickup = gamepad1.dpad_left;
-            dropoff = gamepad1.dpad_right;
-
-            telemetry.addData("backRight", backRight.getCurrentPosition());
-            telemetry.addData("backLeft", backLeft.getCurrentPosition());
-            telemetry.addData("frontRight", frontRight.getCurrentPosition());
-            telemetry.addData("frontLeft", frontLeft.getCurrentPosition());
+            pickup = gamepad1.left_bumper;
+            dropoff = gamepad1.right_bumper;
 
             frontLeft.setPower(-strafeLeft);
             frontRight.setPower(-strafeLeft);
@@ -72,16 +70,32 @@ public class oneplayer extends LinearOpMode {
             backLeft.setPower(throttle);
             backRight.setPower(throttle);
 
-            frontLeft.setPower(-turn);
-            frontRight.setPower(turn);
-            backLeft.setPower(-turn);
-            backRight.setPower(turn);
+            if (cranepower<turn){
 
-            Crane.setPower(cranepower);
+                Crane.setPower(cranepower);
+                frontLeft.setPower(0);
+                frontRight.setPower(0);
+                backLeft.setPower(0);
+                backRight.setPower(0);
 
-            telemetry.addData("crane",Crane.getCurrentPosition());
-            telemetry.update();
+            }else {
 
+                Crane.setPower(0);
+                frontLeft.setPower(-turn);
+                frontRight.setPower(turn);
+                backLeft.setPower(-turn);
+                backRight.setPower(turn);
+
+                if (cranepower==turn){
+
+                    Crane.setPower(cranepower);
+                    frontLeft.setPower(0);
+                    frontRight.setPower(0);
+                    backLeft.setPower(0);
+                    backRight.setPower(0);
+
+                }
+            }
 
             if (pickup) {
                 Left.setPower(-1);
@@ -89,8 +103,6 @@ public class oneplayer extends LinearOpMode {
             }
             if (dropoff) {
                 Left.setPower(1);
-
-
 
             }
         }

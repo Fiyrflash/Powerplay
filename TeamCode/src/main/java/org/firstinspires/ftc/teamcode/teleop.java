@@ -55,11 +55,6 @@ public class teleop extends LinearOpMode {
 
             crane.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-            telemetry.addData("backRight", backRight.getCurrentPosition());
-            telemetry.addData("backLeft", backLeft.getCurrentPosition());
-            telemetry.addData("frontRight", frontRight.getCurrentPosition());
-            telemetry.addData("frontLeft", frontLeft.getCurrentPosition());
-
             frontLeft.setPower(strafeLeft);
             frontRight.setPower(-strafeLeft);
             backLeft.setPower(-strafeLeft);
