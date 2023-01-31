@@ -97,7 +97,23 @@ public class oneplayer extends LinearOpMode {
 
             }
 
-            if (){
+            if (pickup){
+
+                Left.setPower(-1);
+
+            }
+
+            if (dropoff){
+
+                Left.setPower(1);
+
+            }
+
+            if (pickup == dropoff){
+
+                Left.setPower(0);
+
+            }
 
         }
     }
