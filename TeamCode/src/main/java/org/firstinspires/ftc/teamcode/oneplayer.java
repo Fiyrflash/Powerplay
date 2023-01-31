@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -16,7 +15,7 @@ public class oneplayer extends LinearOpMode {
     private DcMotor backRight;
 
     private CRServo Left;
-    private DcMotor Crane;
+    private DcMotor crane;
 
     public void runOpMode() throws InterruptedException {
 
@@ -26,12 +25,12 @@ public class oneplayer extends LinearOpMode {
         backRight = hardwareMap.get(DcMotor.class, "backRight");
 
         Left = hardwareMap.get(CRServo.class, "Lefts");
-        Crane = hardwareMap.get(DcMotor.class, "Crane");
+        crane = hardwareMap.get(DcMotor.class, "Crane");
 
-        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
-        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        backRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+        frontRight.setDirection(DcMotorSimple.Direction.FORWARD);
+        backLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+        backRight.setDirection(DcMotorSimple.Direction.FORWARD);
 
         waitForStart();
         while (opModeIsActive()) {
@@ -40,6 +39,7 @@ public class oneplayer extends LinearOpMode {
             double throttle;
             float strafeLeft;
             float strafeRight;
+
 
             boolean pickup;
             boolean dropoff;
@@ -50,20 +50,20 @@ public class oneplayer extends LinearOpMode {
             strafeLeft = gamepad1.left_trigger;
             strafeRight = gamepad1.right_trigger;
 
-            cranepower = gamepad1.right_stick_y;
+            cranepower = gamepad2.right_stick_y;
             pickup = gamepad1.left_bumper;
             dropoff = gamepad1.right_bumper;
 
-            Crane.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            crane.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-            frontLeft.setPower(-strafeLeft);
+            frontLeft.setPower(strafeLeft);
             frontRight.setPower(-strafeLeft);
-            backLeft.setPower(strafeLeft);
+            backLeft.setPower(-strafeLeft);
             backRight.setPower(strafeLeft);
 
-            frontLeft.setPower(strafeRight);
+            frontLeft.setPower(-strafeRight);
             frontRight.setPower(strafeRight);
-            backLeft.setPower(-strafeRight);
+            backLeft.setPower(strafeRight);
             backRight.setPower(-strafeRight);
 
             frontLeft.setPower(throttle);
@@ -73,39 +73,32 @@ public class oneplayer extends LinearOpMode {
 
             if (cranepower<turn){
 
-                Crane.setPower(0);
+                crane.setPower(0);
                 frontLeft.setPower(-turn);
                 frontRight.setPower(turn);
                 backLeft.setPower(-turn);
                 backRight.setPower(turn);
 
-            }else {
+            } else if (cranepower>turn) {
 
-                Crane.setPower(cranepower);
+                crane.setPower(cranepower);
                 frontLeft.setPower(0);
                 frontRight.setPower(0);
                 backLeft.setPower(0);
                 backRight.setPower(0);
 
-                if (cranepower==turn){
+            } else if (cranepower==turn) {
 
-                    Crane.setPower(cranepower);
-                    frontLeft.setPower(0);
-                    frontRight.setPower(0);
-                    backLeft.setPower(0);
-                    backRight.setPower(0);
-
-                }
-            }
-
-            if (pickup) {
-                Left.setPower(-1);
+                crane.setPower(0);
+                frontLeft.setPower(0);
+                frontRight.setPower(0);
+                backLeft.setPower(0);
+                backRight.setPower(0);
 
             }
-            if (dropoff) {
-                Left.setPower(1);
 
-            }
+            if (){
+
         }
     }
 }
