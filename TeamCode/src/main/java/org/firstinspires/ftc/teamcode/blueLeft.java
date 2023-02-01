@@ -425,61 +425,6 @@ public class blueLeft extends LinearOpMode {
         return foundAngle;
     }
 
-    public boolean fastgyroTurning(double targetAngle) {
-        frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        boolean foundAngle;
-        foundAngle = false;
-        while (!foundAngle) {
-            angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-            double currentAngle = angles.firstAngle;
-            telemetry.addData("Angle", currentAngle);
-            telemetry.addData("targetangle", targetAngle);
-            telemetry.update();
-            if (angles.firstAngle >= targetAngle - 0.1 && angles.firstAngle <= targetAngle + 0.1) {
-                frontLeft.setPower(0);
-                frontRight.setPower(0);
-                backLeft.setPower(0);
-                backRight.setPower(0);
-                foundAngle = true;
-                sleep(1000);
-                break;
-
-            } else if (angles.firstAngle >= targetAngle + 0.5) {
-                if (angles.firstAngle <= targetAngle - 5) {
-                    frontLeft.setPower(0.50);
-                    frontRight.setPower(-0.50);
-                    backLeft.setPower(0.50);
-                    backRight.setPower(-0.50);
-                    foundAngle = false;
-                } else {
-                    frontLeft.setPower(-0.50);
-                    frontRight.setPower(0.50);
-                    backLeft.setPower(-0.50);
-                    backRight.setPower(0.50);
-                    foundAngle = false;
-                }
-            } else if (angles.firstAngle <= targetAngle - 0.5) {
-                if (angles.firstAngle >= targetAngle + 5) {
-                    frontLeft.setPower(-0.50);
-                    frontRight.setPower(0.50);
-                    backLeft.setPower(-0.50);
-                    backRight.setPower(0.50);
-                    foundAngle = false;
-                } else {
-                    frontLeft.setPower(.50);
-                    frontRight.setPower(-.50);
-                    backLeft.setPower(.50);
-                    backRight.setPower(-.50);
-                    foundAngle = false;
-                }
-            }
-        }
-        return foundAngle;
-    }
-
     public void strafeLeft(double power, int position) {
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
