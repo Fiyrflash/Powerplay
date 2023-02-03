@@ -50,10 +50,10 @@ public class oneplayer extends LinearOpMode {
             strafeLeft = gamepad1.left_trigger;
             strafeRight = gamepad1.right_trigger;
 
-            cranepower = gamepad2.right_stick_y;
+            cranepower = gamepad1.right_stick_y;
             pickup = gamepad1.left_bumper;
             dropoff = gamepad1.right_bumper;
-
+*
             crane.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
             frontLeft.setPower(strafeLeft);
@@ -84,7 +84,8 @@ public class oneplayer extends LinearOpMode {
                 frontRight.setPower(turn);
                 backLeft.setPower(-turn);
                 backRight.setPower(turn);
-
+*
+ --+
             } else if (cranepower>turn) {
 
                 crane.setPower(cranepower);

@@ -90,8 +90,6 @@ public class teleop extends LinearOpMode {
                 Left.setPower(0);
 
             }
-
-
         }
     }
 }
