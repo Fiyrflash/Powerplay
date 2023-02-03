@@ -71,8 +71,14 @@ public class oneplayer extends LinearOpMode {
             backLeft.setPower(throttle);
             backRight.setPower(throttle);
 
-            if (cranepower<turn){
+            if (cranepower==turn) {
+                crane.setPower(0);
+                frontLeft.setPower(0);
+                frontRight.setPower(0);
+                backLeft.setPower(0);
+                backRight.setPower(0);
 
+            }else if (cranepower<turn) {
                 crane.setPower(0);
                 frontLeft.setPower(-turn);
                 frontRight.setPower(turn);
@@ -82,14 +88,6 @@ public class oneplayer extends LinearOpMode {
             } else if (cranepower>turn) {
 
                 crane.setPower(cranepower);
-                frontLeft.setPower(0);
-                frontRight.setPower(0);
-                backLeft.setPower(0);
-                backRight.setPower(0);
-
-            } else if (cranepower==turn) {
-
-                crane.setPower(0);
                 frontLeft.setPower(0);
                 frontRight.setPower(0);
                 backLeft.setPower(0);
