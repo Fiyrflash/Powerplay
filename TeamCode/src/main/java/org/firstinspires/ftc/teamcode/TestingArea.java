@@ -37,14 +37,13 @@ public class TestingArea extends LinearOpMode {
 
             double turn;
             double throttle;
-            double strafe;
+            float strafe;
 
             float pickup;
             float dropoff;
             double cranepower;
 
             throttle = gamepad1.left_stick_y;
-
             turn = gamepad1.right_stick_x;
             strafe = gamepad1.left_stick_x;
 
@@ -60,35 +59,24 @@ public class TestingArea extends LinearOpMode {
                 backLeft.setPower(0);
                 backRight.setPower(0);
             } else if (strafe>throttle) {
-                frontLeft.setPower(-strafe);
-                frontRight.setPower(strafe);
-                backLeft.setPower(strafe);
-                backRight.setPower(-strafe);
+                frontLeft.setPower(strafe);
+                frontRight.setPower(-strafe);
+                backLeft.setPower(-strafe);
+                backRight.setPower(strafe);
             } else if (strafe<throttle) {
                 frontLeft.setPower(throttle);
                 frontRight.setPower(throttle);
                 backLeft.setPower(throttle);
                 backRight.setPower(throttle);
             }
-            if (turn==cranepower) {
-                frontLeft.setPower(0);
-                frontRight.setPower(0);
-                backLeft.setPower(0);
-                backRight.setPower(0);
-                crane.setPower(0);
-            } else if (turn>cranepower) {
-                frontLeft.setPower(turn);
-                frontRight.setPower(-turn);
-                backLeft.setPower(turn);
-                backRight.setPower(-turn);
-                crane.setPower(0);
-            } else if (turn<cranepower) {
-                frontLeft.setPower(0);
-                frontRight.setPower(0);
-                backLeft.setPower(0);
-                backRight.setPower(0);
-                crane.setPower(cranepower);
-            }
+
+            frontLeft.setPower(-turn);
+            frontRight.setPower(turn);
+            backLeft.setPower(-turn);
+            backRight.setPower(turn);
+
+            crane.setPower(cranepower);
+
             if (pickup > 0){
                 Left.setPower(-1);
             }
