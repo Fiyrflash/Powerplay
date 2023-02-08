@@ -53,17 +53,13 @@ public class TestingArea extends LinearOpMode {
 
             crane.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-            if (strafe==throttle){
-                frontLeft.setPower(0);
-                frontRight.setPower(0);
-                backLeft.setPower(0);
-                backRight.setPower(0);
-            } else if (strafe>throttle) {
+            if (strafe>throttle) {
                 frontLeft.setPower(strafe);
                 frontRight.setPower(-strafe);
                 backLeft.setPower(-strafe);
                 backRight.setPower(strafe);
-            } else if (strafe<throttle) {
+            }
+            if (strafe<throttle) {
                 frontLeft.setPower(throttle);
                 frontRight.setPower(throttle);
                 backLeft.setPower(throttle);
