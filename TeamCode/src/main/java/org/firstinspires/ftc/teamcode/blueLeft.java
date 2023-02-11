@@ -211,6 +211,8 @@ public class blueLeft extends LinearOpMode {
             crane(.7,-1100);*/
             strafeLeftandCrane(1, 1100, 0, 1, 4000);
             movethenCranethenIntake(1, 250, 500, 1, -200, 1000, -1);
+            slowgyroTurning(0);
+
             move(1, -300);
             slowgyroTurning(0);
             strafeLeft(1,800);
@@ -237,9 +239,7 @@ public class blueLeft extends LinearOpMode {
 
 
             }
-            sleep(30000);
-
-
+            terminateOpModeNow();
         }
     }
 
