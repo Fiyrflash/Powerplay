@@ -193,26 +193,13 @@ public class blueLeft extends LinearOpMode {
         waitForStart();
         initGyro();
         if (opModeIsActive()) {
-            telemetry.clear();
+            telemetry.clearAll();
             telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
+            telemetry.update();
 
-            /*strafeLeftandCrane(1,980, 0,.7,3700);
-            slowgyroTurning(0);
-            move(1,290);
-            slowgyroTurning(0);
-            cranethenIntake(.7,-550,1000,1);
-            move(1,-250);
-            slowgyroTurning(0);
-            strafeLeft(1,2040);
-            gyroTurning(90);
-            initGyro();
-            gyroTurning(89);
-            moveandcrane(1,1275, 0,1,-200);
-            crane(.7,-1100);*/
             strafeLeftandCrane(1, 1100, 0, 1, 4000);
             movethenCranethenIntake(1, 250, 500, 1, -200, 1000, -1);
             slowgyroTurning(0);
-
             move(1, -300);
             slowgyroTurning(0);
             strafeLeft(1,800);
@@ -273,6 +260,7 @@ public class blueLeft extends LinearOpMode {
         frontLeft.setPower(0);
         backRight.setPower(0);
         backLeft.setPower(0);
+        Crane.setPower(0);
     }
 
     public void moveandcrane(double power, int position, int time, double power2, int position2) {
@@ -300,8 +288,6 @@ public class blueLeft extends LinearOpMode {
 
         sleep(time);
 
-        telemetry.addData("Crane", Crane.getCurrentPosition());
-        telemetry.update();
         Crane.setTargetPosition(position2);
         Crane.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Crane.setPower(power2);
@@ -509,8 +495,6 @@ public class blueLeft extends LinearOpMode {
 
         sleep(time);
 
-        telemetry.addData("Crane", Crane.getCurrentPosition());
-        telemetry.update();
         Crane.setTargetPosition(position2);
         Crane.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Crane.setPower(power2);
@@ -543,8 +527,6 @@ public class blueLeft extends LinearOpMode {
 
         sleep(time);
 
-        telemetry.addData("Crane", Crane.getCurrentPosition());
-        telemetry.update();
         Crane.setTargetPosition(position2);
         Crane.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Crane.setPower(power2);
@@ -615,8 +597,6 @@ public class blueLeft extends LinearOpMode {
 
         sleep(time);
 
-        telemetry.addData("Crane", Crane.getCurrentPosition());
-        telemetry.update();
         Crane.setTargetPosition(position2);
         Crane.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Crane.setPower(power2);
