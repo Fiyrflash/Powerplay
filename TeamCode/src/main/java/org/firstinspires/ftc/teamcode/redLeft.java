@@ -209,7 +209,7 @@ public class redLeft extends LinearOpMode {
             gyroTurning(89);
             moveandcrane(1,1275, 0,1,-200);
             crane(.7,-1100);*/
-            strafeLeftandCrane(1, 950, 0, 1, 3000);
+            strafeLeftandCrane(1, 950, 0, 1, 4000);
             movethenCranethenIntake(1, 300, 500, 1, -200, 1000, -1);
             move(1, -300);
             slowgyroTurning(0);
