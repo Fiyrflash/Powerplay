@@ -209,15 +209,16 @@ public class blueLeft extends LinearOpMode {
             gyroTurning(89);
             moveandcrane(1,1275, 0,1,-200);
             crane(.7,-1100);*/
-            strafeLeftandCrane(1, 950, 0, 1, 4000);
-            movethenCranethenIntake(1, 300, 500, 1, -200, 1000, -1);
+            strafeLeftandCrane(1, 1100, 0, 1, 4000);
+            movethenCranethenIntake(1, 250, 500, 1, -200, 1000, -1);
             move(1, -300);
             slowgyroTurning(0);
             strafeLeft(1,800);
             stopMotors();
             if (tagOfInterest.id == LEFT){
                 slowgyroTurning(0);
-                moveandcrane(1,-1200,0,1,-2800);
+                moveandcrane(1,-1300,0,1,-2800);
+                slowgyroTurning(0);
                 stopMotors();
 
 
@@ -231,6 +232,7 @@ public class blueLeft extends LinearOpMode {
             else if (tagOfInterest.id == RIGHT){
                 slowgyroTurning(0);
                 moveandcrane(1,1200,0,1,-6700);
+                slowgyroTurning(0);
                 stopMotors();
 
 
