@@ -82,7 +82,7 @@ public class blueLeft extends LinearOpMode {
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         opModeInInit();
-
+//camera starts
             int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
             camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "ConeCam"), cameraMonitorViewId);
             aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
