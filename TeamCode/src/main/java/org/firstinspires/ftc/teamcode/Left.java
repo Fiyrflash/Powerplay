@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 @Autonomous
 
-public class redRight extends LinearOpMode {
+public class Left extends LinearOpMode {
     private DcMotor frontLeft;
     private DcMotor frontRight;
     private DcMotor backLeft;
@@ -62,114 +62,6 @@ public class redRight extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "ConeCam"), cameraMonitorViewId);
-        aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
-
-        camera.setPipeline(aprilTagDetectionPipeline);
-        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
-            @Override
-            public void onOpened() {
-                camera.startStreaming(800, 448, OpenCvCameraRotation.UPRIGHT);
-            }
-
-            @Override
-            public void onError(int errorCode) {
-
-            }
-        });
-
-        telemetry.setMsTransmissionInterval(50);
-
-        /*
-         * The INIT-loop:
-         * This REPLACES waitForStart!
-         */
-        while (!isStarted() && !isStopRequested()) {
-            ArrayList<AprilTagDetection> currentDetections = aprilTagDetectionPipeline.getLatestDetections();
-
-            if (currentDetections.size() != 0) {
-                boolean tagFound = false;
-
-                for (AprilTagDetection tag : currentDetections) {
-                    if (tag.id == LEFT || tag.id == MIDDLE || tag.id == RIGHT) {
-                        tagOfInterest = tag;
-                        tagFound = true;
-                        break;
-                    }
-                }
-
-                if (tagFound) {
-                    telemetry.addLine("Tag of interest is in sight!\n\nLocation data:");
-                    tagToTelemetry(tagOfInterest);
-                } else {
-                    telemetry.addLine("Don't see tag of interest :(");
-
-                    if (tagOfInterest == null) {
-                        telemetry.addLine("(The tag has never been seen)");
-                    } else {
-                        telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
-                        tagToTelemetry(tagOfInterest);
-                    }
-                }
-
-            } else {
-                telemetry.addLine("Don't see tag of interest :(");
-
-                if (tagOfInterest == null) {
-                    telemetry.addLine("(The tag has never been seen)");
-                } else {
-                    telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
-                    tagToTelemetry(tagOfInterest);
-                }
-
-            }
-
-            telemetry.update();
-            sleep(20);
-        }
-
-        /*
-         * The START command just came in: now work off the latest snapshot acquired
-         * during the init loop.
-         */
-
-        /* Update the telemetry */
-        if (tagOfInterest != null) {
-            telemetry.addLine("Tag snapshot:\n");
-            tagToTelemetry(tagOfInterest);
-            telemetry.update();
-        } else {
-            telemetry.addLine("No tag snapshot available, it was never sighted during the init loop :(");
-            telemetry.update();
-        }
-
-        /* Actually do something useful */
-        if (tagOfInterest == null || tagOfInterest.id == LEFT) {
-            //trajectory
-        } else if (tagOfInterest.id == MIDDLE) {
-            //trajectory
-        } else if (tagOfInterest.id == RIGHT) {
-            //trajectory
-        }
-
-
-        /* You wouldn't have this in your autonomous, this is just to prevent the sample from ending */
-        while (opModeIsActive()) {
-            sleep(20);
-        }
-    }
-
-    void tagToTelemetry(AprilTagDetection detection) {
-        telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
-        telemetry.addLine(String.format("Translation X: %.2f feet", detection.pose.x * FEET_PER_METER));
-        telemetry.addLine(String.format("Translation Y: %.2f feet", detection.pose.y * FEET_PER_METER));
-        telemetry.addLine(String.format("Translation Z: %.2f feet", detection.pose.z * FEET_PER_METER));
-        telemetry.addLine(String.format("Rotation Yaw: %.2f degrees", Math.toDegrees(detection.pose.yaw)));
-        telemetry.addLine(String.format("Rotation Pitch: %.2f degrees", Math.toDegrees(detection.pose.pitch)));
-        telemetry.addLine(String.format("Rotation Roll: %.2f degrees", Math.toDegrees(detection.pose.roll)));
-
-
         frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
         backLeft = hardwareMap.get(DcMotor.class, "backLeft");
@@ -189,58 +81,153 @@ public class redRight extends LinearOpMode {
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        opModeInInit();
+//camera starts
+            int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+            camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "ConeCam"), cameraMonitorViewId);
+            aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
+
+            camera.setPipeline(aprilTagDetectionPipeline);
+            camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+                @Override
+                public void onOpened() {
+                    camera.startStreaming(800, 448, OpenCvCameraRotation.UPRIGHT);
+                }
+
+                @Override
+                public void onError(int errorCode) {
+
+                }
+            });
+
+            telemetry.setMsTransmissionInterval(50);
+
+            /*
+             * The INIT-loop:
+             * This REPLACES waitForStart!
+             */
+            while (!isStarted() && !isStopRequested()) {
+                ArrayList<AprilTagDetection> currentDetections = aprilTagDetectionPipeline.getLatestDetections();
+
+                if (currentDetections.size() != 0) {
+                    boolean tagFound = false;
+
+                    for (AprilTagDetection tag : currentDetections) {
+                        if (tag.id == LEFT || tag.id == MIDDLE || tag.id == RIGHT) {
+                            tagOfInterest = tag;
+                            tagFound = true;
+                            break;
+                        }
+                    }
+
+                    if (tagFound) {
+                        telemetry.addLine("Tag of interest is in sight!\n\nLocation data:");
+                        tagToTelemetry(tagOfInterest);
+                    } else {
+                        telemetry.addLine("Don't see tag of interest :(");
+
+                        if (tagOfInterest == null) {
+                            telemetry.addLine("(The tag has never been seen)");
+                        } else {
+                            telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
+                            tagToTelemetry(tagOfInterest);
+                        }
+                    }
+
+                } else {
+                    telemetry.addLine("Don't see tag of interest :(");
+
+                    if (tagOfInterest == null) {
+                        telemetry.addLine("(The tag has never been seen)");
+                    } else {
+                        telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
+                        tagToTelemetry(tagOfInterest);
+                    }
+
+                }
+
+                telemetry.update();
+                sleep(20);
+            }
+
+            /*
+             * The START command just came in: now work off the latest snapshot acquired
+             * during the init loop.
+             */
+
+            /* Update the telemetry */
+            if (tagOfInterest != null) {
+                telemetry.addLine("Tag snapshot:\n");
+                tagToTelemetry(tagOfInterest);
+                telemetry.update();
+            } else {
+                runOpMode();
+                telemetry.addLine("No tag snapshot available, it was never sighted during the init loop :(");
+                telemetry.addLine("robot will run and drop the cone");
+                telemetry.update();
+            }
+
+            /* Actually do something useful */
+            if (tagOfInterest == null || tagOfInterest.id == LEFT) {
+                //trajectory
+            } else if (tagOfInterest.id == MIDDLE) {
+                //trajectory
+            } else if (tagOfInterest.id == RIGHT) {
+                //trajectory
+            }
+
+
+            /* You wouldn't have this in your autonomous, this is just to prevent the sample from ending */
+            while (opModeIsActive()) {
+                sleep(20);
+            }
+        }
+
+        void tagToTelemetry(AprilTagDetection detection) {
+            telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
+            telemetry.addLine(String.format("Translation X: %.2f feet", detection.pose.x * FEET_PER_METER));
+            telemetry.addLine(String.format("Translation Y: %.2f feet", detection.pose.y * FEET_PER_METER));
+            telemetry.addLine(String.format("Translation Z: %.2f feet", detection.pose.z * FEET_PER_METER));
+            telemetry.addLine(String.format("Rotation Yaw: %.2f degrees", Math.toDegrees(detection.pose.yaw)));
+            telemetry.addLine(String.format("Rotation Pitch: %.2f degrees", Math.toDegrees(detection.pose.pitch)));
+            telemetry.addLine(String.format("Rotation Roll: %.2f degrees", Math.toDegrees(detection.pose.roll)));
+
         waitForStart();
         initGyro();
         if (opModeIsActive()) {
+            telemetry.clearAll();
+            telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
+            telemetry.update();
 
-            /*strafeLeftandCrane(1,980, 0,.7,3700);
+            strafeLeftandCrane(1, 1100, 0, 1, 4000);
+            movethenCranethenIntake(1, 250, 500, 1, -300, 1000, -1);
             slowgyroTurning(0);
-            move(1,290);
+            move(1, -300);
             slowgyroTurning(0);
-            cranethenIntake(.7,-550,1000,1);
-            move(1,-250);
-            slowgyroTurning(0);
-            strafeLeft(1,2040);
-            gyroTurning(90);
-            initGyro();
-            gyroTurning(89);
-            moveandcrane(1,1275, 0,1,-200);
-            crane(.7,-1100);*/
-            strafeLeftandCrane(1,400,0,1,300);
-            gyroTurning(90);
-            initGyro();
-            gyroTurning(90);
-            strafeRightandCrane(1, 3650, 0, 1, 6500);
-            movethenCranethenIntake(1, 300, 500, 1, -100, 500, 1);
-            move(1, -250);
-            slowgyroTurning(90);
-            sleep(500);
+            strafeLeft(1,800);
+            stopMotors();
+
             if (tagOfInterest.id == LEFT){
-                strafeLeft(1,2100);
-                sleep(1000);
-                slowgyroTurning(90);
-                sleep(10000);
-                moveandcrane(1,1200,0,1,-6700);
+                slowgyroTurning(0);
+                moveandcrane(1,-1300,0,1,-2800);
+                slowgyroTurning(0);
+                stopMotors();
 
             }
             else if (tagOfInterest.id == MIDDLE){
-                strafeLeftandCrane(1,2100,0,1,-6700);
-
-
+                stopMotors();
 
             }
             else if (tagOfInterest.id == RIGHT){
-                strafeLeft(1,2100);
-                sleep(1000);
-                slowgyroTurning(90);
-                sleep(10000);
-                moveandcrane(1,-1200,0,1,-6700);
+                slowgyroTurning(0);
+                moveandcrane(1,1200,0,1,-6700);
+                slowgyroTurning(0);
+                stopMotors();
 
-
+            }else {
+                stopMotors();
             }
-            sleep(30000);
-
-
+            terminateOpModeNow();
         }
     }
 
@@ -269,6 +256,13 @@ public class redRight extends LinearOpMode {
 
         }
     }
+    public void stopMotors(){
+        frontRight.setPower(0);
+        frontLeft.setPower(0);
+        backRight.setPower(0);
+        backLeft.setPower(0);
+        Crane.setPower(0);
+    }
 
     public void moveandcrane(double power, int position, int time, double power2, int position2) {
 
@@ -295,8 +289,6 @@ public class redRight extends LinearOpMode {
 
         sleep(time);
 
-        telemetry.addData("Crane", Crane.getCurrentPosition());
-        telemetry.update();
         Crane.setTargetPosition(position2);
         Crane.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Crane.setPower(power2);
@@ -429,61 +421,6 @@ public class redRight extends LinearOpMode {
         return foundAngle;
     }
 
-    public boolean fastgyroTurning(double targetAngle) {
-        frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        boolean foundAngle;
-        foundAngle = false;
-        while (!foundAngle) {
-            angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-            double currentAngle = angles.firstAngle;
-            telemetry.addData("Angle", currentAngle);
-            telemetry.addData("targetangle", targetAngle);
-            telemetry.update();
-            if (angles.firstAngle >= targetAngle - 0.1 && angles.firstAngle <= targetAngle + 0.1) {
-                frontLeft.setPower(0);
-                frontRight.setPower(0);
-                backLeft.setPower(0);
-                backRight.setPower(0);
-                foundAngle = true;
-                sleep(1000);
-                break;
-
-            } else if (angles.firstAngle >= targetAngle + 0.5) {
-                if (angles.firstAngle <= targetAngle - 5) {
-                    frontLeft.setPower(0.50);
-                    frontRight.setPower(-0.50);
-                    backLeft.setPower(0.50);
-                    backRight.setPower(-0.50);
-                    foundAngle = false;
-                } else {
-                    frontLeft.setPower(-0.50);
-                    frontRight.setPower(0.50);
-                    backLeft.setPower(-0.50);
-                    backRight.setPower(0.50);
-                    foundAngle = false;
-                }
-            } else if (angles.firstAngle <= targetAngle - 0.5) {
-                if (angles.firstAngle >= targetAngle + 5) {
-                    frontLeft.setPower(-0.50);
-                    frontRight.setPower(0.50);
-                    backLeft.setPower(-0.50);
-                    backRight.setPower(0.50);
-                    foundAngle = false;
-                } else {
-                    frontLeft.setPower(.50);
-                    frontRight.setPower(-.50);
-                    backLeft.setPower(.50);
-                    backRight.setPower(-.50);
-                    foundAngle = false;
-                }
-            }
-        }
-        return foundAngle;
-    }
-
     public void strafeLeft(double power, int position) {
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -559,8 +496,6 @@ public class redRight extends LinearOpMode {
 
         sleep(time);
 
-        telemetry.addData("Crane", Crane.getCurrentPosition());
-        telemetry.update();
         Crane.setTargetPosition(position2);
         Crane.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Crane.setPower(power2);
@@ -593,8 +528,6 @@ public class redRight extends LinearOpMode {
 
         sleep(time);
 
-        telemetry.addData("Crane", Crane.getCurrentPosition());
-        telemetry.update();
         Crane.setTargetPosition(position2);
         Crane.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Crane.setPower(power2);
@@ -665,8 +598,6 @@ public class redRight extends LinearOpMode {
 
         sleep(time);
 
-        telemetry.addData("Crane", Crane.getCurrentPosition());
-        telemetry.update();
         Crane.setTargetPosition(position2);
         Crane.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Crane.setPower(power2);

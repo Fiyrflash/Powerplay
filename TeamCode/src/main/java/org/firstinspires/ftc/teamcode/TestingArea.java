@@ -37,7 +37,7 @@ public class TestingArea extends LinearOpMode {
 
             double turn;
             double throttle;
-            float strafe;
+            double strafe;
 
             float pickup;
             float dropoff;
