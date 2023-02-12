@@ -83,57 +83,46 @@ public class redLeft extends LinearOpMode {
 
         opModeInInit();
 //camera starts
-            int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-            camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "ConeCam"), cameraMonitorViewId);
-            aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "ConeCam"), cameraMonitorViewId);
+        aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
 
-            camera.setPipeline(aprilTagDetectionPipeline);
-            camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
-                @Override
-                public void onOpened() {
-                    camera.startStreaming(800, 448, OpenCvCameraRotation.UPRIGHT);
+        camera.setPipeline(aprilTagDetectionPipeline);
+        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+            @Override
+            public void onOpened() {
+                camera.startStreaming(800, 448, OpenCvCameraRotation.UPRIGHT);
+            }
+
+            @Override
+            public void onError(int errorCode) {
+
+            }
+        });
+
+        telemetry.setMsTransmissionInterval(50);
+
+        /*
+         * The INIT-loop:
+         * This REPLACES waitForStart!
+         */
+        while (!isStarted() && !isStopRequested()) {
+            ArrayList<AprilTagDetection> currentDetections = aprilTagDetectionPipeline.getLatestDetections();
+
+            if (currentDetections.size() != 0) {
+                boolean tagFound = false;
+
+                for (AprilTagDetection tag : currentDetections) {
+                    if (tag.id == LEFT || tag.id == MIDDLE || tag.id == RIGHT) {
+                        tagOfInterest = tag;
+                        tagFound = true;
+                        break;
+                    }
                 }
 
-                @Override
-                public void onError(int errorCode) {
-
-                }
-            });
-
-            telemetry.setMsTransmissionInterval(50);
-
-            /*
-             * The INIT-loop:
-             * This REPLACES waitForStart!
-             */
-            while (!isStarted() && !isStopRequested()) {
-                ArrayList<AprilTagDetection> currentDetections = aprilTagDetectionPipeline.getLatestDetections();
-
-                if (currentDetections.size() != 0) {
-                    boolean tagFound = false;
-
-                    for (AprilTagDetection tag : currentDetections) {
-                        if (tag.id == LEFT || tag.id == MIDDLE || tag.id == RIGHT) {
-                            tagOfInterest = tag;
-                            tagFound = true;
-                            break;
-                        }
-                    }
-
-                    if (tagFound) {
-                        telemetry.addLine("Tag of interest is in sight!\n\nLocation data:");
-                        tagToTelemetry(tagOfInterest);
-                    } else {
-                        telemetry.addLine("Don't see tag of interest :(");
-
-                        if (tagOfInterest == null) {
-                            telemetry.addLine("(The tag has never been seen)");
-                        } else {
-                            telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
-                            tagToTelemetry(tagOfInterest);
-                        }
-                    }
-
+                if (tagFound) {
+                    telemetry.addLine("Tag of interest is in sight!\n\nLocation data:");
+                    tagToTelemetry(tagOfInterest);
                 } else {
                     telemetry.addLine("Don't see tag of interest :(");
 
@@ -143,52 +132,65 @@ public class redLeft extends LinearOpMode {
                         telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
                         tagToTelemetry(tagOfInterest);
                     }
-
                 }
 
-                telemetry.update();
-                sleep(20);
-            }
-
-            /*
-             * The START command just came in: now work off the latest snapshot acquired
-             * during the init loop.
-             */
-
-            /* Update the telemetry */
-            if (tagOfInterest != null) {
-                telemetry.addLine("Tag snapshot:\n");
-                tagToTelemetry(tagOfInterest);
-                telemetry.update();
             } else {
-                telemetry.addLine("No tag snapshot available, it was never sighted during the init loop :(");
-                telemetry.update();
+                telemetry.addLine("Don't see tag of interest :(");
+
+                if (tagOfInterest == null) {
+                    telemetry.addLine("(The tag has never been seen)");
+                } else {
+                    telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
+                    tagToTelemetry(tagOfInterest);
+                }
+
             }
 
-            /* Actually do something useful */
-            if (tagOfInterest == null || tagOfInterest.id == LEFT) {
-                //trajectory
-            } else if (tagOfInterest.id == MIDDLE) {
-                //trajectory
-            } else if (tagOfInterest.id == RIGHT) {
-                //trajectory
-            }
-
-
-            /* You wouldn't have this in your autonomous, this is just to prevent the sample from ending */
-            while (opModeIsActive()) {
-                sleep(20);
-            }
+            telemetry.update();
+            sleep(20);
         }
 
-        void tagToTelemetry(AprilTagDetection detection) {
-            telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
-            telemetry.addLine(String.format("Translation X: %.2f feet", detection.pose.x * FEET_PER_METER));
-            telemetry.addLine(String.format("Translation Y: %.2f feet", detection.pose.y * FEET_PER_METER));
-            telemetry.addLine(String.format("Translation Z: %.2f feet", detection.pose.z * FEET_PER_METER));
-            telemetry.addLine(String.format("Rotation Yaw: %.2f degrees", Math.toDegrees(detection.pose.yaw)));
-            telemetry.addLine(String.format("Rotation Pitch: %.2f degrees", Math.toDegrees(detection.pose.pitch)));
-            telemetry.addLine(String.format("Rotation Roll: %.2f degrees", Math.toDegrees(detection.pose.roll)));
+        /*
+         * The START command just came in: now work off the latest snapshot acquired
+         * during the init loop.
+         */
+
+        /* Update the telemetry */
+        if (tagOfInterest != null) {
+            telemetry.addLine("Tag snapshot:\n");
+            tagToTelemetry(tagOfInterest);
+            telemetry.update();
+        } else {
+            runOpMode();
+            telemetry.addLine("No tag snapshot available, it was never sighted during the init loop :(");
+            telemetry.addLine("robot will run and drop the cone");
+            telemetry.update();
+        }
+
+        /* Actually do something useful */
+        if (tagOfInterest == null || tagOfInterest.id == LEFT) {
+            //trajectory
+        } else if (tagOfInterest.id == MIDDLE) {
+            //trajectory
+        } else if (tagOfInterest.id == RIGHT) {
+            //trajectory
+        }
+
+
+        /* You wouldn't have this in your autonomous, this is just to prevent the sample from ending */
+        while (opModeIsActive()) {
+            sleep(20);
+        }
+    }
+
+    void tagToTelemetry(AprilTagDetection detection) {
+        telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
+        telemetry.addLine(String.format("Translation X: %.2f feet", detection.pose.x * FEET_PER_METER));
+        telemetry.addLine(String.format("Translation Y: %.2f feet", detection.pose.y * FEET_PER_METER));
+        telemetry.addLine(String.format("Translation Z: %.2f feet", detection.pose.z * FEET_PER_METER));
+        telemetry.addLine(String.format("Rotation Yaw: %.2f degrees", Math.toDegrees(detection.pose.yaw)));
+        telemetry.addLine(String.format("Rotation Pitch: %.2f degrees", Math.toDegrees(detection.pose.pitch)));
+        telemetry.addLine(String.format("Rotation Roll: %.2f degrees", Math.toDegrees(detection.pose.roll)));
 
         waitForStart();
         initGyro();
@@ -198,24 +200,22 @@ public class redLeft extends LinearOpMode {
             telemetry.update();
 
             strafeLeftandCrane(1, 1100, 0, 1, 4000);
-            movethenCranethenIntake(1, 250, 500, 1, -200, 1000, -1);
+            movethenCranethenIntake(1, 250, 500, 1, -300, 1000, -1);
             slowgyroTurning(0);
             move(1, -300);
             slowgyroTurning(0);
             strafeLeft(1,800);
             stopMotors();
+
             if (tagOfInterest.id == LEFT){
                 slowgyroTurning(0);
                 moveandcrane(1,-1300,0,1,-2800);
                 slowgyroTurning(0);
                 stopMotors();
 
-
             }
             else if (tagOfInterest.id == MIDDLE){
                 stopMotors();
-
-
 
             }
             else if (tagOfInterest.id == RIGHT){
@@ -224,7 +224,8 @@ public class redLeft extends LinearOpMode {
                 slowgyroTurning(0);
                 stopMotors();
 
-
+            }else {
+                stopMotors();
             }
             terminateOpModeNow();
         }
@@ -536,7 +537,8 @@ public class redLeft extends LinearOpMode {
     }
 
     public void crane(double power, int position) {
-        Crane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        telemetry.addData("Crane", Crane.getCurrentPosition());
+        telemetry.update();
         Crane.setTargetPosition(position);
         Crane.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Crane.setPower(power);
@@ -556,6 +558,8 @@ public class redLeft extends LinearOpMode {
 
     public void cranethenIntake(double power, int position, int time, double power2) {
         Crane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        telemetry.addData("Crane", Crane.getCurrentPosition());
+        telemetry.update();
         Crane.setTargetPosition(position);
         Crane.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Crane.setPower(power);

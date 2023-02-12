@@ -161,7 +161,9 @@ public class blueLeft extends LinearOpMode {
                 tagToTelemetry(tagOfInterest);
                 telemetry.update();
             } else {
+                runOpMode();
                 telemetry.addLine("No tag snapshot available, it was never sighted during the init loop :(");
+                telemetry.addLine("robot will run and drop the cone");
                 telemetry.update();
             }
 
@@ -198,24 +200,22 @@ public class blueLeft extends LinearOpMode {
             telemetry.update();
 
             strafeLeftandCrane(1, 1100, 0, 1, 4000);
-            movethenCranethenIntake(1, 250, 500, 1, -200, 1000, -1);
+            movethenCranethenIntake(1, 250, 500, 1, -300, 1000, -1);
             slowgyroTurning(0);
             move(1, -300);
             slowgyroTurning(0);
             strafeLeft(1,800);
             stopMotors();
+
             if (tagOfInterest.id == LEFT){
                 slowgyroTurning(0);
                 moveandcrane(1,-1300,0,1,-2800);
                 slowgyroTurning(0);
                 stopMotors();
 
-
             }
             else if (tagOfInterest.id == MIDDLE){
                 stopMotors();
-
-
 
             }
             else if (tagOfInterest.id == RIGHT){
@@ -224,7 +224,8 @@ public class blueLeft extends LinearOpMode {
                 slowgyroTurning(0);
                 stopMotors();
 
-
+            }else {
+                stopMotors();
             }
             terminateOpModeNow();
         }
