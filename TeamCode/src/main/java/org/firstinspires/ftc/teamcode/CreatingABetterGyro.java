@@ -92,7 +92,7 @@ public class CreatingABetterGyro {
                 telemetry.addData("Angle", currentAngle);
                 telemetry.addData("targetangle", targetAngle);
                 telemetry.update();
-                if (angles.firstAngle >= targetAngle - 0.01 && angles.firstAngle <= targetAngle + 0.01) {
+                if (angles.firstAngle >= targetAngle - 0.1 && angles.firstAngle <= targetAngle + 0.1) {
                     frontLeft.setPower(0);
                     frontRight.setPower(0);
                     backLeft.setPower(0);
