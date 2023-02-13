@@ -186,20 +186,6 @@ public class Right extends LinearOpMode {
         waitForStart();
         initGyro();
         if (opModeIsActive()) {
-
-            /*strafeLeftandCrane(1,980, 0,.7,3700);
-            slowgyroTurning(0);
-            move(1,290);
-            slowgyroTurning(0);
-            cranethenIntake(.7,-550,1000,1);
-            move(1,-250);
-            slowgyroTurning(0);
-            strafeLeft(1,2040);
-            gyroTurning(90);
-            initGyro();
-            gyroTurning(89);
-            moveandcrane(1,1275, 0,1,-200);
-            crane(.7,-1100);*/
             strafeLeftandCrane(1,400,0,1,300);
             gyroTurning(90);
             initGyro();
@@ -220,21 +206,15 @@ public class Right extends LinearOpMode {
             else if (tagOfInterest.id == MIDDLE){
                 strafeLeftandCrane(1,2100,0,1,-6700);
 
-
-
             }
-            else if (tagOfInterest.id == RIGHT){
-                strafeLeft(1,2100);
+            else if (tagOfInterest.id == RIGHT) {
+                strafeLeft(1, 2100);
                 sleep(1000);
                 slowgyroTurning(90);
                 sleep(10000);
-                moveandcrane(1,-1200,0,1,-6700);
-
-
+                moveandcrane(1, -1200, 0, 1, -6700);
             }
-            sleep(30000);
-
-
+            terminateOpModeNow();
         }
     }
 
