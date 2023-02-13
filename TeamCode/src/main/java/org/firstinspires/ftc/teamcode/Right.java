@@ -186,6 +186,9 @@ public class Right extends LinearOpMode {
         waitForStart();
         initGyro();
         if (opModeIsActive()) {
+            telemetry.clearAll();
+            telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
+            telemetry.update();
             strafeLeftandCrane(1,400,0,1,300);
             gyroTurning(90);
             initGyro();

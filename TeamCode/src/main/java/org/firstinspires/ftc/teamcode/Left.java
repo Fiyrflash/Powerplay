@@ -218,8 +218,10 @@ public class Left extends LinearOpMode {
                 slowgyroTurning(0);
                 stopMotors();
 
-            }else {
+            }
+            else {
                 stopMotors();
+
             }
             terminateOpModeNow();
         }
