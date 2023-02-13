@@ -203,7 +203,7 @@ public class Left extends LinearOpMode {
 
             if (tagOfInterest.id == LEFT){
                 slowgyroTurning(0);
-                moveandcrane(1,-1300,0,1,-2800);
+                moveandcrane(1,-1300,0,1,-2700);
                 slowgyroTurning(0);
                 stopMotors();
 
@@ -214,7 +214,7 @@ public class Left extends LinearOpMode {
             }
             else if (tagOfInterest.id == RIGHT){
                 slowgyroTurning(0);
-                moveandcrane(1,1200,0,1,-6700);
+                moveandcrane(1,1200,0,1,-2700);
                 slowgyroTurning(0);
                 stopMotors();
 

@@ -32,55 +32,73 @@ public class TestingArea extends LinearOpMode {
         backLeft.setDirection(DcMotorSimple.Direction.FORWARD);
         backRight.setDirection(DcMotorSimple.Direction.FORWARD);
 
+        crane.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        crane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         waitForStart();
         while (opModeIsActive()) {
 
             double turn;
             double throttle;
-            double strafe;
+            float strafeLeft;
+            float strafeRight;
 
             float pickup;
             float dropoff;
-            double cranepower;
+            boolean cranepowerup;
+            boolean cranepowerdown;
 
             throttle = gamepad1.left_stick_y;
             turn = gamepad1.right_stick_x;
-            strafe = gamepad1.left_stick_x;
+            strafeLeft = gamepad1.left_trigger;
+            strafeRight = gamepad1.right_trigger;
 
-            cranepower = gamepad2.right_stick_y;
+            cranepowerup = gamepad1.a;
+            cranepowerdown = gamepad1.b;
             pickup = gamepad2.left_trigger;
             dropoff = gamepad2.right_trigger;
 
-            crane.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            frontLeft.setPower(strafeLeft);
+            frontRight.setPower(-strafeLeft);
+            backLeft.setPower(-strafeLeft);
+            backRight.setPower(strafeLeft);
 
-            if (strafe>throttle) {
-                frontLeft.setPower(strafe);
-                frontRight.setPower(-strafe);
-                backLeft.setPower(-strafe);
-                backRight.setPower(strafe);
-            }
-            if (strafe<throttle) {
-                frontLeft.setPower(throttle);
-                frontRight.setPower(throttle);
-                backLeft.setPower(throttle);
-                backRight.setPower(throttle);
-            }
+            frontLeft.setPower(-strafeRight);
+            frontRight.setPower(strafeRight);
+            backLeft.setPower(strafeRight);
+            backRight.setPower(-strafeRight);
+
+            frontLeft.setPower(throttle);
+            frontRight.setPower(throttle);
+            backLeft.setPower(throttle);
+            backRight.setPower(throttle);
 
             frontLeft.setPower(-turn);
             frontRight.setPower(turn);
             backLeft.setPower(-turn);
             backRight.setPower(turn);
 
-            crane.setPower(cranepower);
+            if (cranepowerup){
+                crane.setPower(1);
+            }
+
+            if (cranepowerdown){
+                if (crane.getCurrentPosition()==0)
+                crane.setPower(-1);
+            }
 
             if (pickup > 0){
                 Left.setPower(-1);
             }
+
             if (dropoff > 0){
                 Left.setPower(1);
+
             }
+
             if (dropoff == 0 && pickup == 0){
                 Left.setPower(0);
+
             }
         }
     }
