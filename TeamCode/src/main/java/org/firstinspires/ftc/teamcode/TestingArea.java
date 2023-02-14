@@ -83,8 +83,9 @@ public class TestingArea extends LinearOpMode {
             }
 
             if (cranepowerdown){
-                if (crane.getCurrentPosition()==0)
-                crane.setPower(-1);
+                if (crane.getCurrentPosition()==0) {
+                    crane.setPower(-1);
+                }
             }
 
             if (pickup > 0){

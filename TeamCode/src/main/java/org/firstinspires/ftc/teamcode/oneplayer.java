@@ -78,15 +78,6 @@ public class oneplayer extends LinearOpMode {
             backLeft.setPower(-turn);
             backRight.setPower(turn);
 
-            if (cranepowerup){
-                crane.setPower(1);
-            }
-
-            if (cranepowerdown){
-                if (crane.getCurrentPosition()==0)
-                    crane.setPower(-1);
-            }
-
             if (pickup > 0){
                 Left.setPower(-1);
             }
