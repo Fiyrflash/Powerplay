@@ -139,6 +139,7 @@ public class Left extends LinearOpMode {
 
                     if (tagOfInterest == null) {
                         telemetry.addLine("(The tag has never been seen)");
+                        runOpMode(); //this might break code
                     } else {
                         telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
                         tagToTelemetry(tagOfInterest);
@@ -161,9 +162,7 @@ public class Left extends LinearOpMode {
                 tagToTelemetry(tagOfInterest);
                 telemetry.update();
             } else {
-                runOpMode();
                 telemetry.addLine("No tag snapshot available, it was never sighted during the init loop :(");
-                telemetry.addLine("robot will run and drop the cone");
                 telemetry.update();
             }
 
@@ -193,13 +192,14 @@ public class Left extends LinearOpMode {
             telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
             telemetry.update();
 
-            strafeLeftandCrane(1, 1100, 0, 1, 4000);
+            strafeLeftandCrane(1, 2300, 0, 1, 5300);
             movethenCranethenIntake(1, 250, 500, 1, -300, 1000, -1);
             slowgyroTurning(0);
-            move(1, -300);
+            move(1, -350);
             slowgyroTurning(0);
-            strafeLeft(1,800);
+            strafeRight(1,750);
             stopMotors();
+
 
             if (tagOfInterest.id == LEFT){
                 slowgyroTurning(0);
@@ -534,6 +534,7 @@ public class Left extends LinearOpMode {
 
     public void crane(double power, int position) {
         telemetry.addData("Crane", Crane.getCurrentPosition());
+        telemetry.addData("CraneTargetPostion", Crane.getTargetPosition());
         telemetry.update();
         Crane.setTargetPosition(position);
         Crane.setMode(DcMotor.RunMode.RUN_TO_POSITION);
