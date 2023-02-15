@@ -1,9 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -38,6 +39,8 @@ public class Right extends LinearOpMode {
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
+    FtcDashboard dashboard = FtcDashboard.getInstance();
+
     static final double FEET_PER_METER = 3.28084;
 
     // Lens intrinsics
@@ -62,6 +65,27 @@ public class Right extends LinearOpMode {
     @Override
     public void runOpMode() {
 
+        frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
+        frontRight = hardwareMap.get(DcMotor.class, "frontRight");
+        backLeft = hardwareMap.get(DcMotor.class, "backLeft");
+        backRight = hardwareMap.get(DcMotor.class, "backRight");
+
+        intake = hardwareMap.get(CRServo.class, "Lefts");
+        Crane = hardwareMap.get(DcMotor.class, "Crane");
+
+        frontLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+        frontRight.setDirection(DcMotorSimple.Direction.FORWARD);
+        backLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+        backRight.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        Crane.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        opModeInInit();
+//camera starts
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "ConeCam"), cameraMonitorViewId);
         aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
@@ -118,6 +142,7 @@ public class Right extends LinearOpMode {
 
                 if (tagOfInterest == null) {
                     telemetry.addLine("(The tag has never been seen)");
+                    runOpMode(); //this might break code
                 } else {
                     telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
                     tagToTelemetry(tagOfInterest);
@@ -163,26 +188,6 @@ public class Right extends LinearOpMode {
         telemetry.addLine(String.format("Rotation Pitch: %.2f degrees", Math.toDegrees(detection.pose.pitch)));
         telemetry.addLine(String.format("Rotation Roll: %.2f degrees", Math.toDegrees(detection.pose.roll)));
 
-
-        frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
-        frontRight = hardwareMap.get(DcMotor.class, "frontRight");
-        backLeft = hardwareMap.get(DcMotor.class, "backLeft");
-        backRight = hardwareMap.get(DcMotor.class, "backRight");
-
-        intake = hardwareMap.get(CRServo.class, "Lefts");
-        Crane = hardwareMap.get(DcMotor.class, "Crane");
-
-        frontLeft.setDirection(DcMotorSimple.Direction.FORWARD);
-        frontRight.setDirection(DcMotorSimple.Direction.FORWARD);
-        backLeft.setDirection(DcMotorSimple.Direction.FORWARD);
-        backRight.setDirection(DcMotorSimple.Direction.FORWARD);
-
-        Crane.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
         waitForStart();
         initGyro();
         if (opModeIsActive()) {
@@ -190,33 +195,27 @@ public class Right extends LinearOpMode {
             telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
             telemetry.update();
 
-            strafeLeftandCrane(1,400,0,1,300);
-            gyroTurning(90);
-            initGyro();
-            gyroTurning(90);
-            strafeRightandCrane(1, 3650, 0, 1, 6500);
-            movethenCranethenIntake(1, 300, 500, 1, -100, 500, 1);
-            move(1, -250);
-            slowgyroTurning(90);
-            sleep(500);
             if (tagOfInterest.id == LEFT){
-                strafeLeft(1,2100);
-                sleep(1000);
-                slowgyroTurning(90);
-                sleep(10000);
-                moveandcrane(1,1200,0,1,-6700);
+                slowgyroTurning(0);
+                moveandcrane(1,-1300,0,1,-2700);
+                slowgyroTurning(0);
+                stopMotors();
 
             }
             else if (tagOfInterest.id == MIDDLE){
-                strafeLeftandCrane(1,2100,0,1,-6700);
+                stopMotors();
 
             }
-            else if (tagOfInterest.id == RIGHT) {
-                strafeLeft(1, 2100);
-                sleep(1000);
-                slowgyroTurning(90);
-                sleep(10000);
-                moveandcrane(1, -1200, 0, 1, -6700);
+            else if (tagOfInterest.id == RIGHT){
+                slowgyroTurning(0);
+                moveandcrane(1,1200,0,1,-2700);
+                slowgyroTurning(0);
+                stopMotors();
+
+            }
+            else {
+                stopMotors();
+
             }
             terminateOpModeNow();
         }
@@ -247,6 +246,13 @@ public class Right extends LinearOpMode {
 
         }
     }
+    public void stopMotors(){
+        frontRight.setPower(0);
+        frontLeft.setPower(0);
+        backRight.setPower(0);
+        backLeft.setPower(0);
+        Crane.setPower(0);
+    }
 
     public void moveandcrane(double power, int position, int time, double power2, int position2) {
 
@@ -273,8 +279,6 @@ public class Right extends LinearOpMode {
 
         sleep(time);
 
-        telemetry.addData("Crane", Crane.getCurrentPosition());
-        telemetry.update();
         Crane.setTargetPosition(position2);
         Crane.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Crane.setPower(power2);
@@ -482,8 +486,6 @@ public class Right extends LinearOpMode {
 
         sleep(time);
 
-        telemetry.addData("Crane", Crane.getCurrentPosition());
-        telemetry.update();
         Crane.setTargetPosition(position2);
         Crane.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Crane.setPower(power2);
@@ -516,8 +518,6 @@ public class Right extends LinearOpMode {
 
         sleep(time);
 
-        telemetry.addData("Crane", Crane.getCurrentPosition());
-        telemetry.update();
         Crane.setTargetPosition(position2);
         Crane.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Crane.setPower(power2);
@@ -528,6 +528,7 @@ public class Right extends LinearOpMode {
 
     public void crane(double power, int position) {
         telemetry.addData("Crane", Crane.getCurrentPosition());
+        telemetry.addData("CraneTargetPostion", Crane.getTargetPosition());
         telemetry.update();
         Crane.setTargetPosition(position);
         Crane.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -588,8 +589,6 @@ public class Right extends LinearOpMode {
 
         sleep(time);
 
-        telemetry.addData("Crane", Crane.getCurrentPosition());
-        telemetry.update();
         Crane.setTargetPosition(position2);
         Crane.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Crane.setPower(power2);
