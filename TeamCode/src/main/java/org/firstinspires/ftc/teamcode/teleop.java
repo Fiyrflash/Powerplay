@@ -38,7 +38,6 @@ public class teleop extends LinearOpMode {
         opModeInInit();
         crane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-
         waitForStart();
         while (opModeIsActive()) {
 
