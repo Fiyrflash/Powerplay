@@ -39,8 +39,6 @@ public class Left extends LinearOpMode {
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
-    FtcDashboard dashboard = FtcDashboard.getInstance();
-
     static final double FEET_PER_METER = 3.28084;
 
     // Lens intrinsics
@@ -142,7 +140,6 @@ public class Left extends LinearOpMode {
 
                     if (tagOfInterest == null) {
                         telemetry.addLine("(The tag has never been seen)");
-                        runOpMode(); //this might break code
                     } else {
                         telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
                         tagToTelemetry(tagOfInterest);
@@ -196,7 +193,8 @@ public class Left extends LinearOpMode {
             telemetry.update();
 
             strafeLeftandCrane(1, 2300, 0, 1, 5300);
-            movethenCranethenIntake(1, 250, 500, 1, -300, 1000, -1);
+            slowgyroTurning(0);
+            movethenCranethenIntake(1, 250, 500, 1, -800, 1000, -1);
             slowgyroTurning(0);
             move(1, -350);
             slowgyroTurning(0);

@@ -34,9 +34,8 @@ public class teleop extends LinearOpMode {
         backRight.setDirection(DcMotorSimple.Direction.FORWARD);
 
         crane.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        opModeInInit();
         crane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        crane.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         waitForStart();
         while (opModeIsActive()) {
@@ -79,26 +78,25 @@ public class teleop extends LinearOpMode {
             backLeft.setPower(-turn);
             backRight.setPower(turn);
 
-            //crane.setPower(cranepower);
-
-            telemetry.addData("CraneCurrentPosition", crane.getCurrentPosition());
-            telemetry.addData("CranePower", crane.getPower());
-            telemetry.addData("cranepowervalue",cranepower);
-            telemetry.update();
-
-            if (cranepower>0) {
+            //crane.setPower(-cranepower);
+            if (-cranepower>0) {
                 crane.setPower(cranepower);
             }
-
-            if (cranepower<0) {
+            if (-cranepower<0) {
                 if (crane.getCurrentPosition() >= 0) {
                     crane.setPower(cranepower);
                 }
-
                 if (crane.getCurrentPosition() < 0) {
                     crane.setPower(0);
                 }
             }
+            if (-cranepower==0){
+                crane.setPower(0);
+            }
+            if (gamepad1.a){
+                crane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            }
+
 
             if (pickup > 0){
                 Left.setPower(-1);
