@@ -33,9 +33,10 @@ public class teleop extends LinearOpMode {
         backLeft.setDirection(DcMotorSimple.Direction.FORWARD);
         backRight.setDirection(DcMotorSimple.Direction.FORWARD);
 
+        crane.setDirection(DcMotorSimple.Direction.REVERSE);
         crane.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        crane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        crane.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //crane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //crane.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         waitForStart();
         while (opModeIsActive()) {
@@ -54,7 +55,7 @@ public class teleop extends LinearOpMode {
             strafeLeft = gamepad1.left_trigger;
             strafeRight = gamepad1.right_trigger;
 
-            cranepower = gamepad2.right_stick_y;
+            cranepower = -gamepad2.right_stick_y;
             pickup = gamepad2.left_trigger;
             dropoff = gamepad2.right_trigger;
 
@@ -78,11 +79,12 @@ public class teleop extends LinearOpMode {
             backLeft.setPower(-turn);
             backRight.setPower(turn);
 
-            //crane.setPower(-cranepower);
-            if (-cranepower>0) {
+            crane.setPower(-cranepower);
+
+            /*if (cranepower>0) {
                 crane.setPower(cranepower);
             }
-            if (-cranepower<0) {
+            if (cranepower<0) {
                 if (crane.getCurrentPosition() >= 0) {
                     crane.setPower(cranepower);
                 }
@@ -90,13 +92,12 @@ public class teleop extends LinearOpMode {
                     crane.setPower(0);
                 }
             }
-            if (-cranepower==0){
+            if (cranepower==0){
                 crane.setPower(0);
             }
             if (gamepad1.a){
-                crane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            }
-
+                crane.setMode(DcMotor.RunMode.RESET_ENCODERS);
+            }*/
 
             if (pickup > 0){
                 Left.setPower(-1);
