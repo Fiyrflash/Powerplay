@@ -32,14 +32,7 @@ public class oneplayer extends LinearOpMode {
         backLeft.setDirection(DcMotorSimple.Direction.FORWARD);
         backRight.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
         crane.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        crane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        crane.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         waitForStart();
         while (opModeIsActive()) {
@@ -76,30 +69,12 @@ public class oneplayer extends LinearOpMode {
             backLeft.setPower(throttle);
             backRight.setPower(throttle);
 
-            if (cranepower>turn){
-                frontLeft.setPower(0);
-                frontRight.setPower(0);
-                backLeft.setPower(0);
-                backRight.setPower(0);
+            frontLeft.setPower(-turn);
+            frontRight.setPower(turn);
+            backLeft.setPower(-turn);
+            backRight.setPower(turn);
 
-                if (cranepower>0) {
-                    crane.setPower(cranepower);
-                }
-                if (cranepower<0) {
-                    if (crane.getCurrentPosition() >= 0) {
-                        crane.setPower(cranepower);
-                    }
-                    if (crane.getCurrentPosition() < 0) {
-                        crane.setPower(0);
-                    }
-                }
-                if (gamepad1.a){
-                    crane.setMode(DcMotor.RunMode.RESET_ENCODERS);
-                }
-            }
-            if (turn>cranepower){
-
-            }
+            crane.setPower(cranepower);
 
             if (pickup){
                 Left.setPower(-1);
