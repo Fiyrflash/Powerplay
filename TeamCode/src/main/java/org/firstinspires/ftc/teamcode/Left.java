@@ -129,7 +129,6 @@ public class Left extends LinearOpMode {
 
                         if (tagOfInterest == null) {
                             telemetry.addLine("(The tag has never been seen)");
-
                         } else {
                             telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
                             tagToTelemetry(tagOfInterest);
@@ -141,6 +140,7 @@ public class Left extends LinearOpMode {
 
                     if (tagOfInterest == null) {
                         telemetry.addLine("(The tag has never been seen)");
+                        break;
                     } else {
                         telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
                         tagToTelemetry(tagOfInterest);
