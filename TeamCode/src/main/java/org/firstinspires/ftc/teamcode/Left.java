@@ -129,6 +129,7 @@ public class Left extends LinearOpMode {
 
                         if (tagOfInterest == null) {
                             telemetry.addLine("(The tag has never been seen)");
+
                         } else {
                             telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
                             tagToTelemetry(tagOfInterest);
@@ -176,7 +177,7 @@ public class Left extends LinearOpMode {
             }
         }
 
-        void tagToTelemetry(AprilTagDetection detection) {
+        void tagToTelemetry(AprilTagDetection detection){
             telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
             telemetry.addLine(String.format("Translation X: %.2f feet", detection.pose.x * FEET_PER_METER));
             telemetry.addLine(String.format("Translation Y: %.2f feet", detection.pose.y * FEET_PER_METER));
