@@ -571,9 +571,7 @@ public class Left extends LinearOpMode {
     }
 
     public void crane(double power, int position) {
-        telemetry.addData("Crane", Crane.getCurrentPosition());
-        telemetry.addData("CraneTargetPostion", Crane.getTargetPosition());
-        telemetry.update();
+        Crane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Crane.setTargetPosition(position);
         Crane.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Crane.setPower(power);
@@ -593,8 +591,6 @@ public class Left extends LinearOpMode {
 
     public void cranethenIntake(double power, int position, int time, double power2) {
         Crane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        telemetry.addData("Crane", Crane.getCurrentPosition());
-        telemetry.update();
         Crane.setTargetPosition(position);
         Crane.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Crane.setPower(power);
