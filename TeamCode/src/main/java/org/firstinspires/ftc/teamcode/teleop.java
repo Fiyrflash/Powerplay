@@ -1,11 +1,10 @@
 package org.firstinspires.ftc.teamcode;
-import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.Servo;
+import org.firstinspires.ftc.teamcode.driveConstances;
 
 @TeleOp
 public class teleop extends LinearOpMode {
@@ -15,8 +14,10 @@ public class teleop extends LinearOpMode {
     private DcMotor backLeft;
     private DcMotor backRight;
 
-    private CRServo Left;
-    private DcMotor crane;
+    private CRServo leftFront;
+    private CRServo leftBack;
+    private DcMotor craneFront;
+    private DcMotor craneBack;
 
     public void runOpMode() throws InterruptedException {
 
@@ -25,18 +26,24 @@ public class teleop extends LinearOpMode {
         backLeft = hardwareMap.get(DcMotor.class, "backLeft");
         backRight = hardwareMap.get(DcMotor.class, "backRight");
 
-        Left = hardwareMap.get(CRServo.class, "Lefts");
-        crane = hardwareMap.get(DcMotor.class, "Crane");
+        leftFront = hardwareMap.get(CRServo.class, "LeftsFront");
+        leftBack = hardwareMap.get(CRServo.class, "LeftsBack");
+        craneFront = hardwareMap.get(DcMotor.class, "CraneFront");
+        craneBack = hardwareMap.get(DcMotor.class, "CraneBack");
 
         frontLeft.setDirection(DcMotorSimple.Direction.FORWARD);
         frontRight.setDirection(DcMotorSimple.Direction.FORWARD);
         backLeft.setDirection(DcMotorSimple.Direction.FORWARD);
         backRight.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        crane.setDirection(DcMotorSimple.Direction.REVERSE);
-        crane.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        crane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        crane.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        craneFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        craneFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        craneFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        craneFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        craneBack.setDirection(DcMotorSimple.Direction.REVERSE);
+        craneBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        craneBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        craneBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         waitForStart();
         while (opModeIsActive()) {
@@ -79,9 +86,10 @@ public class teleop extends LinearOpMode {
             backLeft.setPower(-turn);
             backRight.setPower(turn);
 
-            //crane.setPower(-cranepower);
+            craneFront.setPower(-cranepower);
+            craneBack.setPower(-cranepower);
 
-            if (cranepower>0) {
+            /*if (cranepower>0) {
                 crane.setPower(cranepower);
             }
             if (cranepower<0) {
@@ -99,18 +107,21 @@ public class teleop extends LinearOpMode {
                 crane.setMode(DcMotor.RunMode.RESET_ENCODERS);
             }
 
+             */
+
             if (pickup > 0){
-                Left.setPower(-1);
+                leftFront.setPower(-1);
+                leftBack.setPower(-1);
             }
 
             if (dropoff > 0){
-                Left.setPower(1);
-
+                leftFront.setPower(1);
+                leftBack.setPower(1);
             }
 
             if (dropoff == 0 && pickup == 0){
-                Left.setPower(0);
-
+                leftFront.setPower(0);
+                leftBack.setPower(0);
             }
         }
     }
