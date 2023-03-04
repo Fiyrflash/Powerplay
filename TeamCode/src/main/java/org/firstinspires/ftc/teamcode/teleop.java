@@ -81,8 +81,8 @@ public class teleop extends LinearOpMode {
             backRight.setPower(throttle);
 
             frontLeft.setPower(-turn);
-            frontRight.setPower(turn);
-            backLeft.setPower(-turn);
+            frontRight.setPower(-turn);
+            backLeft.setPower(turn);
             backRight.setPower(turn);
 
             craneFront.setPower(-cranepower);
