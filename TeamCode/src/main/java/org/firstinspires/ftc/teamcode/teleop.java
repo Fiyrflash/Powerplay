@@ -8,17 +8,17 @@ import com.qualcomm.robotcore.hardware.CRServo;
 @TeleOp
 public class teleop extends LinearOpMode {
 
-    private DcMotor frontLeft;
-    private DcMotor frontRight;
-    private DcMotor backLeft;
-    private DcMotor backRight;
+    public DcMotor frontLeft;
+    public DcMotor frontRight;
+    public DcMotor backLeft;
+    public DcMotor backRight;
 
-    private CRServo leftFront;
-    private CRServo leftBack;
-    private DcMotor craneFront;
-    private DcMotor craneBack;
+    public CRServo leftFront;
+    public CRServo leftBack;
+    public DcMotor craneFront;
+    public DcMotor craneBack;
 
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode(){
 
         frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
@@ -55,6 +55,9 @@ public class teleop extends LinearOpMode {
             float pickup;
             float dropoff;
             double cranepower;
+            boolean HighJ;
+            boolean MidJ;
+            boolean LowJ;
 
             throttle = gamepad1.left_stick_y;
             turn = gamepad1.right_stick_x;
@@ -62,6 +65,9 @@ public class teleop extends LinearOpMode {
             strafeRight = gamepad1.right_trigger;
 
             cranepower = -gamepad2.right_stick_y;
+            HighJ = gamepad2.y;
+            MidJ = gamepad2.b;
+            LowJ = gamepad2.a;
             pickup = gamepad2.left_trigger;
             dropoff = gamepad2.right_trigger;
 
@@ -85,9 +91,6 @@ public class teleop extends LinearOpMode {
             backLeft.setPower(-turn);
             backRight.setPower(-turn);
 
-            //craneFront.setPower(-cranepower);
-            //craneBack.setPower(-cranepower);
-
             if (cranepower>0) {
                 craneFront.setPower(cranepower);
                 craneBack.setTargetPosition(craneFront.getCurrentPosition());
@@ -104,9 +107,27 @@ public class teleop extends LinearOpMode {
                     craneFront.setPower(0);
                 }
             }
+
             if (cranepower==0){
                 craneFront.setPower(0);
             }
+
+            /*if (HighJ){
+                craneFront.setTargetPosition(1000);
+                craneFront.setPower(1);
+                craneFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            }else if (MidJ){
+                craneFront.setTargetPosition(1000);
+                craneFront.setPower(1);
+                craneFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            }else if (LowJ){
+                craneFront.setTargetPosition(1000);
+                craneFront.setPower(1);
+                craneFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            }
+             */
 
             if (pickup > 0){
                 leftFront.setPower(-1);
