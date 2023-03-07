@@ -55,9 +55,6 @@ public class teleop extends LinearOpMode {
             float pickup;
             float dropoff;
             double cranepower;
-            boolean HighJ;
-            boolean MidJ;
-            boolean LowJ;
 
             throttle = gamepad1.left_stick_y;
             turn = gamepad1.right_stick_x;
@@ -65,9 +62,6 @@ public class teleop extends LinearOpMode {
             strafeRight = gamepad1.right_trigger;
 
             cranepower = -gamepad2.right_stick_y;
-            HighJ = gamepad2.y;
-            MidJ = gamepad2.b;
-            LowJ = gamepad2.a;
             pickup = gamepad2.left_trigger;
             dropoff = gamepad2.right_trigger;
 
@@ -91,13 +85,14 @@ public class teleop extends LinearOpMode {
             backLeft.setPower(-turn);
             backRight.setPower(-turn);
 
-            if (cranepower>0) {
+
+            if (cranepower > 0) {
                 craneFront.setPower(cranepower);
                 craneBack.setTargetPosition(craneFront.getCurrentPosition());
                 craneBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 craneBack.setPower(1);
             }
-            if (cranepower<0) {
+            if (cranepower < 0) {
                 if (craneFront.getCurrentPosition() >= 0) {
                     craneFront.setPower(cranepower);
                     craneBack.setTargetPosition(craneFront.getCurrentPosition());
@@ -109,28 +104,9 @@ public class teleop extends LinearOpMode {
                 }
             }
 
-            if (cranepower==0){
+            if (cranepower == 0) {
                 craneFront.setPower(0);
             }
-
-            if (HighJ){
-                craneFront.setTargetPosition(1000);
-                craneFront.setPower(1);
-                craneFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                craneFront.setTargetPosition(-1000);
-                craneFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                craneFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            }else if (MidJ){
-                craneFront.setTargetPosition(1000);
-                craneFront.setPower(1);
-                craneFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            }else if (LowJ){
-                craneFront.setTargetPosition(1000);
-                craneFront.setPower(1);
-                craneFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            }
-
 
             if (pickup > 0){
                 leftFront.setPower(-1);
