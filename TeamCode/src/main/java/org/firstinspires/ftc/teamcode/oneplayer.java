@@ -4,35 +4,45 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp
 public class oneplayer extends LinearOpMode {
 
-    private DcMotor frontLeft;
-    private DcMotor frontRight;
-    private DcMotor backLeft;
-    private DcMotor backRight;
+    public DcMotor frontLeft;
+    public DcMotor frontRight;
+    public DcMotor backLeft;
+    public DcMotor backRight;
 
-    private CRServo Left;
-    private DcMotor crane;
+    public CRServo leftFront;
+    public CRServo leftBack;
+    public DcMotor craneFront;
+    public DcMotor craneBack;
 
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode(){
 
         frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
         backLeft = hardwareMap.get(DcMotor.class, "backLeft");
         backRight = hardwareMap.get(DcMotor.class, "backRight");
 
-        Left = hardwareMap.get(CRServo.class, "Lefts");
-        crane = hardwareMap.get(DcMotor.class, "Crane");
+        leftFront = hardwareMap.get(CRServo.class, "LeftsFront");
+        leftBack = hardwareMap.get(CRServo.class, "LeftsBack");
+        craneFront = hardwareMap.get(DcMotor.class, "CraneFront");
+        craneBack = hardwareMap.get(DcMotor.class, "CraneBack");
 
         frontLeft.setDirection(DcMotorSimple.Direction.FORWARD);
         frontRight.setDirection(DcMotorSimple.Direction.FORWARD);
         backLeft.setDirection(DcMotorSimple.Direction.FORWARD);
         backRight.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        crane.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        craneFront.setDirection(DcMotorSimple.Direction.FORWARD);
+        craneFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        craneFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        craneFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        craneBack.setDirection(DcMotorSimple.Direction.FORWARD);
+        craneBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        craneBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        craneBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         waitForStart();
         while (opModeIsActive()) {
@@ -41,8 +51,9 @@ public class oneplayer extends LinearOpMode {
             double throttle;
             float strafeLeft;
             float strafeRight;
-            boolean pickup;
-            boolean dropoff;
+
+            float pickup;
+            float dropoff;
             double cranepower;
 
             throttle = gamepad1.left_stick_y;
@@ -50,44 +61,77 @@ public class oneplayer extends LinearOpMode {
             strafeLeft = gamepad1.left_trigger;
             strafeRight = gamepad1.right_trigger;
 
-            cranepower = gamepad1.right_stick_y;
-            pickup = gamepad1.left_bumper;
-            dropoff = gamepad1.right_bumper;
+            cranepower = -gamepad2.right_stick_y;
+            pickup = gamepad2.left_trigger;
+            dropoff = gamepad2.right_trigger;
 
-            frontLeft.setPower(strafeLeft);
-            frontRight.setPower(-strafeLeft);
-            backLeft.setPower(-strafeLeft);
-            backRight.setPower(strafeLeft);
+            frontLeft.setPower(-strafeLeft);
+            frontRight.setPower(strafeLeft);
+            backLeft.setPower(strafeLeft);
+            backRight.setPower(-strafeLeft);
 
-            frontLeft.setPower(-strafeRight);
-            frontRight.setPower(strafeRight);
-            backLeft.setPower(strafeRight);
-            backRight.setPower(-strafeRight);
+            frontLeft.setPower(strafeRight);
+            frontRight.setPower(-strafeRight);
+            backLeft.setPower(-strafeRight);
+            backRight.setPower(strafeRight);
 
             frontLeft.setPower(throttle);
             frontRight.setPower(throttle);
             backLeft.setPower(throttle);
             backRight.setPower(throttle);
 
-            frontLeft.setPower(-turn);
+            frontLeft.setPower(turn);
             frontRight.setPower(turn);
             backLeft.setPower(-turn);
-            backRight.setPower(turn);
+            backRight.setPower(-turn);
 
-            crane.setPower(cranepower);
+            if (cranepower>turn) {
 
-            if (pickup){
-                Left.setPower(-1);
+                if (cranepower > 0) {
+                    craneFront.setPower(cranepower);
+                    craneBack.setTargetPosition(craneFront.getCurrentPosition());
+                    craneBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    craneBack.setPower(1);
+                }
+                if (cranepower < 0) {
+                    if (craneFront.getCurrentPosition() >= 0) {
+                        craneFront.setPower(cranepower);
+                        craneBack.setTargetPosition(craneFront.getCurrentPosition());
+                        craneBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                        craneBack.setPower(1);
+                    }
+                    if (craneFront.getCurrentPosition() < 0) {
+                        craneFront.setPower(0);
+                    }
+                }
+
+                if (cranepower == 0) {
+                    craneFront.setPower(0);
+                }
+            }else if (cranepower<turn){
+
+                frontLeft.setPower(turn);
+                frontRight.setPower(turn);
+                backLeft.setPower(-turn);
+                backRight.setPower(-turn);
+            } else if (cranepower==turn) {
+
+
             }
 
-            if (dropoff){
-                Left.setPower(1);
-
+            if (pickup > 0){
+                leftFront.setPower(-1);
+                leftBack.setPower(-1);
             }
 
-            if (dropoff & pickup){
-                Left.setPower(0);
+            if (dropoff > 0){
+                leftFront.setPower(1);
+                leftBack.setPower(1);
+            }
 
+            if (dropoff == 0 && pickup == 0){
+                leftFront.setPower(0);
+                leftBack.setPower(0);
             }
         }
     }

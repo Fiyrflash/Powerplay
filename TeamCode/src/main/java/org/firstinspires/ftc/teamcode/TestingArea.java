@@ -100,7 +100,7 @@ public class TestingArea extends LinearOpMode {
                     mode = false;
                     break;
                 }else if (mode=false){
-                    mode = true;
+                    mode=true;
                     break;
                 }
             }
