@@ -95,6 +95,7 @@ public class teleop extends LinearOpMode {
                 craneFront.setPower(cranepower);
                 craneBack.setTargetPosition(craneFront.getCurrentPosition());
                 craneBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                craneBack.setPower(1);
             }
             if (cranepower<0) {
                 if (craneFront.getCurrentPosition() >= 0) {
@@ -112,11 +113,13 @@ public class teleop extends LinearOpMode {
                 craneFront.setPower(0);
             }
 
-            /*if (HighJ){
+            if (HighJ){
                 craneFront.setTargetPosition(1000);
                 craneFront.setPower(1);
                 craneFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
+                craneFront.setTargetPosition(-1000);
+                craneFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                craneFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             }else if (MidJ){
                 craneFront.setTargetPosition(1000);
                 craneFront.setPower(1);
@@ -127,7 +130,7 @@ public class teleop extends LinearOpMode {
                 craneFront.setPower(1);
                 craneFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             }
-             */
+
 
             if (pickup > 0){
                 leftFront.setPower(-1);

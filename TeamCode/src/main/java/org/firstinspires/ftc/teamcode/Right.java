@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -38,9 +37,6 @@ public class Right extends LinearOpMode {
 
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
-
-    FtcDashboard dashboard = FtcDashboard.getInstance();
-
     static final double FEET_PER_METER = 3.28084;
 
     // Lens intrinsics
@@ -168,15 +164,6 @@ public class Right extends LinearOpMode {
             telemetry.addLine("No tag snapshot available, it was never sighted during the init loop :(");
             telemetry.update();
         }
-
-        /* Actually do something useful */
-        if (tagOfInterest == null || tagOfInterest.id == LEFT) {
-            //trajectory
-        } else if (tagOfInterest.id == MIDDLE) {
-            //trajectory
-        } else if (tagOfInterest.id == RIGHT) {
-            //trajectory
-        }
     }
 
     void tagToTelemetry(AprilTagDetection detection) {
@@ -195,7 +182,7 @@ public class Right extends LinearOpMode {
             telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
             telemetry.update();
 
-            if (tagOfInterest.id == LEFT){
+            if (tagOfInterest == null || tagOfInterest.id == LEFT){
                 slowgyroTurning(0);
                 moveandcrane(1,-1300,0,1,-2700);
                 slowgyroTurning(0);
