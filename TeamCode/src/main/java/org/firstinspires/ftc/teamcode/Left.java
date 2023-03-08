@@ -134,6 +134,7 @@ public class Left extends LinearOpMode {
 
                         if (tagOfInterest == null) {
                             telemetry.addLine("(The tag has never been seen)");
+                            break; //could break something
                         } else {
                             telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
                             tagToTelemetry(tagOfInterest);
@@ -188,6 +189,7 @@ public class Left extends LinearOpMode {
             telemetry.clearAll();
             telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
             telemetry.update();
+
 
 
 
@@ -282,10 +284,10 @@ public class Left extends LinearOpMode {
         sleep(time);
 
         craneFront.setTargetPosition(position2);
-        craneFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        craneFront.setPower(power2);
         craneBack.setTargetPosition(position2);
+        craneFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         craneBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        craneFront.setPower(power2);
         craneBack.setPower(power2);
         while (backRight.isBusy() || craneFront.isBusy() || craneBack.isBusy() && opModeIsActive()) {
 
@@ -493,8 +495,11 @@ public class Left extends LinearOpMode {
         sleep(time);
 
         craneFront.setTargetPosition(position2);
+        craneBack.setTargetPosition(position2);
         craneFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        craneBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         craneFront.setPower(power2);
+        craneBack.setPower(power2);
         while (backRight.isBusy() || craneFront.isBusy() || craneFront.isBusy() && opModeIsActive()) {
 
         }
@@ -526,10 +531,10 @@ public class Left extends LinearOpMode {
         sleep(time);
 
         craneFront.setTargetPosition(position2);
-        craneFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        craneFront.setPower(power2);
         craneBack.setTargetPosition(position2);
+        craneFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         craneBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        craneFront.setPower(power2);
         craneBack.setPower(power2);
         while (backRight.isBusy() || craneFront.isBusy() || craneBack.isBusy() && opModeIsActive()) {
 
@@ -538,12 +543,12 @@ public class Left extends LinearOpMode {
 
     public void crane(double power, int position) {
         craneFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        craneFront.setTargetPosition(position);
-        craneFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        craneFront.setPower(power);
         craneBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        craneFront.setTargetPosition(position);
         craneBack.setTargetPosition(position);
+        craneFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         craneBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        craneFront.setPower(power);
         craneBack.setPower(power);
         while (craneFront.isBusy() || craneBack.isBusy() && opModeIsActive()) {
 
@@ -552,21 +557,24 @@ public class Left extends LinearOpMode {
 
     public void intake(double power) {
         leftFront.setPower(power);
-        sleep(2000);
-        leftFront.setPower(0);
         leftBack.setPower(power);
         sleep(2000);
+        leftFront.setPower(0);
         leftBack.setPower(0);
-        while (backLeft.isBusy() && opModeIsActive()) {
+        while (backLeft.isBusy() || leftFront.getPower() == 1 && opModeIsActive()) {
 
         }
     }
 
     public void cranethenIntake(double power, int position, int time, double power2) {
         craneFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        craneBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         craneFront.setTargetPosition(position);
+        craneBack.setTargetPosition(position);
         craneFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        craneBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         craneFront.setPower(power);
+        craneBack.setPower(power);
 
         sleep(time);
 
@@ -614,11 +622,12 @@ public class Left extends LinearOpMode {
 
         sleep(time2);
 
-        intake.setPower(power3);
+        leftFront.setPower(power3);
+        leftBack.setPower(power3);
         sleep(2000);
-        intake.setPower(0);
-        while (backRight.isBusy() || Crane.isBusy() && opModeIsActive()) {
-
+        leftFront.setPower(0);
+        leftBack.setPower(0);
+        while (backRight.isBusy() || craneFront.isBusy() || craneBack.isBusy() && opModeIsActive()) {
         }
     }
 }
