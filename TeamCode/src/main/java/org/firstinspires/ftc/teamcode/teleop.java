@@ -49,7 +49,11 @@ public class teleop extends LinearOpMode {
 
         waitForStart();
         while (opModeIsActive()) {
-
+            telemetry.addData("frontLeft", frontLeft.getCurrentPosition());
+            telemetry.addData("frontRight", frontRight.getCurrentPosition());
+            telemetry.addData("backLeft", backLeft.getCurrentPosition());
+            telemetry.addData("backRight", backRight.getCurrentPosition());
+            telemetry.update();
             double turn;
             double throttle;
             float strafeLeft;

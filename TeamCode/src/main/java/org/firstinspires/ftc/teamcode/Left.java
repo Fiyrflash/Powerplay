@@ -180,9 +180,13 @@ public class Left extends LinearOpMode {
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
         initGyro();
         if (opModeIsActive()) {
-
             strafeLeft(1, 2000);
             stopMotors();
             crane(1, -300);
@@ -434,9 +438,10 @@ public class Left extends LinearOpMode {
         frontLeft.setPower(power);
         backRight.setPower(power);
         backLeft.setPower(power);
+
         while (backRight.isBusy() && opModeIsActive()) {
 
-        }0
+        }
     }
 
     public void strafeRight(double power, int position) {
