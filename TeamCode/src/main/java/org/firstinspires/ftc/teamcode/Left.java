@@ -1,18 +1,14 @@
 package org.firstinspires.ftc.teamcode;
 
-import static java.lang.Thread.sleep;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
-import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import com.qualcomm.robotcore.hardware.CRServo;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -61,7 +57,6 @@ public class Left extends LinearOpMode {
     int RIGHT = 3;
 
     int location;
-    double distancesnap;
 
     AprilTagDetection tagOfInterest = null;                         //setting motor varible
 
@@ -187,9 +182,6 @@ public class Left extends LinearOpMode {
 
 
         if (opModeIsActive()) {
-            telemetry.clearAll();
-            telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
-            telemetry.update();
 
             strafeLeftandCrane(1, 7000, 0, 1, 5000);
             crane(1, -300);
