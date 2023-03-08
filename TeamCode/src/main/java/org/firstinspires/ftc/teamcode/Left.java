@@ -87,8 +87,6 @@ public class Left extends LinearOpMode {
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        opModeInInit();
-//camera starts
             int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
             camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "ConeCam"), cameraMonitorViewId);
             aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
@@ -134,7 +132,6 @@ public class Left extends LinearOpMode {
 
                         if (tagOfInterest == null) {
                             telemetry.addLine("(The tag has never been seen)");
-                            break; //could break something
                         } else {
                             telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
                             tagToTelemetry(tagOfInterest);
@@ -146,7 +143,6 @@ public class Left extends LinearOpMode {
 
                     if (tagOfInterest == null) {
                         telemetry.addLine("(The tag has never been seen)");
-                        break; //This might break something
                     } else {
                         telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
                         tagToTelemetry(tagOfInterest);
@@ -174,7 +170,7 @@ public class Left extends LinearOpMode {
             }
         }
 
-        void tagToTelemetry(AprilTagDetection detection){
+        void tagToTelemetry(AprilTagDetection detection) {
             telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
             telemetry.addLine(String.format("Translation X: %.2f feet", detection.pose.x * FEET_PER_METER));
             telemetry.addLine(String.format("Translation Y: %.2f feet", detection.pose.y * FEET_PER_METER));
@@ -183,14 +179,14 @@ public class Left extends LinearOpMode {
             telemetry.addLine(String.format("Rotation Pitch: %.2f degrees", Math.toDegrees(detection.pose.pitch)));
             telemetry.addLine(String.format("Rotation Roll: %.2f degrees", Math.toDegrees(detection.pose.roll)));
 
-        waitForStart();
-        initGyro();
         if (opModeIsActive()) {
             telemetry.clearAll();
             telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
             telemetry.update();
 
-
+            strafeLeftandCrane(1, 7000, 0, 1, 5000);
+            crane(1, -300);
+            intake(1);
 
 
 
