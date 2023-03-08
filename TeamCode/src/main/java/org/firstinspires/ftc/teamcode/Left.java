@@ -62,7 +62,7 @@ public class Left extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        initGyro();                                                                 //setting up camera
+                                                                         //setting up camera
         int cameraMonitorViewId = hardwareMap.appContext
                 .getResources().getIdentifier("cameraMonitorViewId",
                         "id", hardwareMap.appContext.getPackageName());
@@ -180,10 +180,11 @@ public class Left extends LinearOpMode {
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-
+        initGyro();
         if (opModeIsActive()) {
 
-            strafeLeftandCrane(1, 7000, 0, 1, 5000);
+            strafeLeft(1, 2000);
+            stopMotors();
             crane(1, -300);
             intake(1);
 
@@ -215,6 +216,7 @@ public class Left extends LinearOpMode {
              */
 
         }
+        terminateOpModeNow();
     }
 
     public void move(double power, int position) {
@@ -434,7 +436,7 @@ public class Left extends LinearOpMode {
         backLeft.setPower(power);
         while (backRight.isBusy() && opModeIsActive()) {
 
-        }
+        }0
     }
 
     public void strafeRight(double power, int position) {
@@ -494,7 +496,7 @@ public class Left extends LinearOpMode {
         craneBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         craneFront.setPower(power2);
         craneBack.setPower(power2);
-        while (backRight.isBusy() || craneFront.isBusy() || craneFront.isBusy() && opModeIsActive()) {
+        while (backRight.isBusy() || craneFront.isBusy() || craneBack.isBusy() && opModeIsActive()) {
 
         }
     }
