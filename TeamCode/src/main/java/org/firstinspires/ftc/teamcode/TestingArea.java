@@ -44,16 +44,34 @@ public class TestingArea extends LinearOpMode {
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        frontRight.setDirection(DcMotorSimple.Direction.FORWARD);
+        backRight.setDirection(DcMotorSimple.Direction.FORWARD);
+        backLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+        frontLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+
         frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        waitForStart();
         if (opModeIsActive()) {
-            strafeLeft(1,3000);
+            //strafeLeft(1,3000);
+            frontLeft.setPower(1);
+            frontRight.setPower(1);
+            backLeft.setPower(1);
+            backRight.setPower(1);
+            /*sleep(1000);
+            frontLeft.setPower(0);
+            frontRight.setPower(0);
+            backLeft.setPower(0);
+            backRight.setPower(0);
+
+             */
+
 
         }
-        while (opModeIsActive()){
+        //while (opModeIsActive()){
             telemetry.addData("Current Position: frontLeft: ", frontLeft.getCurrentPosition());
             telemetry.addData("Target Position: frontLeft: ", frontLeft.getTargetPosition());
             telemetry.addData("Current Position: frontRight", frontRight.getCurrentPosition());
@@ -63,7 +81,7 @@ public class TestingArea extends LinearOpMode {
             telemetry.addData("Current Position: backRight", backRight.getCurrentPosition());
             telemetry.addData("Target Position: backRight: ", backRight.getTargetPosition());
             telemetry.update();
-        }
+
     }
     public void strafeLeft(double power, int position) {
 

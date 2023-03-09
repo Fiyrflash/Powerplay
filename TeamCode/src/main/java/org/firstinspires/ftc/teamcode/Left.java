@@ -62,7 +62,7 @@ public class Left extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-                                                                         //setting up camera
+        //setting up camera
         int cameraMonitorViewId = hardwareMap.appContext
                 .getResources().getIdentifier("cameraMonitorViewId",
                         "id", hardwareMap.appContext.getPackageName());
@@ -149,13 +149,13 @@ public class Left extends LinearOpMode {
 
 
         if (tagOfInterest == null) {                                    //setting up my own varable from the open cv
-            location=0;
+            location = 0;
         } else if (tagOfInterest.id == LEFT) {
-            location=1;
+            location = 1;
         } else if (tagOfInterest.id == MIDDLE) {
-            location=2;
+            location = 2;
         } else {
-            location=3;
+            location = 3;
         }
 
         frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
@@ -180,14 +180,9 @@ public class Left extends LinearOpMode {
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
         initGyro();
         if (opModeIsActive()) {
-            strafeLeft(1, 2000);
+            strafeLeft(1, 100);
             stopMotors();
             crane(1, -300);
             intake(1);
