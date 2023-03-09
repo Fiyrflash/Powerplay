@@ -1,22 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import com.qualcomm.robotcore.hardware.CRServo;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvCameraFactory;
-import org.openftc.easyopencv.OpenCvCameraRotation;
-import org.openftc.apriltag.AprilTagDetection;
-import java.util.ArrayList;
 
 @Autonomous
 
@@ -62,11 +50,44 @@ public class TestingArea extends LinearOpMode {
         backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         if (opModeIsActive()) {
+            strafeLeft(1,3000);
 
+        }
+        while (opModeIsActive()){
+            telemetry.addData("Current Position: frontLeft: ", frontLeft.getCurrentPosition());
+            telemetry.addData("Target Position: frontLeft: ", frontLeft.getTargetPosition());
+            telemetry.addData("Current Position: frontRight", frontRight.getCurrentPosition());
+            telemetry.addData("Target Position: frontRight: ", frontRight.getTargetPosition());
+            telemetry.addData("Current Position: backLeft", backLeft.getCurrentPosition());
+            telemetry.addData("Target Position: backLeft: ", backLeft.getTargetPosition());
+            telemetry.addData("Current Position: backRight", backRight.getCurrentPosition());
+            telemetry.addData("Target Position: backRight: ", backRight.getTargetPosition());
+            telemetry.update();
+        }
+    }
+    public void strafeLeft(double power, int position) {
 
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        frontRight.setTargetPosition(-position);
+        frontLeft.setTargetPosition(position);
+        backRight.setTargetPosition(position);
+        backLeft.setTargetPosition(-position);
 
+        frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+        frontRight.setPower(power);
+        frontLeft.setPower(power);
+        backRight.setPower(power);
+        backLeft.setPower(power);
+
+        while (frontLeft.isBusy() && opModeIsActive()) {
         }
     }
 }
