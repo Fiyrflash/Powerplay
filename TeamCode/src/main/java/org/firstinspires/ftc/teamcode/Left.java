@@ -1,39 +1,30 @@
-package org.firstinspires.ftc.teamcode;
-
+package org.firstinspires.ftc.teamcode;                                     //imports
+import static java.lang.Thread.sleep;
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.Servo;
+
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.apriltag.AprilTagDetection;
 import java.util.ArrayList;
-
+//testing
 @Autonomous
-
 public class Left extends LinearOpMode {
-    public DcMotor frontLeft;
-    public DcMotor frontRight;
-    public DcMotor backLeft;
-    public DcMotor backRight;
-
-    BNO055IMU imu;
-    Orientation angles;
-
-    public CRServo leftFront;
-    public CRServo leftBack;
-    public DcMotor craneFront;
-    public DcMotor craneBack;
-
     OpenCvCamera webcam;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
@@ -57,13 +48,27 @@ public class Left extends LinearOpMode {
     int RIGHT = 3;
 
     int location;
+    double distancesnap;
 
-    AprilTagDetection tagOfInterest = null;                         //setting motor varible
+    AprilTagDetection tagOfInterest = null;                             //setting motor varibles
+    DcMotor frontLeft;
+    DcMotor frontRight;
+    DcMotor backLeft;
+    DcMotor backRight;
+
+    BNO055IMU imu;
+    Orientation angles;
+
+    public CRServo leftFront;
+    public CRServo leftBack;
+    public DcMotor craneFront;
+    public DcMotor craneBack;
+
 
     @Override
     public void runOpMode() {
-        //setting up camera
-        int cameraMonitorViewId = hardwareMap.appContext
+        initGyro();
+        int cameraMonitorViewId = hardwareMap.appContext                            //setting up the camera
                 .getResources().getIdentifier("cameraMonitorViewId",
                         "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "ConeCam"), cameraMonitorViewId);
@@ -101,9 +106,9 @@ public class Left extends LinearOpMode {
                         break;
                     }
                 }
-
+                //telematry for the signal sleave
                 if (tagFound) {
-                    telemetry.addLine("Tag of interest is in sight!\n\nLocation data:");        //telemetry for signal sleave
+                    telemetry.addLine("Tag of interest is in sight!\n\nLocation data:");
                     tagToTelemetry(tagOfInterest);
                 } else {
                     telemetry.addLine("Don't see tag of interest :(");
@@ -148,7 +153,7 @@ public class Left extends LinearOpMode {
         }
 
 
-        if (tagOfInterest == null) {                                    //setting up my own varable from the open cv
+        if (tagOfInterest == null) {                                            //takes the camera value and turns it into my own varible
             location = 0;
         } else if (tagOfInterest.id == LEFT) {
             location = 1;
@@ -158,9 +163,10 @@ public class Left extends LinearOpMode {
             location = 3;
         }
 
+
         frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
-        backLeft = hardwareMap.get(DcMotor.class, "backLeft");
+        backLeft = hardwareMap.get(DcMotor.class, "backLeft");                      //mapping the motors
         backRight = hardwareMap.get(DcMotor.class, "backRight");
 
         leftFront = hardwareMap.get(CRServo.class, "LeftsFront");
@@ -169,56 +175,128 @@ public class Left extends LinearOpMode {
         craneBack = hardwareMap.get(DcMotor.class, "CraneBack");
 
         frontLeft.setDirection(DcMotorSimple.Direction.FORWARD);
-        frontRight.setDirection(DcMotorSimple.Direction.FORWARD);
+        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.FORWARD);
         backRight.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        craneFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        craneBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        if (opModeIsActive()) {//start of queue for autonnums movement
+            strafeLeftandCrane(1,3000,0,1,4000);
+            gyroTurning(0);
+            crane(1,-300);
+            intake(1);
+            strafeRight(1,400);
+            gyroTurning(0);
+            moveandcrane(1,1000,0,1,-2000);
+            gyroTurning(0);
+            crane(1,-300);
+            intake(-1);
+            crane(1,400);
+            moveandcrane(1,1500,0,1,2500);
+            gyroTurning(0);
+            strafeLeft(1,400);
+            move(1,300);
+            intake(1);
+            move(1,-300);
+            strafeRight(1,400);
+            moveandcrane(1,1800,0,1,2000);
+
+
+
+        }
+    }
+
+    //methods
+    public void initGyro() {
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.calibrationDataFile = "BNO055IMUCalibration.json";
+        parameters.loggingEnabled = true;
+        parameters.loggingTag = "IMU";
+        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        imu.initialize(parameters);
+        sleep(250);
+    }
+
+    void tagToTelemetry(AprilTagDetection detection) {
+        telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
+        telemetry.addLine(String.format("Translation X: %.2f feet", detection.pose.x * FEET_PER_METER));
+        telemetry.addLine(String.format("Translation Y: %.2f feet", detection.pose.y * FEET_PER_METER));
+        telemetry.addLine(String.format("Translation Z: %.2f feet", detection.pose.z * FEET_PER_METER));
+        telemetry.addLine(String.format("Rotation Yaw: %.2f degrees", Math.toDegrees(detection.pose.yaw)));
+        telemetry.addLine(String.format("Rotation Pitch: %.2f degrees", Math.toDegrees(detection.pose.pitch)));
+        telemetry.addLine(String.format("Rotation Roll: %.2f degrees", Math.toDegrees(detection.pose.roll)));
+    }
+
+    public boolean gyroTurning(double targetAngle) {
+        frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        boolean foundAngle;
+        foundAngle = false;
+        while (!foundAngle) {
+            angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+            double currentAngle = angles.firstAngle;
+            telemetry.addData("Angle", currentAngle);
+            telemetry.addData("targetangle", targetAngle);
+            telemetry.update();
+            if (angles.firstAngle >= targetAngle - 0.15 && angles.firstAngle <= targetAngle + 0.15) {
+                frontLeft.setPower(0);
+                frontRight.setPower(0);
+                backLeft.setPower(0);
+                backRight.setPower(0);
+                foundAngle = true;
+                sleep(500);
+                break;
+
+            } else if (angles.firstAngle >= targetAngle + 0.5) {
+                if (angles.firstAngle <= targetAngle - 5) {
+                    frontLeft.setPower(0.1);
+                    frontRight.setPower(-0.1);
+                    backLeft.setPower(0.1);
+                    backRight.setPower(-0.1);
+                    foundAngle = false;
+                } else {
+                    frontLeft.setPower(-0.1);
+                    frontRight.setPower(0.1);
+                    backLeft.setPower(-0.1);
+                    backRight.setPower(0.1);
+                    foundAngle = false;
+                }
+            } else if (angles.firstAngle <= targetAngle - 0.5) {
+                if (angles.firstAngle >= targetAngle + 5) {
+                    frontLeft.setPower(-0.1);
+                    frontRight.setPower(0.1);
+                    backLeft.setPower(-0.1);
+                    backRight.setPower(0.1);
+                    foundAngle = false;
+                } else {
+                    frontLeft.setPower(.1);
+                    frontRight.setPower(-.1);
+                    backLeft.setPower(.1);
+                    backRight.setPower(-.1);
+                    foundAngle = false;
+                }
+            }
+        }
+        return foundAngle;
+    }
+
+    public void stopMotors() {
+        frontLeft.setPower(0);
+        frontRight.setPower(0);
+        backLeft.setPower(0);
+        backRight.setPower(0);
+    }
+
+    public void move(double power, int position) {
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        initGyro();
-        if (opModeIsActive()) {
-            strafeLeft(1, 100);
-            stopMotors();
-            crane(1, -300);
-            intake(1);
 
-
-
-            /*if (tagOfInterest.id == LEFT){
-                slowgyroTurning(0);
-                moveandcrane(.5,-1300,0,1,-2700);
-                slowgyroTurning(0);
-                stopMotors();
-
-            }
-            else if (tagOfInterest.id == MIDDLE){
-                stopMotors();
-
-            }
-            else if (tagOfInterest.id == RIGHT){
-                slowgyroTurning(0);
-                moveandcrane(-5,1200,0,1,-2700);
-                slowgyroTurning(0);
-                stopMotors();
-
-            }
-            else {
-                stopMotors();
-
-            }
-
-             */
-
-        }
-        terminateOpModeNow();
-    }
-
-    public void move(double power, int position) {
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -239,17 +317,10 @@ public class Left extends LinearOpMode {
         backRight.setPower(power);
         backLeft.setPower(power);
 
-        while (backRight.isBusy() && opModeIsActive()) {
+        while (frontLeft.isBusy() && opModeIsActive()) {
 
         }
-    }
-    public void stopMotors(){
-        frontRight.setPower(0);
-        frontLeft.setPower(0);
-        backRight.setPower(0);
-        backLeft.setPower(0);
-        craneFront.setPower(0);
-        craneBack.setPower(0);
+
     }
 
     public void moveandcrane(double power, int position, int time, double power2, int position2) {
@@ -289,129 +360,6 @@ public class Left extends LinearOpMode {
         }
     }
 
-    public void initGyro() {
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-        parameters.calibrationDataFile = "BNO055IMUCalibration.json";
-        parameters.loggingEnabled = true;
-        parameters.loggingTag = "IMU";
-        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-        imu.initialize(parameters);
-        while (backRight.isBusy() && opModeIsActive()) {
-
-        }
-    }
-
-    public boolean gyroTurning(double targetAngle) {
-        frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        boolean foundAngle;
-        foundAngle = false;
-        while (!foundAngle) {
-            angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-            double currentAngle = angles.firstAngle;
-            telemetry.addData("Angle", currentAngle);
-            telemetry.addData("targetangle", targetAngle);
-            telemetry.update();
-            if (angles.firstAngle >= targetAngle - 0.1 && angles.firstAngle <= targetAngle + 0.1) {
-                frontLeft.setPower(0);
-                frontRight.setPower(0);
-                backLeft.setPower(0);
-                backRight.setPower(0);
-                foundAngle = true;
-                sleep(1000);
-                break;
-
-            } else if (angles.firstAngle >= targetAngle + 0.5) {
-                if (angles.firstAngle <= targetAngle - 5) {
-                    frontLeft.setPower(0.25);
-                    frontRight.setPower(-0.25);
-                    backLeft.setPower(0.25);
-                    backRight.setPower(-0.25);
-                    foundAngle = false;
-                } else {
-                    frontLeft.setPower(-0.25);
-                    frontRight.setPower(0.25);
-                    backLeft.setPower(-0.25);
-                    backRight.setPower(0.25);
-                    foundAngle = false;
-                }
-            } else if (angles.firstAngle <= targetAngle - 0.5) {
-                if (angles.firstAngle >= targetAngle + 5) {
-                    frontLeft.setPower(-0.25);
-                    frontRight.setPower(0.25);
-                    backLeft.setPower(-0.25);
-                    backRight.setPower(0.25);
-                    foundAngle = false;
-                } else {
-                    frontLeft.setPower(.25);
-                    frontRight.setPower(-.25);
-                    backLeft.setPower(.25);
-                    backRight.setPower(-.25);
-                    foundAngle = false;
-                }
-            }
-        }
-        return foundAngle;
-    }
-
-    public boolean slowgyroTurning(double targetAngle) {
-        frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        boolean foundAngle;
-        foundAngle = false;
-        while (!foundAngle) {
-            angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-            double currentAngle = angles.firstAngle;
-            telemetry.addData("Angle", currentAngle);
-            telemetry.addData("targetangle", targetAngle);
-            telemetry.update();
-            if (angles.firstAngle >= targetAngle - 0.1 && angles.firstAngle <= targetAngle + 0.1) {
-                frontLeft.setPower(0);
-                frontRight.setPower(0);
-                backLeft.setPower(0);
-                backRight.setPower(0);
-                foundAngle = true;
-                sleep(1000);
-                break;
-
-            } else if (angles.firstAngle >= targetAngle + 0.5) {
-                if (angles.firstAngle <= targetAngle - 5) {
-                    frontLeft.setPower(0.10);
-                    frontRight.setPower(-0.10);
-                    backLeft.setPower(0.10);
-                    backRight.setPower(-0.10);
-                    foundAngle = false;
-                } else {
-                    frontLeft.setPower(-0.10);
-                    frontRight.setPower(0.10);
-                    backLeft.setPower(-0.10);
-                    backRight.setPower(0.10);
-                    foundAngle = false;
-                }
-            } else if (angles.firstAngle <= targetAngle - 0.5) {
-                if (angles.firstAngle >= targetAngle + 5) {
-                    frontLeft.setPower(-0.10);
-                    frontRight.setPower(0.10);
-                    backLeft.setPower(-0.10);
-                    backRight.setPower(0.10);
-                    foundAngle = false;
-                } else {
-                    frontLeft.setPower(.10);
-                    frontRight.setPower(-.10);
-                    backLeft.setPower(.10);
-                    backRight.setPower(-.10);
-                    foundAngle = false;
-                }
-            }
-        }
-        return foundAngle;
-    }
 
     public void strafeLeft(double power, int position) {
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -625,15 +573,5 @@ public class Left extends LinearOpMode {
         leftBack.setPower(0);
         while (backRight.isBusy() || craneFront.isBusy() || craneBack.isBusy() && opModeIsActive()) {
         }
-    }
-    void tagToTelemetry (AprilTagDetection detection)
-    {
-        telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
-        telemetry.addLine(String.format("Translation X: %.2f feet", detection.pose.x * FEET_PER_METER));
-        telemetry.addLine(String.format("Translation Y: %.2f feet", detection.pose.y * FEET_PER_METER));
-        telemetry.addLine(String.format("Translation Z: %.2f feet", detection.pose.z * FEET_PER_METER));
-        telemetry.addLine(String.format("Rotation Yaw: %.2f degrees", Math.toDegrees(detection.pose.yaw)));
-        telemetry.addLine(String.format("Rotation Pitch: %.2f degrees", Math.toDegrees(detection.pose.pitch)));
-        telemetry.addLine(String.format("Rotation Roll: %.2f degrees", Math.toDegrees(detection.pose.roll)));
     }
 }
