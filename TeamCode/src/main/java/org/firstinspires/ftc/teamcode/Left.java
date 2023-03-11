@@ -179,32 +179,42 @@ public class Left extends LinearOpMode {
         backLeft.setDirection(DcMotorSimple.Direction.FORWARD);
         backRight.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        if (opModeIsActive()) {//start of queue for autonnums movement
-            strafeLeftandCrane(.7,2000,0,1,4500);
+        if (opModeIsActive()) {
+            strafeRight(1,500);
+            if (location == 1 || location == 0){
+                move(1,-500);
+                stopMotors();
+            }else if (location==2){
+                stopMotors();
+            } else if (location==3) {
+                move(1,500);
+                stopMotors();
+            }
+
+            /*strafeLeftandCrane(.7,2000,0,1,4500);
             gyroTurning(0);
             move(.7,150);
             crane(1,-400);
             gyroTurning(5);
             intake(-1);
-            move(.5,-150);
-            strafeLeft(.7,350);
             gyroTurning(0);
-            moveandcrane(.5,-2000,0,1,-2000);
+            move(.5,-200);
+            strafeLeft(.7,600);
+            gyroTurning(0);
+            moveandcrane(.5,-2000,0,1,-2700);
             gyroTurning(0);
             crane(1,-300);
             intake(1);
             crane(1,400);
-            moveandcrane(.5,1500,0,1,2500);
+            moveandcrane(1,3000,0,1,4000);
             gyroTurning(0);
             strafeLeft(.5,400);
-            move(.5,300);
+            move(.7,200);
             intake(-1);
-            move(.5,-300);
+            move(.7,-200);
             strafeRight(.5,400);
             moveandcrane(.5,1800,0,1,2000);
-
-
-
+            */
         }
     }
 
