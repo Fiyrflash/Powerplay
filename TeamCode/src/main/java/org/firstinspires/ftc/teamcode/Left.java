@@ -22,9 +22,9 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.apriltag.AprilTagDetection;
 import java.util.ArrayList;
-//testing
 @Autonomous
 public class Left extends LinearOpMode {
+
     OpenCvCamera webcam;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
@@ -175,30 +175,33 @@ public class Left extends LinearOpMode {
         craneBack = hardwareMap.get(DcMotor.class, "CraneBack");
 
         frontLeft.setDirection(DcMotorSimple.Direction.FORWARD);
-        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontRight.setDirection(DcMotorSimple.Direction.FORWARD);
         backLeft.setDirection(DcMotorSimple.Direction.FORWARD);
         backRight.setDirection(DcMotorSimple.Direction.FORWARD);
 
         if (opModeIsActive()) {//start of queue for autonnums movement
-            strafeLeftandCrane(1,3000,0,1,4000);
+            strafeLeftandCrane(.7,2000,0,1,4500);
             gyroTurning(0);
-            crane(1,-300);
-            intake(1);
-            strafeRight(1,400);
-            gyroTurning(0);
-            moveandcrane(1,1000,0,1,-2000);
-            gyroTurning(0);
-            crane(1,-300);
+            move(.7,150);
+            crane(1,-400);
+            gyroTurning(5);
             intake(-1);
-            crane(1,400);
-            moveandcrane(1,1500,0,1,2500);
+            move(.5,-150);
+            strafeLeft(.7,350);
             gyroTurning(0);
-            strafeLeft(1,400);
-            move(1,300);
+            moveandcrane(.5,-2000,0,1,-2000);
+            gyroTurning(0);
+            crane(1,-300);
             intake(1);
-            move(1,-300);
-            strafeRight(1,400);
-            moveandcrane(1,1800,0,1,2000);
+            crane(1,400);
+            moveandcrane(.5,1500,0,1,2500);
+            gyroTurning(0);
+            strafeLeft(.5,400);
+            move(.5,300);
+            intake(-1);
+            move(.5,-300);
+            strafeRight(.5,400);
+            moveandcrane(.5,1800,0,1,2000);
 
 
 
@@ -367,10 +370,10 @@ public class Left extends LinearOpMode {
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        frontRight.setTargetPosition(position);
-        frontLeft.setTargetPosition(-position);
-        backRight.setTargetPosition(-position);
-        backLeft.setTargetPosition(position);
+        frontRight.setTargetPosition(-position);
+        frontLeft.setTargetPosition(position);
+        backRight.setTargetPosition(position);
+        backLeft.setTargetPosition(-position);
 
         frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -393,10 +396,10 @@ public class Left extends LinearOpMode {
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        frontRight.setTargetPosition(-position);
-        frontLeft.setTargetPosition(position);
-        backRight.setTargetPosition(position);
-        backLeft.setTargetPosition(-position);
+        frontRight.setTargetPosition(position);
+        frontLeft.setTargetPosition(-position);
+        backRight.setTargetPosition(-position);
+        backLeft.setTargetPosition(position);
 
         frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -421,10 +424,10 @@ public class Left extends LinearOpMode {
         craneFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         craneBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        frontRight.setTargetPosition(position);
-        frontLeft.setTargetPosition(-position);
-        backRight.setTargetPosition(-position);
-        backLeft.setTargetPosition(position);
+        frontRight.setTargetPosition(-position);
+        frontLeft.setTargetPosition(position);
+        backRight.setTargetPosition(position);
+        backLeft.setTargetPosition(-position);
 
         frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -457,10 +460,10 @@ public class Left extends LinearOpMode {
         craneFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         craneBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        frontRight.setTargetPosition(-position);
-        frontLeft.setTargetPosition(position);
-        backRight.setTargetPosition(position);
-        backLeft.setTargetPosition(-position);
+        frontRight.setTargetPosition(position);
+        frontLeft.setTargetPosition(-position);
+        backRight.setTargetPosition(-position);
+        backLeft.setTargetPosition(position);
 
         frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -501,7 +504,7 @@ public class Left extends LinearOpMode {
 
     public void intake(double power) {
         leftFront.setPower(power);
-        leftBack.setPower(power);
+        leftBack.setPower(-power);
         sleep(2000);
         leftFront.setPower(0);
         leftBack.setPower(0);

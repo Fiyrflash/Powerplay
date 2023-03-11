@@ -40,12 +40,8 @@ public class teleop extends LinearOpMode {
 
         craneFront.setDirection(DcMotorSimple.Direction.FORWARD);
         craneFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        craneFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        craneFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         craneBack.setDirection(DcMotorSimple.Direction.FORWARD);
         craneBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        craneBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        craneBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         waitForStart();
         while (opModeIsActive()) {
@@ -62,6 +58,7 @@ public class teleop extends LinearOpMode {
             float pickup;
             float dropoff;
             double cranepower;
+            double cranepower2;
 
             throttle = gamepad1.left_stick_y;
             turn = gamepad1.right_stick_x;
@@ -69,60 +66,41 @@ public class teleop extends LinearOpMode {
             strafeRight = gamepad1.right_trigger;
 
             cranepower = -gamepad2.right_stick_y;
+            cranepower2 = -gamepad2.left_stick_y;
             pickup = gamepad2.left_trigger;
             dropoff = gamepad2.right_trigger;
 
-            frontLeft.setPower(-strafeLeft);
-            frontRight.setPower(strafeLeft);
-            backLeft.setPower(strafeLeft);
-            backRight.setPower(-strafeLeft);
+            frontLeft.setPower(strafeLeft);
+            frontRight.setPower(-strafeLeft);
+            backLeft.setPower(-strafeLeft);
+            backRight.setPower(strafeLeft);
 
-            frontLeft.setPower(strafeRight);
-            frontRight.setPower(-strafeRight);
-            backLeft.setPower(-strafeRight);
-            backRight.setPower(strafeRight);
+            frontLeft.setPower(-strafeRight);
+            frontRight.setPower(strafeRight);
+            backLeft.setPower(strafeRight);
+            backRight.setPower(-strafeRight);
 
             frontLeft.setPower(throttle);
             frontRight.setPower(throttle);
             backLeft.setPower(throttle);
             backRight.setPower(throttle);
 
-            frontLeft.setPower(turn);
+            frontLeft.setPower(-turn);
             frontRight.setPower(turn);
             backLeft.setPower(-turn);
-            backRight.setPower(-turn);
+            backRight.setPower(turn);
 
-
-            if (cranepower > 0) {
-                craneFront.setPower(cranepower);
-                craneBack.setTargetPosition(craneFront.getCurrentPosition());
-                craneBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                craneBack.setPower(1);
-            }
-            if (cranepower < 0) {
-                if (craneFront.getCurrentPosition() >= 0) {
-                    craneFront.setPower(cranepower);
-                    craneBack.setTargetPosition(craneFront.getCurrentPosition());
-                    craneBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    craneBack.setPower(1);
-                }
-                if (craneFront.getCurrentPosition() < 0) {
-                    craneFront.setPower(0);
-                }
-            }
-
-            if (cranepower == 0) {
-                craneFront.setPower(0);
-            }
+            craneFront.setPower(cranepower);
+            craneBack.setPower(cranepower2);
 
             if (pickup > 0){
                 leftFront.setPower(-1);
-                leftBack.setPower(-1);
+                leftBack.setPower(1);
             }
 
             if (dropoff > 0){
                 leftFront.setPower(1);
-                leftBack.setPower(1);
+                leftBack.setPower(-1);
             }
 
             if (dropoff == 0 && pickup == 0){
