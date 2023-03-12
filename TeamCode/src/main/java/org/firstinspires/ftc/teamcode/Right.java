@@ -1,42 +1,33 @@
-package org.firstinspires.ftc.teamcode;
-
+package org.firstinspires.ftc.teamcode;                                     //imports
+import static java.lang.Thread.sleep;
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.openftc.apriltag.AprilTagDetection;
-import org.openftc.easyopencv.OpenCvCamera;
+import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
-
+import org.openftc.apriltag.AprilTagDetection;
 import java.util.ArrayList;
-
 @Autonomous
-
 public class Right extends LinearOpMode {
-    private DcMotor frontLeft;
-    private DcMotor frontRight;
-    private DcMotor backLeft;
-    private DcMotor backRight;
 
-    BNO055IMU imu;
-    Orientation angles;
-
-    private CRServo intake;
-    private DcMotor Crane;
-
-    OpenCvCamera camera;
+    OpenCvCamera webcam;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
+
     static final double FEET_PER_METER = 3.28084;
 
     // Lens intrinsics
@@ -56,41 +47,38 @@ public class Right extends LinearOpMode {
     int MIDDLE = 2;
     int RIGHT = 3;
 
-    AprilTagDetection tagOfInterest = null;
+    int location;
+    double distancesnap;
+
+    AprilTagDetection tagOfInterest = null;                             //setting motor varibles
+    DcMotor frontLeft;
+    DcMotor frontRight;
+    DcMotor backLeft;
+    DcMotor backRight;
+
+    BNO055IMU imu;
+    Orientation angles;
+
+    public CRServo leftFront;
+    public CRServo leftBack;
+    public DcMotor craneFront;
+    public DcMotor craneBack;
+
 
     @Override
     public void runOpMode() {
-
-        frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
-        frontRight = hardwareMap.get(DcMotor.class, "frontRight");
-        backLeft = hardwareMap.get(DcMotor.class, "backLeft");
-        backRight = hardwareMap.get(DcMotor.class, "backRight");
-
-        intake = hardwareMap.get(CRServo.class, "Lefts");
-        Crane = hardwareMap.get(DcMotor.class, "Crane");
-
-        frontLeft.setDirection(DcMotorSimple.Direction.FORWARD);
-        frontRight.setDirection(DcMotorSimple.Direction.FORWARD);
-        backLeft.setDirection(DcMotorSimple.Direction.FORWARD);
-        backRight.setDirection(DcMotorSimple.Direction.FORWARD);
-
-        Crane.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        opModeInInit();
-//camera starts
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "ConeCam"), cameraMonitorViewId);
+        initGyro();
+        int cameraMonitorViewId = hardwareMap.appContext                            //setting up the camera
+                .getResources().getIdentifier("cameraMonitorViewId",
+                        "id", hardwareMap.appContext.getPackageName());
+        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "ConeCam"), cameraMonitorViewId);
         aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
 
-        camera.setPipeline(aprilTagDetectionPipeline);
-        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+        webcam.setPipeline(aprilTagDetectionPipeline);
+        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
-                camera.startStreaming(800, 448, OpenCvCameraRotation.UPRIGHT);
+                webcam.startStreaming(800, 448, OpenCvCameraRotation.UPRIGHT);
             }
 
             @Override
@@ -118,7 +106,7 @@ public class Right extends LinearOpMode {
                         break;
                     }
                 }
-
+                //telematry for the signal sleave
                 if (tagFound) {
                     telemetry.addLine("Tag of interest is in sight!\n\nLocation data:");
                     tagToTelemetry(tagOfInterest);
@@ -138,7 +126,6 @@ public class Right extends LinearOpMode {
 
                 if (tagOfInterest == null) {
                     telemetry.addLine("(The tag has never been seen)");
-                    runOpMode(); //this might break code
                 } else {
                     telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
                     tagToTelemetry(tagOfInterest);
@@ -164,6 +151,85 @@ public class Right extends LinearOpMode {
             telemetry.addLine("No tag snapshot available, it was never sighted during the init loop :(");
             telemetry.update();
         }
+
+
+        if (tagOfInterest == null) {                                            //takes the camera value and turns it into my own varible
+            location = 0;
+        } else if (tagOfInterest.id == LEFT) {
+            location = 1;
+        } else if (tagOfInterest.id == MIDDLE) {
+            location = 2;
+        } else {
+            location = 3;
+        }
+
+
+        frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
+        frontRight = hardwareMap.get(DcMotor.class, "frontRight");
+        backLeft = hardwareMap.get(DcMotor.class, "backLeft");                      //mapping the motors
+        backRight = hardwareMap.get(DcMotor.class, "backRight");
+
+        leftFront = hardwareMap.get(CRServo.class, "LeftsFront");
+        leftBack = hardwareMap.get(CRServo.class, "LeftsBack");
+        craneFront = hardwareMap.get(DcMotor.class, "CraneFront");
+        craneBack = hardwareMap.get(DcMotor.class, "CraneBack");
+
+        frontLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+        frontRight.setDirection(DcMotorSimple.Direction.FORWARD);
+        backLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+        backRight.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        if (opModeIsActive()) {
+            strafeLeft(.5,1400);
+            gyroTurning(0);
+            if (location == 1 || location == 0){
+                move(.5,-950);
+                stopMotors();
+            }else if (location==2){
+                stopMotors();
+            } else if (location==3) {
+                move(.5,950);
+                stopMotors();
+            }
+
+            /*strafeLeftandCrane(.7,2000,0,1,4500);
+            gyroTurning(0);
+            move(.7,150);
+            crane(1,-400);
+            gyroTurning(5);
+            intake(-1);
+            gyroTurning(0);
+            move(.5,-200);
+            strafeLeft(.7,600);
+            gyroTurning(0);
+            moveandcrane(.5,-2000,0,1,-2700);
+            gyroTurning(0);
+            crane(1,-300);
+            intake(1);
+            crane(1,400);
+            moveandcrane(1,3000,0,1,4000);
+            gyroTurning(0);
+            strafeLeft(.5,400);
+            move(.7,200);
+            intake(-1);-
+            move(.7,-200);
+            strafeRight(.5,400);
+            moveandcrane(.5,1800,0,1,2000);
+            */
+        }
+    }
+
+    //methods
+    public void initGyro() {
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.calibrationDataFile = "BNO055IMUCalibration.json";
+        parameters.loggingEnabled = true;
+        parameters.loggingTag = "IMU";
+        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        imu.initialize(parameters);
+        sleep(250);
     }
 
     void tagToTelemetry(AprilTagDetection detection) {
@@ -174,41 +240,77 @@ public class Right extends LinearOpMode {
         telemetry.addLine(String.format("Rotation Yaw: %.2f degrees", Math.toDegrees(detection.pose.yaw)));
         telemetry.addLine(String.format("Rotation Pitch: %.2f degrees", Math.toDegrees(detection.pose.pitch)));
         telemetry.addLine(String.format("Rotation Roll: %.2f degrees", Math.toDegrees(detection.pose.roll)));
+    }
 
-        waitForStart();
-        initGyro();
-        if (opModeIsActive()) {
-            telemetry.clearAll();
-            telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
+    public boolean gyroTurning(double targetAngle) {
+        frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        boolean foundAngle;
+        foundAngle = false;
+        while (!foundAngle) {
+            angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+            double currentAngle = angles.firstAngle;
+            telemetry.addData("Angle", currentAngle);
+            telemetry.addData("targetangle", targetAngle);
             telemetry.update();
+            if (angles.firstAngle >= targetAngle - 0.15 && angles.firstAngle <= targetAngle + 0.15) {
+                frontLeft.setPower(0);
+                frontRight.setPower(0);
+                backLeft.setPower(0);
+                backRight.setPower(0);
+                foundAngle = true;
+                sleep(500);
+                break;
 
-            if (tagOfInterest == null || tagOfInterest.id == LEFT){
-                slowgyroTurning(0);
-                moveandcrane(1,-1300,0,1,-2700);
-                slowgyroTurning(0);
-                stopMotors();
-
+            } else if (angles.firstAngle >= targetAngle + 0.5) {
+                if (angles.firstAngle <= targetAngle - 5) {
+                    frontLeft.setPower(0.1);
+                    frontRight.setPower(-0.1);
+                    backLeft.setPower(0.1);
+                    backRight.setPower(-0.1);
+                    foundAngle = false;
+                } else {
+                    frontLeft.setPower(-0.1);
+                    frontRight.setPower(0.1);
+                    backLeft.setPower(-0.1);
+                    backRight.setPower(0.1);
+                    foundAngle = false;
+                }
+            } else if (angles.firstAngle <= targetAngle - 0.5) {
+                if (angles.firstAngle >= targetAngle + 5) {
+                    frontLeft.setPower(-0.1);
+                    frontRight.setPower(0.1);
+                    backLeft.setPower(-0.1);
+                    backRight.setPower(0.1);
+                    foundAngle = false;
+                } else {
+                    frontLeft.setPower(.1);
+                    frontRight.setPower(-.1);
+                    backLeft.setPower(.1);
+                    backRight.setPower(-.1);
+                    foundAngle = false;
+                }
             }
-            else if (tagOfInterest.id == MIDDLE){
-                stopMotors();
-
-            }
-            else if (tagOfInterest.id == RIGHT){
-                slowgyroTurning(0);
-                moveandcrane(1,1200,0,1,-2700);
-                slowgyroTurning(0);
-                stopMotors();
-
-            }
-            else {
-                stopMotors();
-
-            }
-            terminateOpModeNow();
         }
+        return foundAngle;
+    }
+
+    public void stopMotors() {
+        frontLeft.setPower(0);
+        frontRight.setPower(0);
+        backLeft.setPower(0);
+        backRight.setPower(0);
     }
 
     public void move(double power, int position) {
+        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -229,16 +331,10 @@ public class Right extends LinearOpMode {
         backRight.setPower(power);
         backLeft.setPower(power);
 
-        while (backRight.isBusy() && opModeIsActive()) {
+        while (frontLeft.isBusy() && opModeIsActive()) {
 
         }
-    }
-    public void stopMotors(){
-        frontRight.setPower(0);
-        frontLeft.setPower(0);
-        backRight.setPower(0);
-        backLeft.setPower(0);
-        Crane.setPower(0);
+
     }
 
     public void moveandcrane(double power, int position, int time, double power2, int position2) {
@@ -247,7 +343,8 @@ public class Right extends LinearOpMode {
         backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        Crane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        craneFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        craneBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         frontRight.setTargetPosition(-position);
         frontLeft.setTargetPosition(-position);
@@ -266,137 +363,17 @@ public class Right extends LinearOpMode {
 
         sleep(time);
 
-        Crane.setTargetPosition(position2);
-        Crane.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        Crane.setPower(power2);
-        while (backRight.isBusy() || Crane.isBusy() && opModeIsActive()) {
+        craneFront.setTargetPosition(position2);
+        craneBack.setTargetPosition(position2);
+        craneFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        craneBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        craneFront.setPower(power2);
+        craneBack.setPower(power2);
+        while (backRight.isBusy() || craneFront.isBusy() || craneBack.isBusy() && opModeIsActive()) {
 
         }
     }
 
-    public void initGyro() {
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-        parameters.calibrationDataFile = "BNO055IMUCalibration.json";
-        parameters.loggingEnabled = true;
-        parameters.loggingTag = "IMU";
-        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-        imu.initialize(parameters);
-        while (backRight.isBusy() && opModeIsActive()) {
-
-        }
-    }
-
-    public boolean gyroTurning(double targetAngle) {
-        frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        boolean foundAngle;
-        foundAngle = false;
-        while (!foundAngle) {
-            angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-            double currentAngle = angles.firstAngle;
-            telemetry.addData("Angle", currentAngle);
-            telemetry.addData("targetangle", targetAngle);
-            telemetry.update();
-            if (angles.firstAngle >= targetAngle - 0.1 && angles.firstAngle <= targetAngle + 0.1) {
-                frontLeft.setPower(0);
-                frontRight.setPower(0);
-                backLeft.setPower(0);
-                backRight.setPower(0);
-                foundAngle = true;
-                sleep(1000);
-                break;
-
-            } else if (angles.firstAngle >= targetAngle + 0.5) {
-                if (angles.firstAngle <= targetAngle - 5) {
-                    frontLeft.setPower(0.25);
-                    frontRight.setPower(-0.25);
-                    backLeft.setPower(0.25);
-                    backRight.setPower(-0.25);
-                    foundAngle = false;
-                } else {
-                    frontLeft.setPower(-0.25);
-                    frontRight.setPower(0.25);
-                    backLeft.setPower(-0.25);
-                    backRight.setPower(0.25);
-                    foundAngle = false;
-                }
-            } else if (angles.firstAngle <= targetAngle - 0.5) {
-                if (angles.firstAngle >= targetAngle + 5) {
-                    frontLeft.setPower(-0.25);
-                    frontRight.setPower(0.25);
-                    backLeft.setPower(-0.25);
-                    backRight.setPower(0.25);
-                    foundAngle = false;
-                } else {
-                    frontLeft.setPower(.25);
-                    frontRight.setPower(-.25);
-                    backLeft.setPower(.25);
-                    backRight.setPower(-.25);
-                    foundAngle = false;
-                }
-            }
-        }
-        return foundAngle;
-    }
-
-    public boolean slowgyroTurning(double targetAngle) {
-        frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        boolean foundAngle;
-        foundAngle = false;
-        while (!foundAngle) {
-            angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-            double currentAngle = angles.firstAngle;
-            telemetry.addData("Angle", currentAngle);
-            telemetry.addData("targetangle", targetAngle);
-            telemetry.update();
-            if (angles.firstAngle >= targetAngle - 0.1 && angles.firstAngle <= targetAngle + 0.1) {
-                frontLeft.setPower(0);
-                frontRight.setPower(0);
-                backLeft.setPower(0);
-                backRight.setPower(0);
-                foundAngle = true;
-                sleep(1000);
-                break;
-
-            } else if (angles.firstAngle >= targetAngle + 0.5) {
-                if (angles.firstAngle <= targetAngle - 5) {
-                    frontLeft.setPower(0.10);
-                    frontRight.setPower(-0.10);
-                    backLeft.setPower(0.10);
-                    backRight.setPower(-0.10);
-                    foundAngle = false;
-                } else {
-                    frontLeft.setPower(-0.10);
-                    frontRight.setPower(0.10);
-                    backLeft.setPower(-0.10);
-                    backRight.setPower(0.10);
-                    foundAngle = false;
-                }
-            } else if (angles.firstAngle <= targetAngle - 0.5) {
-                if (angles.firstAngle >= targetAngle + 5) {
-                    frontLeft.setPower(-0.10);
-                    frontRight.setPower(0.10);
-                    backLeft.setPower(-0.10);
-                    backRight.setPower(0.10);
-                    foundAngle = false;
-                } else {
-                    frontLeft.setPower(.10);
-                    frontRight.setPower(-.10);
-                    backLeft.setPower(.10);
-                    backRight.setPower(-.10);
-                    foundAngle = false;
-                }
-            }
-        }
-        return foundAngle;
-    }
 
     public void strafeLeft(double power, int position) {
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -418,6 +395,7 @@ public class Right extends LinearOpMode {
         frontLeft.setPower(power);
         backRight.setPower(power);
         backLeft.setPower(power);
+
         while (backRight.isBusy() && opModeIsActive()) {
 
         }
@@ -454,7 +432,8 @@ public class Right extends LinearOpMode {
         backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        Crane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        craneFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        craneBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         frontRight.setTargetPosition(-position);
         frontLeft.setTargetPosition(position);
@@ -473,10 +452,13 @@ public class Right extends LinearOpMode {
 
         sleep(time);
 
-        Crane.setTargetPosition(position2);
-        Crane.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        Crane.setPower(power2);
-        while (backRight.isBusy() || Crane.isBusy() && opModeIsActive()) {
+        craneFront.setTargetPosition(position2);
+        craneBack.setTargetPosition(position2);
+        craneFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        craneBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        craneFront.setPower(power2);
+        craneBack.setPower(power2);
+        while (backRight.isBusy() || craneFront.isBusy() || craneBack.isBusy() && opModeIsActive()) {
 
         }
     }
@@ -486,7 +468,8 @@ public class Right extends LinearOpMode {
         backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        Crane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        craneFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        craneBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         frontRight.setTargetPosition(position);
         frontLeft.setTargetPosition(-position);
@@ -505,49 +488,60 @@ public class Right extends LinearOpMode {
 
         sleep(time);
 
-        Crane.setTargetPosition(position2);
-        Crane.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        Crane.setPower(power2);
-        while (backRight.isBusy() || Crane.isBusy() && opModeIsActive()) {
+        craneFront.setTargetPosition(position2);
+        craneBack.setTargetPosition(position2);
+        craneFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        craneBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        craneFront.setPower(power2);
+        craneBack.setPower(power2);
+        while (backRight.isBusy() || craneFront.isBusy() || craneBack.isBusy() && opModeIsActive()) {
 
         }
     }
 
     public void crane(double power, int position) {
-        telemetry.addData("Crane", Crane.getCurrentPosition());
-        telemetry.addData("CraneTargetPostion", Crane.getTargetPosition());
-        telemetry.update();
-        Crane.setTargetPosition(position);
-        Crane.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        Crane.setPower(power);
-        while (Crane.isBusy() && opModeIsActive()) {
+        craneFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        craneBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        craneFront.setTargetPosition(position);
+        craneBack.setTargetPosition(position);
+        craneFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        craneBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        craneFront.setPower(power);
+        craneBack.setPower(power);
+        while (craneFront.isBusy() || craneBack.isBusy() && opModeIsActive()) {
 
         }
     }
 
     public void intake(double power) {
-        intake.setPower(power);
+        leftFront.setPower(power);
+        leftBack.setPower(-power);
         sleep(2000);
-        intake.setPower(0);
-        while (backRight.isBusy() && opModeIsActive()) {
+        leftFront.setPower(0);
+        leftBack.setPower(0);
+        while (backLeft.isBusy() || leftFront.getPower() == 1 && opModeIsActive()) {
 
         }
     }
 
     public void cranethenIntake(double power, int position, int time, double power2) {
-        Crane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        telemetry.addData("Crane", Crane.getCurrentPosition());
-        telemetry.update();
-        Crane.setTargetPosition(position);
-        Crane.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        Crane.setPower(power);
+        craneFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        craneBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        craneFront.setTargetPosition(position);
+        craneBack.setTargetPosition(position);
+        craneFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        craneBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        craneFront.setPower(power);
+        craneBack.setPower(power);
 
         sleep(time);
 
-        intake.setPower(power2);
+        leftFront.setPower(power2);
+        leftBack.setPower(power2);
         sleep(2000);
-        intake.setPower(0);
-        while (Crane.isBusy() && opModeIsActive()) {
+        leftFront.setPower(0);
+        leftBack.setPower(0);
+        while (craneFront.isBusy() && opModeIsActive()) {
 
         }
     }
@@ -557,7 +551,8 @@ public class Right extends LinearOpMode {
         backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        Crane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        craneFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        craneBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         frontRight.setTargetPosition(-position);
         frontLeft.setTargetPosition(-position);
@@ -576,17 +571,21 @@ public class Right extends LinearOpMode {
 
         sleep(time);
 
-        Crane.setTargetPosition(position2);
-        Crane.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        Crane.setPower(power2);
+        craneFront.setTargetPosition(position2);
+        craneBack.setTargetPosition(position2);
+        craneFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        craneBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        craneFront.setPower(power2);
+        craneBack.setPower(power2);
 
         sleep(time2);
 
-        intake.setPower(power3);
+        leftFront.setPower(power3);
+        leftBack.setPower(power3);
         sleep(2000);
-        intake.setPower(0);
-        while (backRight.isBusy() || Crane.isBusy() && opModeIsActive()) {
-
+        leftFront.setPower(0);
+        leftBack.setPower(0);
+        while (backRight.isBusy() || craneFront.isBusy() || craneBack.isBusy() && opModeIsActive()) {
         }
     }
 }

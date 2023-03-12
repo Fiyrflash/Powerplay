@@ -33,10 +33,10 @@ public class teleop extends LinearOpMode {
         craneFront = hardwareMap.get(DcMotor.class, "CraneFront");
         craneBack = hardwareMap.get(DcMotor.class, "CraneBack");
 
-        frontLeft.setDirection(DcMotorSimple.Direction.FORWARD);
-        frontRight.setDirection(DcMotorSimple.Direction.FORWARD);
-        backLeft.setDirection(DcMotorSimple.Direction.FORWARD);
-        backRight.setDirection(DcMotorSimple.Direction.FORWARD);
+        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        backRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
         craneFront.setDirection(DcMotorSimple.Direction.FORWARD);
         craneFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -57,7 +57,7 @@ public class teleop extends LinearOpMode {
 
             float pickup;
             float dropoff;
-            double cranepower;
+            //double cranepower;
             double cranepower2;
 
             throttle = gamepad1.left_stick_y;
@@ -65,7 +65,7 @@ public class teleop extends LinearOpMode {
             strafeLeft = gamepad1.left_trigger;
             strafeRight = gamepad1.right_trigger;
 
-            cranepower = -gamepad2.right_stick_y;
+            //cranepower = -gamepad2.right_stick_y;
             cranepower2 = -gamepad2.left_stick_y;
             pickup = gamepad2.left_trigger;
             dropoff = gamepad2.right_trigger;
@@ -90,17 +90,17 @@ public class teleop extends LinearOpMode {
             backLeft.setPower(-turn);
             backRight.setPower(turn);
 
-            craneFront.setPower(cranepower);
+            //craneFront.setPower(cranepower);
             craneBack.setPower(cranepower2);
 
             if (pickup > 0){
-                leftFront.setPower(-1);
-                leftBack.setPower(1);
+                leftFront.setPower(1);
+                leftBack.setPower(-1);
             }
 
             if (dropoff > 0){
-                leftFront.setPower(1);
-                leftBack.setPower(-1);
+                leftFront.setPower(-1);
+                leftBack.setPower(1);
             }
 
             if (dropoff == 0 && pickup == 0){
