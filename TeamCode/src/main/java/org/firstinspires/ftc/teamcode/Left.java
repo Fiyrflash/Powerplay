@@ -180,14 +180,14 @@ public class Left extends LinearOpMode {
         backRight.setDirection(DcMotorSimple.Direction.FORWARD);
 
         if (opModeIsActive()) {
-            strafeRight(1,500);
+            strafeLeft(.7, 1400);
             if (location == 1 || location == 0){
-                move(1,-500);
+                move(.7,-950);
                 stopMotors();
             }else if (location==2){
                 stopMotors();
             } else if (location==3) {
-                move(1,500);
+                move(.7,950);
                 stopMotors();
             }
 
@@ -210,7 +210,7 @@ public class Left extends LinearOpMode {
             gyroTurning(0);
             strafeLeft(.5,400);
             move(.7,200);
-            intake(-1);
+            intake(-1);-
             move(.7,-200);
             strafeRight(.5,400);
             moveandcrane(.5,1800,0,1,2000);
