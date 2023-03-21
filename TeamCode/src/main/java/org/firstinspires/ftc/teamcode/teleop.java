@@ -1,52 +1,14 @@
 package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.CRServo;
 
 @TeleOp
 public class teleop extends LinearOpMode {
-
-    public DcMotor frontLeft;
-    public DcMotor frontRight;
-    public DcMotor backLeft;
-    public DcMotor backRight;
-
-    public CRServo leftFront;
-    public CRServo leftBack;
-    public DcMotor craneFront;
-    public DcMotor craneBack;
-
     public void runOpMode(){
-
-        frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
-        frontRight = hardwareMap.get(DcMotor.class, "frontRight");
-        backLeft = hardwareMap.get(DcMotor.class, "backLeft");
-        backRight = hardwareMap.get(DcMotor.class, "backRight");
-
-        leftFront = hardwareMap.get(CRServo.class, "LeftsFront");
-        leftBack = hardwareMap.get(CRServo.class, "LeftsBack");
-        craneFront = hardwareMap.get(DcMotor.class, "CraneFront");
-        craneBack = hardwareMap.get(DcMotor.class, "CraneBack");
-
-        frontLeft.setDirection(DcMotorSimple.Direction.FORWARD);
-        frontRight.setDirection(DcMotorSimple.Direction.FORWARD);
-        backLeft.setDirection(DcMotorSimple.Direction.FORWARD);
-        backRight.setDirection(DcMotorSimple.Direction.FORWARD);
-
-        craneFront.setDirection(DcMotorSimple.Direction.FORWARD);
-        craneFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        craneBack.setDirection(DcMotorSimple.Direction.FORWARD);
-        craneBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        driveConstants dC = new driveConstants();
 
         waitForStart();
         while (opModeIsActive()) {
-            telemetry.addData("frontLeft", frontLeft.getCurrentPosition());
-            telemetry.addData("frontRight", frontRight.getCurrentPosition());
-            telemetry.addData("backLeft", backLeft.getCurrentPosition());
-            telemetry.addData("backRight", backRight.getCurrentPosition());
-            telemetry.update();
             double turn;
             double throttle;
             float strafeLeft;
@@ -72,52 +34,53 @@ public class teleop extends LinearOpMode {
             dropoff2 = gamepad2.right_bumper;
 
 
-            frontLeft.setPower(strafeLeft);
-            frontRight.setPower(-strafeLeft);
-            backLeft.setPower(-strafeLeft);
-            backRight.setPower(strafeLeft);
+            dC.frontLeft.setPower(strafeLeft);
+            dC.frontRight.setPower(-strafeLeft);
+            dC.backLeft.setPower(-strafeLeft);
+            dC.backRight.setPower(strafeLeft);
 
-            frontLeft.setPower(-strafeRight);
-            frontRight.setPower(strafeRight);
-            backLeft.setPower(strafeRight);
-            backRight.setPower(-strafeRight);
+            dC.frontLeft.setPower(-strafeRight);
+            dC.frontRight.setPower(strafeRight);
+            dC.backLeft.setPower(strafeRight);
+            dC.backRight.setPower(-strafeRight);
 
-            frontLeft.setPower(throttle);
-            frontRight.setPower(throttle);
-            backLeft.setPower(throttle);
-            backRight.setPower(throttle);
+            dC.frontLeft.setPower(throttle);
+            dC.frontRight.setPower(throttle);
+            dC.backLeft.setPower(throttle);
+            dC.backRight.setPower(throttle);
 
-            frontLeft.setPower(-turn);
-            frontRight.setPower(turn);
-            backLeft.setPower(-turn);
-            backRight.setPower(turn);
+            dC.frontLeft.setPower(-turn);
+            dC.frontRight.setPower(turn);
+            dC.backLeft.setPower(-turn);
+            dC.backRight.setPower(turn);
 
-            craneFront.setPower(cranepower);
-            craneBack.setPower(cranepower2);
+            dC.craneFront.setPower(cranepower);
+            dC.craneBack.setPower(cranepower2);
 
             if (pickup > 0){
-                leftFront.setPower(1);
+                dC.leftFront.setPower(1);
             }
 
             if (dropoff > 0){
-                leftFront.setPower(-1);
+                dC.leftFront.setPower(-1);
             }
 
             if (dropoff == 0 && pickup == 0){
-                leftFront.setPower(0);
+                dC.leftFront.setPower(0);
             }
 
             if (pickup2){
-                leftBack.setPower(-1);
+                dC.leftBack.setPower(-1);
             }
 
             if (dropoff2){
-                leftBack.setPower(1);
+                dC.leftBack.setPower(1);
             }
 
             if (dropoff2 && pickup2){
-                leftBack.setPower(0);
+                dC.leftBack.setPower(0);
             }
+
         }
     }
 }
