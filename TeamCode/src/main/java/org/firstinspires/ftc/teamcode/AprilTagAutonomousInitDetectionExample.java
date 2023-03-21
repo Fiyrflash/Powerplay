@@ -21,12 +21,9 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.AprilTagDetectionPipeline;
 import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -36,7 +33,7 @@ import java.util.ArrayList;
 @TeleOp
 public class AprilTagAutonomousInitDetectionExample extends LinearOpMode
 {
-    OpenCvCamera camera;
+    OpenCvCamera webcam;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
     static final double FEET_PER_METER = 3.28084;
@@ -56,29 +53,33 @@ public class AprilTagAutonomousInitDetectionExample extends LinearOpMode
     // Tag ID 1,2,3 from the 36h11 family
     int LEFT = 1;
     int MIDDLE = 2;
-    int RIGHT =3;
+    int RIGHT = 3;
+
+    int location;
 
     AprilTagDetection tagOfInterest = null;
 
     @Override
-    public void runOpMode()
+    public void runOpMode() throws InterruptedException {
+
+    }
+    public void scan()
     {
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "ConeCam"), cameraMonitorViewId);
+        int cameraMonitorViewId = hardwareMap.appContext                            //setting up the camera
+                .getResources().getIdentifier("cameraMonitorViewId",
+                        "id", hardwareMap.appContext.getPackageName());
+        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "ConeCam"), cameraMonitorViewId);
         aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
 
-        camera.setPipeline(aprilTagDetectionPipeline);
-        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
-        {
+        webcam.setPipeline(aprilTagDetectionPipeline);
+        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
-            public void onOpened()
-            {
-                camera.startStreaming(800,448, OpenCvCameraRotation.UPRIGHT);
+            public void onOpened() {
+                webcam.startStreaming(800, 448, OpenCvCameraRotation.UPRIGHT);
             }
 
             @Override
-            public void onError(int errorCode)
-            {
+            public void onError(int errorCode) {
 
             }
         });
@@ -89,55 +90,40 @@ public class AprilTagAutonomousInitDetectionExample extends LinearOpMode
          * The INIT-loop:
          * This REPLACES waitForStart!
          */
-        while (!isStarted() && !isStopRequested())
-        {
+        while (!isStarted() && !isStopRequested()) {
             ArrayList<AprilTagDetection> currentDetections = aprilTagDetectionPipeline.getLatestDetections();
 
-            if(currentDetections.size() != 0)
-            {
+            if (currentDetections.size() != 0) {
                 boolean tagFound = false;
 
-                for(AprilTagDetection tag : currentDetections)
-                {
-                    if(tag.id == LEFT || tag.id == MIDDLE || tag.id == RIGHT)
-                    {
+                for (AprilTagDetection tag : currentDetections) {
+                    if (tag.id == LEFT || tag.id == MIDDLE || tag.id == RIGHT) {
                         tagOfInterest = tag;
                         tagFound = true;
                         break;
                     }
                 }
-
-                if(tagFound)
-                {
+                //telematry for the signal sleave
+                if (tagFound) {
                     telemetry.addLine("Tag of interest is in sight!\n\nLocation data:");
                     tagToTelemetry(tagOfInterest);
-                }
-                else
-                {
+                } else {
                     telemetry.addLine("Don't see tag of interest :(");
 
-                    if(tagOfInterest == null)
-                    {
+                    if (tagOfInterest == null) {
                         telemetry.addLine("(The tag has never been seen)");
-                    }
-                    else
-                    {
+                    } else {
                         telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
                         tagToTelemetry(tagOfInterest);
                     }
                 }
 
-            }
-            else
-            {
+            } else {
                 telemetry.addLine("Don't see tag of interest :(");
 
-                if(tagOfInterest == null)
-                {
+                if (tagOfInterest == null) {
                     telemetry.addLine("(The tag has never been seen)");
-                }
-                else
-                {
+                } else {
                     telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
                     tagToTelemetry(tagOfInterest);
                 }
@@ -154,25 +140,24 @@ public class AprilTagAutonomousInitDetectionExample extends LinearOpMode
          */
 
         /* Update the telemetry */
-        if(tagOfInterest != null)
-        {
+        if (tagOfInterest != null) {
             telemetry.addLine("Tag snapshot:\n");
             tagToTelemetry(tagOfInterest);
             telemetry.update();
-        }
-        else
-        {
+        } else {
             telemetry.addLine("No tag snapshot available, it was never sighted during the init loop :(");
             telemetry.update();
         }
 
-        /* Actually do something useful */
-        if (tagOfInterest == null || tagOfInterest.id == LEFT){
-            //trajectory
-        }else if(tagOfInterest.id == MIDDLE){
-            //trajectory
-        }else if (tagOfInterest.id == RIGHT){
-            //trajectory
+
+        if (tagOfInterest == null) {                                            //takes the camera value and turns it into my own varible
+            location = 0;
+        } else if (tagOfInterest.id == LEFT) {
+            location = 1;
+        } else if (tagOfInterest.id == MIDDLE) {
+            location = 2;
+        } else {
+            location = 3;
         }
 
 

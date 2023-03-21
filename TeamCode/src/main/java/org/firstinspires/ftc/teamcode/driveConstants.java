@@ -15,30 +15,6 @@ import org.openftc.easyopencv.OpenCvCamera;
 
 public class driveConstants extends LinearOpMode {
 
-    OpenCvCamera webcam;
-    AprilTagDetectionPipeline aprilTagDetectionPipeline;
-
-    static final double FEET_PER_METER = 3.28084;
-
-    // Lens intrinsics
-    // UNITS ARE PIXELS
-    // NOTE: this calibration is for the C920 webcam at 800x448.
-    // You will need to do your own calibration for other configurations!
-    double fx = 578.272;
-    double fy = 578.272;
-    double cx = 402.145;
-    double cy = 221.506;
-
-    // UNITS ARE METERS
-    double tagsize = 0.166;
-
-    // Tag ID 1,2,3 from the 36h11 family
-    int LEFT = 1;
-    int MIDDLE = 2;
-    int RIGHT = 3;
-
-    int location;
-
     AprilTagDetection tagOfInterest = null;
     public DcMotor frontLeft;
     public DcMotor frontRight;
@@ -84,16 +60,6 @@ public class driveConstants extends LinearOpMode {
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
         sleep(250);
-    }
-
-    void tagToTelemetry(AprilTagDetection detection) {
-        telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
-        telemetry.addLine(String.format("Translation X: %.2f feet", detection.pose.x * FEET_PER_METER));
-        telemetry.addLine(String.format("Translation Y: %.2f feet", detection.pose.y * FEET_PER_METER));
-        telemetry.addLine(String.format("Translation Z: %.2f feet", detection.pose.z * FEET_PER_METER));
-        telemetry.addLine(String.format("Rotation Yaw: %.2f degrees", Math.toDegrees(detection.pose.yaw)));
-        telemetry.addLine(String.format("Rotation Pitch: %.2f degrees", Math.toDegrees(detection.pose.pitch)));
-        telemetry.addLine(String.format("Rotation Roll: %.2f degrees", Math.toDegrees(detection.pose.roll)));
     }
 
     public boolean gyroTurning(double targetAngle) {
