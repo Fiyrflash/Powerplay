@@ -11,8 +11,8 @@ public class Left extends LinearOpMode {
     public void runOpMode() {
         driveConstants dc = new driveConstants();
         AprilTagAutonomousInitDetectionExample aT = new AprilTagAutonomousInitDetectionExample();
-        dc.initGyro();
 
+        dc.initGyro();
         aT.scan();
 
         if (opModeIsActive()) {
