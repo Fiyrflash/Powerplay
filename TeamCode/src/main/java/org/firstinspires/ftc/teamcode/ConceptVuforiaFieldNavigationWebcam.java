@@ -111,7 +111,7 @@ public class ConceptVuforiaFieldNavigationWebcam extends LinearOpMode {
 
     @Override public void runOpMode() {
         // Connect to the camera we are to use.  This name must match what is set up in Robot Configuration
-        webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
+        webcamName = hardwareMap.get(WebcamName.class, "ConeCam");
 
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
