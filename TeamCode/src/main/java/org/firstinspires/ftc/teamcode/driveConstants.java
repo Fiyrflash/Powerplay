@@ -11,7 +11,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.openftc.apriltag.AprilTagDetection;
-import org.openftc.easyopencv.OpenCvCamera;
 
 public class driveConstants extends LinearOpMode {
 

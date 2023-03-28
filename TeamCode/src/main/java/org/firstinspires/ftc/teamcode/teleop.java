@@ -1,14 +1,11 @@
 package org.firstinspires.ftc.teamcode;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @TeleOp
-public class teleop extends LinearOpMode {
+public class teleop extends driveConstants {
     public void runOpMode(){
-
-        driveConstants dc = new driveConstants();
-
         waitForStart();
+
         while (opModeIsActive()) {
             double turn;
             double throttle;
@@ -35,51 +32,51 @@ public class teleop extends LinearOpMode {
             dropoff2 = gamepad2.right_bumper;
 
 
-            dc.frontLeft.setPower(strafeLeft);
-            dc.frontRight.setPower(-strafeLeft);
-            dc.backLeft.setPower(-strafeLeft);
-            dc.backRight.setPower(strafeLeft);
+            frontLeft.setPower(strafeLeft);
+            frontRight.setPower(-strafeLeft);
+            backLeft.setPower(-strafeLeft);
+            backRight.setPower(strafeLeft);
 
-            dc.frontLeft.setPower(-strafeRight);
-            dc.frontRight.setPower(strafeRight);
-            dc.backLeft.setPower(strafeRight);
-            dc.backRight.setPower(-strafeRight);
+            frontLeft.setPower(-strafeRight);
+            frontRight.setPower(strafeRight);
+            backLeft.setPower(strafeRight);
+            backRight.setPower(-strafeRight);
 
-            dc.frontLeft.setPower(throttle);
-            dc.frontRight.setPower(throttle);
-            dc.backLeft.setPower(throttle);
-            dc.backRight.setPower(throttle);
+            frontLeft.setPower(throttle);
+            frontRight.setPower(throttle);
+            backLeft.setPower(throttle);
+            backRight.setPower(throttle);
 
-            dc.frontLeft.setPower(-turn);
-            dc.frontRight.setPower(turn);
-            dc.backLeft.setPower(-turn);
-            dc.backRight.setPower(turn);
+            frontLeft.setPower(-turn);
+            frontRight.setPower(turn);
+            backLeft.setPower(-turn);
+            backRight.setPower(turn);
 
-            dc.craneFront.setPower(cranepower);
-            dc.craneBack.setPower(cranepower2);
+            craneFront.setPower(cranepower);
+            craneBack.setPower(cranepower2);
 
             if (pickup > 0){
-                dc.leftFront.setPower(1);
+                leftFront.setPower(1);
             }
 
             if (dropoff > 0){
-                dc.leftFront.setPower(-1);
+                leftFront.setPower(-1);
             }
 
             if (dropoff == 0 && pickup == 0){
-                dc.leftFront.setPower(0);
+                leftFront.setPower(0);
             }
 
             if (pickup2){
-                dc.leftBack.setPower(-1);
+                leftBack.setPower(-1);
             }
 
             if (dropoff2){
-                dc.leftBack.setPower(1);
+                leftBack.setPower(1);
             }
 
             if (dropoff2 && pickup2){
-                dc.leftBack.setPower(0);
+                leftBack.setPower(0);
             }
 
         }
