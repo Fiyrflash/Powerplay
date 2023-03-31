@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode;
+
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @TeleOp
 public class teleop extends driveConstants {
-    public void runOpMode(){
-        waitForStart();
 
+    public void runOpMode(){
+
+        waitForStart();
         while (opModeIsActive()) {
             double turn;
             double throttle;
@@ -14,8 +16,6 @@ public class teleop extends driveConstants {
 
             float pickup;
             float dropoff;
-            boolean dropoff2;
-            boolean pickup2;
             double cranepower;
             double cranepower2;
 
@@ -28,9 +28,6 @@ public class teleop extends driveConstants {
             cranepower2 = -gamepad2.left_stick_y;
             pickup = gamepad2.left_trigger;
             dropoff = gamepad2.right_trigger;
-            pickup2 = gamepad2.left_bumper;
-            dropoff2 = gamepad2.right_bumper;
-
 
             frontLeft.setPower(strafeLeft);
             frontRight.setPower(-strafeLeft);
@@ -56,29 +53,19 @@ public class teleop extends driveConstants {
             craneBack.setPower(cranepower2);
 
             if (pickup > 0){
-                leftFront.setPower(1);
+                leftFront.setPower(-1);
+                leftBack.setPower(1);
             }
 
             if (dropoff > 0){
-                leftFront.setPower(-1);
+                leftFront.setPower(1);
+                leftBack.setPower(-1);
             }
 
             if (dropoff == 0 && pickup == 0){
                 leftFront.setPower(0);
-            }
-
-            if (pickup2){
-                leftBack.setPower(-1);
-            }
-
-            if (dropoff2){
-                leftBack.setPower(1);
-            }
-
-            if (dropoff2 && pickup2){
                 leftBack.setPower(0);
             }
-
         }
     }
 }
