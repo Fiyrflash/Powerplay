@@ -19,10 +19,9 @@ public class testing extends OpMode {
 
     CraneState CS = CraneState.CRANE_START;
 
-    final int CRANE_LOW = 0;
-    final int CRANE_MID = 0;
-    final int CRANE_HIGH = 0;
-    double cranepower = gamepad2.right_stick_y;
+    final int CRANE_LOW = -2500;
+    final int CRANE_MID = -4500;
+    final int CRANE_HIGH = -6657;
 
 
     @Override
@@ -32,10 +31,12 @@ public class testing extends OpMode {
 
         CS = CraneState.CRANE_START;
         crane.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        crane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     @Override
     public void loop() {
+        double cranepower = gamepad2.right_stick_y;
         switch (CS) {
             case CRANE_START:
                 if (gamepad2.x) {
@@ -63,7 +64,6 @@ public class testing extends OpMode {
                 break;
             case CRANE_MOVING:
                 if (cranepower > 0) {
-                    crane.setTargetPosition(crane.getCurrentPosition());
                     CS = CraneState.CRANE_START;
                 }
                 break;
@@ -75,6 +75,5 @@ public class testing extends OpMode {
         } else if (gamepad2.right_trigger>0) {
             lefts.setPosition(-100);
         }
-        gamepad2.rumble(10*1000);
     }
 }

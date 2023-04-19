@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 @TeleOp
 public class teleop extends driveConstants {
 
     public void runOpMode(){
-
         waitForStart();
         while (opModeIsActive()) {
             double turn;
@@ -28,6 +29,16 @@ public class teleop extends driveConstants {
             cranepower2 = -gamepad2.left_stick_y;
             pickup = gamepad2.left_trigger;
             dropoff = gamepad2.right_trigger;
+
+            frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
+            frontRight = hardwareMap.get(DcMotor.class, "frontRight");
+            backLeft = hardwareMap.get(DcMotor.class, "backLeft");
+            backRight = hardwareMap.get(DcMotor.class, "backRight");
+
+            leftFront = hardwareMap.get(CRServo.class, "LeftsFront");
+            leftBack = hardwareMap.get(CRServo.class, "LeftsBack");
+            craneFront = hardwareMap.get(DcMotor.class, "CraneFront");
+            craneBack = hardwareMap.get(DcMotor.class, "CraneBack");
 
             frontLeft.setPower(strafeLeft);
             frontRight.setPower(-strafeLeft);
