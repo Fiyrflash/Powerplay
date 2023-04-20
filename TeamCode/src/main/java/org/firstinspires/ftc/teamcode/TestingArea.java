@@ -39,7 +39,7 @@ public class TestingArea extends OpMode {
 
     @Override
     public void loop() {
-        switch (CS){
+        switch (CS) {
             case CRANE_START:
                 if (gamepad2.x) {
                     crane.setPower(1);
@@ -60,11 +60,35 @@ public class TestingArea extends OpMode {
                     crane.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
                 } else {
                     crane.setPower(cranepower);
-                    crane.setTargetPosition(crane.getCurrentPosition());
-                    crane.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+                    crane.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODERS);
                 }
                 break;
-        }
+            case CRANE_MOVING:
+                if (cranepower > 0.15) {
+                    CS = CraneState.CRANE_START;
+                }
 
+                if (Math.abs(CRANE_LOW) > Math.abs(crane.getCurrentPosition()) - 10) {
+                    CS = CraneState.CRANE_DUMP;
+                } else if (Math.abs(CRANE_MID) > Math.abs(crane.getCurrentPosition()) - 10) {
+                    CS = CraneState.CRANE_DUMP;
+                } else if (Math.abs(CRANE_HIGH) > Math.abs(crane.getCurrentPosition()) - 10) {
+                    CS = CraneState.CRANE_DUMP;
+                }
+            case CRANE_DUMP:
+                if (gamepad2.b) {
+                    crane.setTargetPosition(0);
+                    crane.setPower(1);
+                    crane.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                }
+                if (gamepad1.a) {
+                    lefts.setPosition(200);
+                    CS = CraneState.CRANE_START;
+                    crane.setTargetPosition(0);
+                    crane.setPower(1);
+                    crane.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                }
+
+        }
     }
 }
