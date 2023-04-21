@@ -7,13 +7,19 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 @Autonomous
 public class testing extends OpMode {
+    public DcMotor crane;
+
+    double cranepower = gamepad1.right_stick_y;
+
     @Override
     public void init() {
-
+        crane = hardwareMap.get(DcMotorEx.class, "CraneFront");
     }
 
     @Override
     public void loop() {
+        telemetry.addData("RunMode: ", crane.getMode());
+        crane.setPower(cranepower);
 
     }
 }

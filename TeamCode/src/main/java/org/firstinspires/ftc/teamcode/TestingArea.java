@@ -60,7 +60,7 @@ public class TestingArea extends OpMode {
                     crane.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
                 } else {
                     crane.setPower(cranepower);
-                    crane.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODERS);
+                    crane.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 }
                 break;
             case CRANE_MOVING:
