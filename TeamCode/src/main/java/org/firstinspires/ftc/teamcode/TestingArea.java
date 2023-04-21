@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -88,7 +87,6 @@ public class TestingArea extends OpMode {
                     crane.setPower(1);
                     crane.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 }
-
         }
     }
 }
