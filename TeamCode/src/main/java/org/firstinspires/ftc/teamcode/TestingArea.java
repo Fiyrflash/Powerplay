@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -11,13 +12,12 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class TestingArea extends OpMode {
 
     public DcMotor crane;
-    public Servo lefts;
+    public CRServo lefts;
 
-    double cranepower = gamepad2.right_stick_y;
+    double cranepower;
 
     public enum CraneState{
         CRANE_START,
-        CRANE_MOVING,
         CRANE_DUMP
     }
 
@@ -29,8 +29,10 @@ public class TestingArea extends OpMode {
 
     @Override
     public void init() {
+        cranepower = gamepad2.right_stick_y;
+
         crane = hardwareMap.get(DcMotorEx.class, "CraneFront");
-        lefts = hardwareMap.get(Servo.class, "LeftsFront");
+        lefts = hardwareMap.get(CRServo.class, "LeftsFront");
 
         crane.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         crane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -40,53 +42,42 @@ public class TestingArea extends OpMode {
     public void loop() {
         switch (CS) {
             case CRANE_START:
-                if (gamepad2.x) {
+                if (gamepad2.cross) {
                     crane.setPower(1);
                     crane.setTargetPosition(CRANE_HIGH);
                     crane.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-                    CS = CraneState.CRANE_MOVING;
+                    if (Math.abs(CRANE_LOW) >= Math.abs(crane.getCurrentPosition()) - 10) {
+                        CS = CraneState.CRANE_DUMP;
+                    }
 
-                } else if (gamepad2.y) {
+                } else if (gamepad2.circle) {
                     crane.setPower(1);
                     crane.setTargetPosition(CRANE_MID);
-                    CS = CraneState.CRANE_MOVING;
                     crane.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+                    if (Math.abs(CRANE_MID) >= Math.abs(crane.getCurrentPosition()) - 10) {
+                        CS = CraneState.CRANE_DUMP;
+                    }
 
-                } else if (gamepad2.a) {
+                } else if (gamepad2.triangle) {
                     crane.setPower(1);
                     crane.setTargetPosition(CRANE_LOW);
-                    CS = CraneState.CRANE_MOVING;
                     crane.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-                } else {
-                    crane.setPower(cranepower);
-                    crane.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                }
-                break;
-            case CRANE_MOVING:
-                if (cranepower > 0.15) {
-                    CS = CraneState.CRANE_START;
+                    if (Math.abs(CRANE_LOW) >= Math.abs(crane.getCurrentPosition()) - 10) {
+                        CS = CraneState.CRANE_DUMP;
+                    }
                 }
 
-                if (Math.abs(CRANE_LOW) > Math.abs(crane.getCurrentPosition()) - 10) {
-                    CS = CraneState.CRANE_DUMP;
-                } else if (Math.abs(CRANE_MID) > Math.abs(crane.getCurrentPosition()) - 10) {
-                    CS = CraneState.CRANE_DUMP;
-                } else if (Math.abs(CRANE_HIGH) > Math.abs(crane.getCurrentPosition()) - 10) {
-                    CS = CraneState.CRANE_DUMP;
-                }
+
             case CRANE_DUMP:
-                if (gamepad2.b) {
+                if (gamepad2.square) {
                     crane.setTargetPosition(0);
-                    crane.setPower(1);
                     crane.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                }
-                if (gamepad1.a) {
-                    lefts.setPosition(200);
-                    CS = CraneState.CRANE_START;
-                    crane.setTargetPosition(0);
                     crane.setPower(1);
-                    crane.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    if (Math.abs(crane.getCurrentPosition()) - 10 >= 0) {
+                        CS = CraneState.CRANE_START;
+                    }
                 }
+
         }
     }
 }
