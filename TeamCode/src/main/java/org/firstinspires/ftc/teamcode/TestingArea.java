@@ -20,7 +20,6 @@ public class TestingArea extends OpMode {
     public DcMotorSimple backRight;
 
     double cranepower;
-
     float pickup;
     float dropoff;
 
@@ -29,9 +28,9 @@ public class TestingArea extends OpMode {
     float strafeLeft;
     float strafeRight;
 
-    final int CRANE_LOW = -2500;
-    final int CRANE_MID = -4500;
-    final int CRANE_HIGH = -6657;
+    final int CRANE_LOW = 2500;
+    final int CRANE_MID = 4500;
+    final int CRANE_HIGH = 6657;
 
     @Override
     public void init() {
@@ -47,7 +46,6 @@ public class TestingArea extends OpMode {
         crane.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         crane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
-
 
     @Override
     public void loop() {
@@ -81,7 +79,6 @@ public class TestingArea extends OpMode {
         backLeft.setPower(-turn);
         backRight.setPower(turn);
 
-
         if (gamepad2.triangle) {
             crane.setPower(1);
             crane.setTargetPosition(CRANE_HIGH);
@@ -114,6 +111,5 @@ public class TestingArea extends OpMode {
         if (dropoff == 0 && pickup == 0){
             lefts.setPower(0);
         }
-
     }
 }
