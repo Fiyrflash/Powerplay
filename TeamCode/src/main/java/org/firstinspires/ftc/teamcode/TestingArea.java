@@ -21,17 +21,13 @@ public class TestingArea extends OpMode {
 
     double cranepower;
 
+    float pickup;
+    float dropoff;
+
     double turn;
     double throttle;
     float strafeLeft;
     float strafeRight;
-
-    public enum CraneState{
-        CRANE_START,
-        CRANE_DUMP
-    }
-
-    CraneState CS = CraneState.CRANE_START;
 
     final int CRANE_LOW = -2500;
     final int CRANE_MID = -4500;
@@ -57,6 +53,9 @@ public class TestingArea extends OpMode {
     public void loop() {
 
         cranepower = gamepad2.right_stick_y;
+        pickup = gamepad2.left_trigger;
+        dropoff = gamepad2.right_trigger;
+
         throttle = gamepad1.left_stick_y;
         turn = gamepad1.right_stick_x;
         strafeLeft = gamepad1.left_trigger;
@@ -82,46 +81,39 @@ public class TestingArea extends OpMode {
         backLeft.setPower(-turn);
         backRight.setPower(turn);
 
-        switch (CS) {
-            case CRANE_START:
-                if (gamepad2.cross) {
-                    crane.setPower(1);
-                    crane.setTargetPosition(CRANE_HIGH);
-                    crane.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-                    if (Math.abs(CRANE_LOW) >= Math.abs(crane.getCurrentPosition()) - 10) {
-                        CS = CraneState.CRANE_DUMP;
-                    }
 
-                } else if (gamepad2.circle) {
-                    crane.setPower(1);
-                    crane.setTargetPosition(CRANE_MID);
-                    crane.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-                    if (Math.abs(CRANE_MID) >= Math.abs(crane.getCurrentPosition()) - 10) {
-                        CS = CraneState.CRANE_DUMP;
-                    }
+        if (gamepad2.triangle) {
+            crane.setPower(1);
+            crane.setTargetPosition(CRANE_HIGH);
+            crane.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
 
-                } else if (gamepad2.triangle) {
-                    crane.setPower(1);
-                    crane.setTargetPosition(CRANE_LOW);
-                    crane.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-                    if (Math.abs(CRANE_LOW) >= Math.abs(crane.getCurrentPosition()) - 10) {
-                        CS = CraneState.CRANE_DUMP;
-                    }
-                }
-                break;
-            case CRANE_DUMP:
-                if (gamepad2.square) {
-                    crane.setTargetPosition(0);
-                    crane.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    crane.setPower(1);
-                    if (Math.abs(crane.getCurrentPosition()) - 10 >= 0) {
-                        CS = CraneState.CRANE_START;
-                    }
-                }
-                break;
-            default:
-                CS = CraneState.CRANE_START;
+        } else if (gamepad2.circle) {
+            crane.setPower(1);
+            crane.setTargetPosition(CRANE_MID);
+            crane.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
 
+        } else if (gamepad2.cross) {
+            crane.setPower(1);
+            crane.setTargetPosition(CRANE_LOW);
+            crane.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+
+        }else if (gamepad2.square) {
+            crane.setTargetPosition(0);
+            crane.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            crane.setPower(1);
         }
+
+        if (pickup > 0){
+            lefts.setPower(-1);
+        }
+
+        if (dropoff > 0){
+            lefts.setPower(1);
+        }
+
+        if (dropoff == 0 && pickup == 0){
+            lefts.setPower(0);
+        }
+
     }
 }
